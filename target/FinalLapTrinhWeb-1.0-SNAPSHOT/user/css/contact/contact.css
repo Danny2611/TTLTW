@@ -1,0 +1,167 @@
+
+/*---------------------
+  Map
+-----------------------*/
+
+.map {
+    height: 500px;
+    position: relative;
+  }
+  
+  .map iframe {
+    width: 100%;
+  }
+  
+
+/*---------------------
+  Contact
+-----------------------*/
+
+
+  .elementor-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px;
+    padding-left: 110px;
+    padding-right: 110px;
+  }
+  .at {
+    margin: 0;
+    padding: 0;
+
+  }
+
+.elementor-widget-wrap1 {
+  float: left;
+  width: 100%;
+}
+
+.elementor-widget-wrap2 {
+  float: right;
+  width: 100%;
+}
+
+.elementor-column1 {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.elementor-element {
+  margin-bottom: 20px;
+}
+
+.elementor-heading-titler,
+.woodmart-title-container {
+  font-size: 24px;
+  color: #26B402;
+  margin-bottom: 20px;
+  display: inline-block; 
+}
+
+.elementor-heading-titler {
+  margin-right: 10px; 
+}
+
+.elementor-field,
+.elementor-field-textual {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.elementor-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.elementor-button:hover {
+  background-color: #0b8d11;
+}
+
+.info-box-inner {
+  color: #333333;
+  line-height: 1.6;
+}
+
+/* Responsive CSS */
+@media (max-width: 768px) {
+  .elementor-container {
+      flex-direction: column;
+  }
+
+  .elementor-column {
+      width: 100%;
+  }
+}
+.icon-infor {
+  display: flex;
+  padding: 5px;
+  padding-top: 5px;
+  margin-bottom: 3px;
+  justify-content: center;
+}
+
+.icon-infor span {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-infor i {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10%;
+  color: #ffffff; 
+}
+
+.fa-facebook-f {
+  background-color: #3b5998;
+}
+
+.fa-twitter {
+  background-color: #1da1f2;
+}
+
+.fa-instagram {
+  background-color: #774430;
+}
+
+.fa-youtube {
+  background-color: #CB2027;
+}
+
+.fa-pinterest {
+  background-color: #bd081c;
+}
+
+.fa-linkedin {
+  background-color: #0274B3;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.fs-4 {
+  font-size: 1.5rem;
+}
+

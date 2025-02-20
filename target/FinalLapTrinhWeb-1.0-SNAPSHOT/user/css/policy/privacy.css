@@ -1,0 +1,23 @@
+.privacy-policy {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    font-size: 16px;
+}
+
+.privacy-policy h2 {
+    font-size: 30px;
+    color: #66B840;
+    text-align: center;
+}
+
+.privacy-policy h3 {
+    font-size: 20px;
+    color: #66B840;
+    margin-top: 20px;
+}
+
+.privacy-policy p {
+    font-size: 15px;
+    margin: 10px 0;
+}

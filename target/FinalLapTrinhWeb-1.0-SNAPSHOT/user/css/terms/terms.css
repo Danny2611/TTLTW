@@ -1,0 +1,49 @@
+/* Apply styles to the content section */
+.content {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Style headings */
+.content h1 {
+    font-size: 30px;
+    color: #66B840;
+    text-align: center;
+}
+
+.content h2 {
+    font-size: 20px;
+    color: #66B840;
+    margin-top: 20px;
+}
+
+/* Style paragraphs and lists */
+.content p {
+    line-height: 1.5;
+    font-size: 20px;
+}
+
+.content ul {
+    list-style: disc;
+    margin-left: 20px;
+}
+
+.content li {
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+/* Style links within the content */
+.content a {
+    color: #0077cc;
+    text-decoration: none;
+}
+
+.content a:hover {
+    text-decoration: underline;
+}

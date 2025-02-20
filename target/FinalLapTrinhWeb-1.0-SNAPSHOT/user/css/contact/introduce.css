@@ -1,0 +1,65 @@
+.content {
+    margin: 20px 149px;
+
+}
+.criteria {
+    line-height: 80px;
+}
+.device {
+    margin: 10px 180px ;
+
+
+}
+a {
+    text-decoration: none !important;
+}
+
+.centered-text {
+    text-align: center;
+    color: #26B402;
+    font-weight: 600
+}
+h2 {
+    margin-top: 3em;
+  }
+.header>.container-2 {
+    width: 1200px;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+.header-center .menu-2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    height: 40px;
+}
+.menu-2>.menu-item:hover .sub-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mission {
+    padding: 15px; 
+}
+.centered-text-1{
+    font-family: "Roboto", Sans-serif;
+    font-size: 35px;
+    font-weight: 600;
+    color: #26B402;
+}
+p {
+    font-size: 14px;
+    color: #777;
+}
+.text-center{
+    font-size: 14px;
+    color: #777;
+
+}
