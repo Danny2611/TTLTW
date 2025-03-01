@@ -34,16 +34,17 @@ public class SignIn extends HttpServlet {
         }
 
         if (user != null && user.getRoleId() == 1) {
+            HttpSession session = request.getSession();
+            session.setAttribute("auth", user);
             if (verifiedStatus) {
-                HttpSession session = request.getSession();
-                session.setAttribute("auth", user);
-
                 // Chuyển hướng đến trang index.jsp
                 response.sendRedirect(request.getContextPath() + "/user/home");
             } else {
                 request.setAttribute("wrongInfor", "Tài khoản chưa kích hoạt");
                 request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
             }
+        } else if (user != null && user.getRoleId() == 2) {
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
         } else {
             request.setAttribute("wrongInfor", "Đăng nhập thất bại hoặc bạn không có quyền truy cập");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
