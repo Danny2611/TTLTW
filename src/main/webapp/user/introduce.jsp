@@ -25,7 +25,7 @@
         <jsp:include page="header.jsp"/>
         <div class="container-fluid">
             <section class="banner">
-                <img decoding="async" class="swiper-slide-image"
+                <img decoding="async" class="swiper-slide-image d-block mx-auto"
                     src="https://tienthangvet.vn/wp-content/uploads/slide-TSD-tien-thang.jpg" alt="web">
             </section>
             <div class="content">

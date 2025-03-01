@@ -19,7 +19,8 @@
 
     <div class="body">
         <div class="form-container">
-            <form class="signup-form" method="post" action="signup">
+            <form class="signup-form" method="post" action="./signup
+">
                 <h2>Đăng Ký</h2>
                 <% String error = (String) request.getAttribute("wrongInfor");%>
                 <% if (error != null) {%>
