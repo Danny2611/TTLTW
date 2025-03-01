@@ -44,11 +44,12 @@ public class ProductDAO {
 
     public List<Product> getAllProductsLimited(int start, int limit) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products LIMIT ?, ?";
+        String query = "SELECT * FROM products WHERE active = ? LIMIT ?, ?";
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
-            preparedStatement.setInt(1, start);
-            preparedStatement.setInt(2, limit);
+            preparedStatement.setBoolean(1, true); // Điều kiện active = true
+            preparedStatement.setInt(2, start);
+            preparedStatement.setInt(3, limit);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -62,6 +63,7 @@ public class ProductDAO {
 
         return products;
     }
+
 
     public int getTotalProducts() {
         int total = 0;
@@ -102,12 +104,13 @@ public class ProductDAO {
         return product;
     }
 
-    public List<Product> searchProducts(String searchTerm) {
+    public List<Product> searchProducts(String searchTerm, boolean active) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products WHERE productName LIKE ?";
+        String query = "SELECT * FROM products WHERE productName LIKE ? and active =? ";
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, "%" + searchTerm + "%");
+            preparedStatement.setBoolean(2,active);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -125,12 +128,13 @@ public class ProductDAO {
     // Trong lớp ProductDAO
     public List<Product> searchProductsLimited(String searchTerm, int start, int pageSize) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products WHERE productName LIKE ? LIMIT ?, ?";
+        String query = "SELECT * FROM products WHERE productName LIKE ? AND active = ? LIMIT ?, ?";
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, "%" + searchTerm + "%");
-            preparedStatement.setInt(2, start);
-            preparedStatement.setInt(3, pageSize);
+            preparedStatement.setBoolean(2, true);
+            preparedStatement.setInt(3, start);
+            preparedStatement.setInt(4, pageSize);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -144,6 +148,7 @@ public class ProductDAO {
 
         return products;
     }
+
 
     public int getTotalSearchResults(String searchTerm) {
         int total = 0;
@@ -207,10 +212,11 @@ public class ProductDAO {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM products\n" +
                 "                JOIN product_categories ON products.category_id = product_categories.id\n" +
-                "                WHERE product_categories.categoryName = ?";
+                "                WHERE product_categories.categoryName = ? and active = ?";
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, object);
+            preparedStatement.setBoolean(2, true);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Product product = mapResultSetToProduct(resultSet);
@@ -226,10 +232,11 @@ public class ProductDAO {
 
     public List<Product> getProductByType(String productType) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM `products` WHERE productType = ?";
+        String query = "SELECT * FROM `products` WHERE productType = ? and active = ?";
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, productType);
+            preparedStatement.setBoolean(2, true);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Product product = mapResultSetToProduct(resultSet);
@@ -286,10 +293,11 @@ public class ProductDAO {
         String query = "SELECT * FROM products " +
                 "JOIN product_categories ON products.category_id = product_categories.id " +
                 "JOIN product_groups ON product_categories.group_id = product_groups.id " +
-                "WHERE product_groups.groupName = ?";
+                "WHERE product_groups.groupName = ? active = ?";
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, groupName);
+            preparedStatement.setBoolean(1, true);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Product product = mapResultSetToProduct(resultSet);
