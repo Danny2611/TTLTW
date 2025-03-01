@@ -23,6 +23,7 @@ public class ProductDAO {
         // Không cần thiết lập kết nối ở đây, sử dụng getConnection khi cần
     }
 
+//    Lấy cho admin
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM products";
@@ -444,6 +445,19 @@ public class ProductDAO {
         }
 
         return deletedRows > 0;
+    }
+    public static boolean changeActiveProductById(int productId) {
+        String query = "Update products SET active= NOT active  WHERE id = ?";
+        int updatedRows  = 0;
+
+        try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
+            preparedStatement.setInt(1, productId);
+            updatedRows  = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý ngoại lệ theo ý của bạn
+        }
+
+        return updatedRows  > 0;
     }
 
     public static void addProduct(Product product) {
