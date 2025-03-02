@@ -17,9 +17,11 @@ import java.sql.SQLException;
 )
 public class SignUp extends HttpServlet {
     public SignUp() {
+        System.out.println("SignUp Servlet Initialized");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Get");
         this.doPost(request, response);
     }
 
@@ -44,14 +46,14 @@ public class SignUp extends HttpServlet {
                     }
                 } else {
                     request.setAttribute("wrongInfor", "Mật khẩu phải có ít nhất 8 ký tự, bao gồm số, chữ in hoa và ký tự đặc biệt!");
-                    request.getRequestDispatcher("./signUp.jsp").forward(request, response);
+                    request.getRequestDispatcher("/user/signUp.jsp").forward(request, response);
                 }
             } catch (SQLException var10) {
                 throw new RuntimeException(var10);
             }
         } else {
             request.setAttribute("wrongInfor", "Mật khẩu không trùng khớp!");
-            request.getRequestDispatcher("./signUp.jsp").forward(request, response);
+            request.getRequestDispatcher("/user/signUp.jsp").forward(request, response);
         }
     }
 
