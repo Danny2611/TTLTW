@@ -1,8 +1,10 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
 import com.example.finallaptrinhweb.controller.user_page.ImageService.Service;
+import com.example.finallaptrinhweb.dao.CommentDAO;
 import com.example.finallaptrinhweb.dao.OrderDAO;
 import com.example.finallaptrinhweb.dao.ProductDAO;
+import com.example.finallaptrinhweb.model.Comment;
 import com.example.finallaptrinhweb.model.Product;
 import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.*;
@@ -37,6 +39,8 @@ public class ProductDetailsServlet extends HttpServlet {
 
                 OrderDAO orderDAO = new OrderDAO();
 
+                CommentDAO commentDAO = new CommentDAO();
+
                 // Gọi phương thức getProductById để lấy chi tiết sản phẩm
                 Product product = productDAO.getProductById(productId);
 
@@ -56,7 +60,15 @@ public class ProductDetailsServlet extends HttpServlet {
                     // Lấy URL của nhà cung cấp từ đối tượng Product
                     supplierImgUrl = productWithSupplierInfo.getSupplierImageUrl();
                 }
-
+//                Kiểm tra đã mua hàng chưa
+                boolean isBought = false;
+                if(user !=null  &&  orderDAO.checkUserBuyProduct(user.getId(), productId)){
+                    isBought = true;
+                    System.out.println("User was bought");
+                }
+//                Lấy danh sách comment
+                List<Comment> comments = commentDAO.getAllCommentForProduct(productId);
+                System.out.println(comments.toString());
 
                 if (product != null) {
                     // Đặt đối tượng Product vào request để hiển thị trên trang JSP
@@ -64,6 +76,8 @@ public class ProductDetailsServlet extends HttpServlet {
                     request.setAttribute("products", products);
                     request.setAttribute("listImg", imgUrl);
                     request.setAttribute("supplierImgUrl", supplierImgUrl);
+                    request.setAttribute("isBought", isBought);
+                    request.setAttribute("comments", comments);
 
 
                     // Chuyển hướng đến trang product-detail.jsp
