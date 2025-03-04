@@ -28,6 +28,9 @@
             gap: 8px;
             align-items: center;
         }
+        .mb-5 {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 
@@ -237,7 +240,7 @@
             <div class="container related-and-upsells">
                 <h3 class="title slider-title">Bình luận về sản phẩm</h3>
                 <div>
-                    <div class=comment>
+                    <div class="comment mb-5">
                         <div class="image bg-secondary rounded-circle"
                              style="width: 50px; height: 50px;
                background-image: url('https://images.unsplash.com/photo-1528287942171-fbe365d1d9ac?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&w=1200&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ');
@@ -256,25 +259,25 @@
                             <p class="mb-0">Sản phẩm rất tốt</p>
                         </div>
                     </div>
-                    <div class=comment>
-                        <div class="image bg-secondary rounded-circle"
-                             style="width: 50px; height: 50px;
+                    <c:forEach var="commnent" items="${comments}">
+                        <div class="comment mb-5">
+                            <div class="image bg-secondary rounded-circle"
+                                 style="width: 50px; height: 50px;
                background-image: url('https://images.unsplash.com/photo-1528287942171-fbe365d1d9ac?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&w=1200&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ');
                background-size: cover; background-position: center;">
-                        </div>
-                        <div class="d-flex flex-column gap-2 ms-3">
-                            <h4 class="fs-4 fw-bold mb-5">Đặng Hữu Quý</h4>
-                            <div>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
-                                <i class="fa fa-star text-warning"></i>
                             </div>
-                            <p>2-12-2025</p>
-                            <p class="mb-0">Sản phẩm rất tốt</p>
+                            <div class="d-flex flex-column gap-2 ms-3">
+                                <h4 class="fs-4 fw-bold mb-5">${commnent.name}</h4>
+                                <div>
+                                    <c:forEach var="i" begin="1" end="${commnent.star}">
+                                        <i class="fa fa-star text-warning"></i>
+                                    </c:forEach>
+                                </div>
+                                <p>${commnent.createdAt}</p>
+                                <p class="mb-0">${commnent.content}</p>
+                            </div>
                         </div>
-                    </div>
+                    </c:forEach>
 
                 </div>
             </div>
