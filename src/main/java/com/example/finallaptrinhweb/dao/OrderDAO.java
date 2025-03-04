@@ -2,8 +2,7 @@ package com.example.finallaptrinhweb.dao;
 
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.model.Order;
-import com.example.finallaptrinhweb.model.Util;
-import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -401,5 +400,16 @@ public class OrderDAO {
         }
         return result;
     }
-
+    public boolean checkUserBuyProduct(int userId, int idProduct){
+        try {
+            String sql = "select user_id, productId from orders whrere user_id = ? and productId = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) return  true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

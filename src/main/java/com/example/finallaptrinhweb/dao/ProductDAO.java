@@ -211,13 +211,15 @@ public class ProductDAO {
 
     public List<Product> getProductByCategory(String object) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products\n" +
-                "                JOIN product_categories ON products.category_id = product_categories.id\n" +
-                "                WHERE product_categories.categoryName = ? and active = ?";
+        String query = "SELECT p.* FROM products p " +
+                "JOIN product_categories c ON p.category_id = c.id " +
+                "WHERE c.categoryName = ? AND p.active = ? AND c.active = ?";
+
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, object);
             preparedStatement.setBoolean(2, true);
+            preparedStatement.setBoolean(3, true);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Product product = mapResultSetToProduct(resultSet);
@@ -291,14 +293,17 @@ public class ProductDAO {
 
     public List<Product> getProductByGroup(String groupName) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products " +
-                "JOIN product_categories ON products.category_id = product_categories.id " +
-                "JOIN product_groups ON product_categories.group_id = product_groups.id " +
-                "WHERE product_groups.groupName = ? active = ?";
+        String query = "SELECT p.* FROM products p " +
+                "JOIN product_categories c ON p.category_id = c.id " +
+                "JOIN product_groups g ON c.group_id = g.id " +
+                "WHERE g.groupName = ? AND p.active = ? AND g.active =? and c.active= ?";
+
 
         try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
             preparedStatement.setString(1, groupName);
-            preparedStatement.setBoolean(1, true);
+            preparedStatement.setBoolean(2, true);
+            preparedStatement.setBoolean(3, true);
+            preparedStatement.setBoolean(4, true);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     Product product = mapResultSetToProduct(resultSet);

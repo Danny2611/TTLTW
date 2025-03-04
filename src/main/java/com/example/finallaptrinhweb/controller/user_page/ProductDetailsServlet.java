@@ -1,8 +1,10 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
 import com.example.finallaptrinhweb.controller.user_page.ImageService.Service;
+import com.example.finallaptrinhweb.dao.OrderDAO;
 import com.example.finallaptrinhweb.dao.ProductDAO;
 import com.example.finallaptrinhweb.model.Product;
+import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -22,12 +24,18 @@ public class ProductDetailsServlet extends HttpServlet {
         // Lấy ID sản phẩm từ request
         String idParameter = request.getParameter("id");
 
+//        Lấy user
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
+
         if (idParameter != null && !idParameter.isEmpty()) {
             try {
                 int productId = Integer.parseInt(idParameter);
 
                 // Tạo một đối tượng ProductDAO
                 ProductDAO productDAO = new ProductDAO();
+
+                OrderDAO orderDAO = new OrderDAO();
 
                 // Gọi phương thức getProductById để lấy chi tiết sản phẩm
                 Product product = productDAO.getProductById(productId);

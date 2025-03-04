@@ -21,6 +21,14 @@
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <title>Chi tiết sản phẩm</title>
+<%--    internal css--%>
+    <style>
+        .comment{
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -224,6 +232,53 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="wrapper-content">
+            <div class="container related-and-upsells">
+                <h3 class="title slider-title">Bình luận về sản phẩm</h3>
+                <div>
+                    <div class=comment>
+                        <div class="image bg-secondary rounded-circle"
+                             style="width: 50px; height: 50px;
+               background-image: url('https://images.unsplash.com/photo-1528287942171-fbe365d1d9ac?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&w=1200&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ');
+               background-size: cover; background-position: center;">
+                        </div>
+                        <div class="d-flex flex-column gap-2 ms-3">
+                            <h4 class="fs-4 fw-bold mb-5">Đặng Hữu Quý</h4>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                            <p>2-12-2025</p>
+                            <p class="mb-0">Sản phẩm rất tốt</p>
+                        </div>
+                    </div>
+                    <div class=comment>
+                        <div class="image bg-secondary rounded-circle"
+                             style="width: 50px; height: 50px;
+               background-image: url('https://images.unsplash.com/photo-1528287942171-fbe365d1d9ac?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&w=1200&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ');
+               background-size: cover; background-position: center;">
+                        </div>
+                        <div class="d-flex flex-column gap-2 ms-3">
+                            <h4 class="fs-4 fw-bold mb-5">Đặng Hữu Quý</h4>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                            <p>2-12-2025</p>
+                            <p class="mb-0">Sản phẩm rất tốt</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
         <div class="wrapper-content">
             <div class="container related-and-upsells">
