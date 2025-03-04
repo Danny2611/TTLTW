@@ -402,8 +402,11 @@ public class OrderDAO {
     }
     public boolean checkUserBuyProduct(int userId, int idProduct){
         try {
-            String sql = "select user_id, productId from orders whrere user_id = ? and productId = ?";
+            String sql = "select user_id, productId from orders whrere user_id = ? and productId = ? LIKE ? ";
             PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2,idProduct);
+            preparedStatement.setString(3, "%Giao hàng thành công%");
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()) return  true;
         }

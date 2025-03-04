@@ -39,4 +39,20 @@ public class CommentDAO {
         }
         return  comments;
     }
+    public boolean insertComment(int userId, int productId, int star, String content) {
+        String sql = "Insert into comments(userId, productId, star, content) values (?,?,?,?)";
+        try{
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2,productId);
+            preparedStatement.setInt(3,star);
+            preparedStatement.setString(4, content);
+            int check = preparedStatement.executeUpdate();
+            return check > 0;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return  false;
+    }
 }
