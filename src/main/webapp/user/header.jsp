@@ -81,6 +81,11 @@
                 <%if (user == null) { %>
                 <a class="sign-in" href="signIn.jsp">Đăng nhập</a>
                 <%} else {%>
+                <div class="wishlish">
+                    <a href="wishlish">
+                        <i class="fa-solid fa-heart" style="color: #66b840" id="wishlish"></i>
+                    </a>
+                </div>
                 <div class="user-dropdown">
                     <i class="fas fa-user fa-2x" style="color: #66b840" id="user-icon"></i>
                     <div class="user-dropdown-content" id="user-dropdown-content">
