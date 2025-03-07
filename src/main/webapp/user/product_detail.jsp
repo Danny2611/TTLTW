@@ -108,8 +108,16 @@
                             </div>
                             <div class="wd-wishlist-btn wd-action-btn wd-style-text wd-wishlist-icon">
                                 <a class="" href="">
-                                    <i class="fa-regular fa-heart"></i>
-                                    <span>Yêu thích</span>
+                                    <c:choose>
+                                        <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(product.id)}">
+                                            <i class="fa-solid fa-heart" style="color: red"></i>
+                                            <span style="color: red">Yêu thích</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fa-regular fa-heart"></i>
+                                            <span>Yêu thích</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </a>
                             </div>
                             <div class="product_meta">
