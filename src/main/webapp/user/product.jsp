@@ -125,7 +125,8 @@
                                             <a href="" class="breadcrumb-link">Đã lọc theo danh mục sản phẩm</a>
                                         </c:when>
                                         <c:when test="${not empty filteredProducts}">
-                                            <a href="" class="breadcrumb-link">Đã lọc theo đối tượng: ${filteredProducts[0].productType}</a>
+                                            <a href="" class="breadcrumb-link">Đã lọc theo đối
+                                                tượng: ${filteredProducts[0].productType}</a>
                                         </c:when>
                                         <c:when test="${not empty selectedCategory}">
                                             <a href="" class="breadcrumb-link"> ${selectedCategory}</a>
@@ -133,7 +134,8 @@
                                         <c:otherwise>
                                             <% String url = (String) request.getAttribute("url"); %>
                                             <% if (url != null && !url.isEmpty()) { %>
-                                            <a href="" class="breadcrumb-link">Kết quả tìm kiếm cho: <%= url %></a>
+                                            <a href="" class="breadcrumb-link">Kết quả tìm kiếm cho: <%= url %>
+                                            </a>
                                             <% } %>
                                         </c:otherwise>
                                     </c:choose>
@@ -176,32 +178,33 @@
                                                 </div>
                                             </div>
                                             <div class="wd-buttons wd-pos-r-t">
-                                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon"><a
-                                                        href="addtocart?id=${product.id}"
-                                                        class="button product_type_simple add-to-cart-loop"
-                                                        aria-label="">
-                        <span>
-                          <i class="fa-solid fa-cart-shopping"></i>
-                        </span></a></div>
+                                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
+                                                    <a href="addtocart?id=${product.id}" class="button product_type_simple add-to-cart-loop" aria-label="">
+                                                        <span>
+                                                          <i class="fa-solid fa-cart-shopping"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
                                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
                                                     <a href="" class="open-quick-view quick-view-button">
-                        <span>
-                          <i class="fa-solid fa-magnifying-glass"></i>
-                        </span></a>
+                                                        <span>
+                                                          <i class="fa-solid fa-magnifying-glass"></i>
+                                                        </span>
+                                                    </a>
                                                 </div>
                                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                                    <a class="wd-tltp wd-tooltip-inited" href=""
-                                                       data-added-text="Browse Wishlist">
-                        <span class="wd-tooltip-label">
-                          <c:choose>
-                              <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(product.id)}">
-                                  <i class="fa-solid fa-heart" style="color: red"></i>
-                              </c:when>
-                              <c:otherwise>
-                                  <i class="fa-regular fa-heart"></i>
-                              </c:otherwise>
-                          </c:choose>
-                        </span></a>
+                                                    <a class="wd-tltp wd-tooltip-inited wishlist-btn" data-product-id="${product.id}" data-added-text="Browse Wishlist">
+                                                        <span class="wd-tooltip-label">
+                                                            <c:choose>
+                                                                <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(product.id)}">
+                                                                    <i class="fa-solid fa-heart" style="color: red"></i>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <i class="fa-regular fa-heart"></i>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </span>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -217,7 +220,9 @@
 
                             <c:if test="${currentPage > 1}">
                                 <li class="page-item">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/user/products?page=${currentPage - 1}" aria-label="Previous">
+                                    <a class="page-link"
+                                       href="${pageContext.request.contextPath}/user/products?page=${currentPage - 1}"
+                                       aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -225,14 +230,16 @@
 
                             <c:if test="${currentPage >= 4 && totalPages > 15}">
                                 <li class="page-item disabled">
-                                    <span class="page-link ellipsis" >...</span>
+                                    <span class="page-link ellipsis">...</span>
                                 </li>
                             </c:if>
 
                             <!-- Hiển thị các trang -->
-                            <c:forEach begin="${currentPage - 2 > 0 ? currentPage - 2 : 1}" end="${currentPage + 2 <= totalPages ? currentPage + 2 : totalPages}" var="page">
+                            <c:forEach begin="${currentPage - 2 > 0 ? currentPage - 2 : 1}"
+                                       end="${currentPage + 2 <= totalPages ? currentPage + 2 : totalPages}" var="page">
                                 <li class="page-item ${page == currentPage ? 'active' : ''}">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/user/products?page=${page}">${page}</a>
+                                    <a class="page-link"
+                                       href="${pageContext.request.contextPath}/user/products?page=${page}">${page}</a>
                                 </li>
                             </c:forEach>
 
@@ -244,7 +251,9 @@
 
                             <c:if test="${currentPage < totalPages}">
                                 <li class="page-item">
-                                    <a class="page-link" href="${pageContext.request.contextPath}/user/products?page=${currentPage + 1}" aria-label="Next">
+                                    <a class="page-link"
+                                       href="${pageContext.request.contextPath}/user/products?page=${currentPage + 1}"
+                                       aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -263,6 +272,58 @@
             var header = document.querySelector(".container");
             header.classList.toggle("sticky", window.scrollY > 100);
         })
+    </script>
+
+
+    <%--DUOC - check ajax thêm xóa sản phẩm khỏi wishlist--%>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $(".wishlist-btn").click(function () {
+                let productId = $(this).data("product-id");
+                let icon = $(this).find("i");
+                let isInWishlist = icon.hasClass("fa-solid");
+
+                Swal.fire({
+                    title: isInWishlist ? "Bạn có chắc muốn xóa?" : "Thêm vào danh sách yêu thích?",
+                    text: isInWishlist ? "Sản phẩm sẽ bị xóa khỏi wishlist!" : "Sản phẩm sẽ được thêm vào wishlist!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: isInWishlist ? "#d33" : "#3085d6",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: isInWishlist ? "Xóa" : "Thêm",
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "${pageContext.request.contextPath}/user/wishlist",
+                            data: {productId: productId},
+                            success: function (response) {
+                                if (response.status === "success") {
+                                    if (response.action === "added") {
+                                        icon.removeClass("fa-regular").addClass("fa-solid").css("color", "red");
+                                    } else {
+                                        icon.removeClass("fa-solid").addClass("fa-regular").css("color", "black");
+                                    }
+                                    Swal.fire({
+                                        title: response.action === "added" ? "Đã thêm!" : "Đã xóa!",
+                                        text: response.action === "added" ? "Sản phẩm đã được thêm vào wishlist." : "Sản phẩm đã bị xóa khỏi wishlist.",
+                                        icon: "success",
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire("Lỗi!", "Cần đăng nhập để thực hiện dịch vụ", "error");
+                            }
+                        });
+                    }
+                });
+            });
+        });
     </script>
 </body>
 <style>

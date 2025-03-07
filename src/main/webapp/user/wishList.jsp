@@ -73,12 +73,11 @@
                                 </div>
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
                                     <button class="wishlist-remove-btn" data-product-id="${p.id}" style="background: none; border: none; cursor: pointer;">
-        <span class="wd-tooltip-label">
-            <i class="fa-solid fa-heart" style="color: red"></i>
-        </span>
+                                        <span class="wd-tooltip-label">
+                                            <i class="fa-solid fa-heart" style="color: red"></i>
+                                        </span>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </c:forEach>
@@ -158,10 +157,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="swiper-button-next"
-                     style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
-                <div class="swiper-button-prev"
-                     style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
+                <div class="swiper-button-next" style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
+                <div class="swiper-button-prev" style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
             </div>
         </div>
     </section>
@@ -212,7 +209,7 @@
                     $.ajax({
                         type: "POST",
                         url: "${pageContext.request.contextPath}/user/wishlist",
-                        data: { productId: productId },
+                        data: {productId: productId},
                         success: function (response) {
                             console.log("Xóa thành công:", response);
                             Swal.fire({

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +32,43 @@ public class WishlistServlet  extends HttpServlet {
         }
         System.out.println(listProduct);
         req.setAttribute("wishlist", listProduct);
+        req.setAttribute("wishlistIds", wishlist);
+
         req.getRequestDispatcher("./wishList.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+        User user = (User) req.getSession().getAttribute("auth");
+        if (user == null) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        int productId = Integer.parseInt(req.getParameter("productId"));
+        WishlistDAO wishlistDAO = new WishlistDAO();
+        boolean success;
+        boolean isInWishlist = wishlistDAO.isInWishlist(user.getId(), productId);
+
+        if (isInWishlist) {
+            success = wishlistDAO.removeFromWishlist(user.getId(), productId);
+        } else {
+            success = wishlistDAO.addToWishlist(user.getId(), productId);
+        }
+
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        PrintWriter out = resp.getWriter();
+
+        if (success) {
+            String action = isInWishlist ? "removed" : "added";
+            out.print("{\"status\": \"success\", \"productId\": " + productId + ", \"action\": \"" + action + "\"}");
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            out.print("{\"status\": \"error\"}");
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        out.flush();
     }
+
 }
