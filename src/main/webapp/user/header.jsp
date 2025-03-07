@@ -82,7 +82,7 @@
                 <a class="sign-in" href="signIn.jsp">Đăng nhập</a>
                 <%} else {%>
                 <div class="wishlish">
-                    <a href="wishlish">
+                    <a href="wishlist">
                         <i class="fa-solid fa-heart" style="color: #66b840" id="wishlish"></i>
                     </a>
                 </div>

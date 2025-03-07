@@ -1,5 +1,6 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.example.finallaptrinhweb.model.Util" %>
 <html>
 <head>
     <link rel="stylesheet" href="css/HomePage/styles.css"/>
@@ -33,60 +34,59 @@
             </div>
             <div class="wrapper-container">
                 <div class="container wrap">
-                    <%--                    <c:forEach var="p" items="${products}">--%>
-                    <div class="item">
-                        <div>
-                            <div class="product-element-top">
-                                <a href="${pageContext.request.contextPath}/user/product?id=${product.id}">
-                                    <img src="../data/sp_1/Dipomax-J.jpg"
-                                         alt="">
-                                </a>
-                            </div>
-                            <div class="product-element-bottom">
-                                <a href="${pageContext.request.contextPath}/user/product?id=${product.id}">
-                                    <%--                                    ${product.productName}--%>
-                                    testProduct
-                                </a>
-                            </div>
-                            <div class="product-element">
-                                <div class="price-wrap">
-                                    <div class="price">
-                                        <%--                                        ${Util.formatCurrency(product.price)}--%>
-                                        100000
-                                    </div>
-                                    <div class="unit">VND</div>
+                    <c:forEach var="p" items="${wishlist}">
+                        <div class="item">
+                            <div>
+                                <div class="product-element-top">
+                                    <a href="${pageContext.request.contextPath}/user/product?id=${p.id}">
+                                        <img src="${pageContext.request.contextPath}/${p.imageUrl}"
+                                             alt="">
+                                    </a>
                                 </div>
-
+                                <div class="product-element-bottom">
+                                    <a href="${pageContext.request.contextPath}/user/product?id=${p.id}">
+                                            ${p.productName}
+                                    </a>
+                                </div>
+                                <div class="product-element">
+                                    <div class="price-wrap">
+                                        <div class="price">${Util.formatCurrency(p.price)}</div>
+                                        <div class="unit">VND</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wd-buttons wd-pos-r-t">
+                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
+                                    <a href="addtocart?id=${p.id}"
+                                       class="button product_type_simple add-to-cart-loop" aria-label="">
+                                    <span>
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </span>
+                                    </a>
+                                </div>
+                                <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
+                                    <a href="" class="open-quick-view quick-view-button">
+                                    <span>
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                    </a>
+                                </div>
+                                <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
+                                    <a class="wd-tltp wd-tooltip-inited" href="removefromwishlist?id=${p.id}"
+                                       data-added-text="Browse Wishlist">
+                                    <span class="wd-tooltip-label">
+                                        <i class="fa-solid fa-heart" style="color: red"></i>
+                                    </span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="wd-buttons wd-pos-r-t">
-                            <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon"><a
-                                    href="addtocart?id=${product.id}"
-                                    class="button product_type_simple add-to-cart-loop"
-                                    aria-label="">
-                        <span>
-                          <i class="fa-solid fa-cart-shopping"></i>
-                        </span></a></div>
-                            <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
-                                <a href="" class="open-quick-view quick-view-button">
-                        <span>
-                          <i class="fa-solid fa-magnifying-glass"></i>
-                        </span></a>
-                            </div>
-                            <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                <a class="wd-tltp wd-tooltip-inited" href=""
-                                   data-added-text="Browse Wishlist">
-                        <span class="wd-tooltip-label">
-                          <i class="fa-solid fa-heart" style="color: red"></i>
-                        </span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <%--                    </c:forEach>--%>
+                    </c:forEach>
                 </div>
             </div>
         </div>
     </section>
+
     <section id="section10">
         <div class="product-recommendation">
             <h2 class="recommendation-title">Sản phẩm gợi ý</h2>
@@ -158,8 +158,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="swiper-button-next" style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
-                <div class="swiper-button-prev" style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
+                <div class="swiper-button-next"
+                     style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
+                <div class="swiper-button-prev"
+                     style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
             </div>
         </div>
     </section>
