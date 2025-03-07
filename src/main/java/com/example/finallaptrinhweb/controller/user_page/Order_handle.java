@@ -61,7 +61,7 @@ public class Order_handle extends HttpServlet {
 
                     insertSta = OrderDAO.addOrderProduct(cart.getCoupon_code_id() == 0 ? 1 : cart.getCoupon_code_id(),
                             cartItem.getProduct().getProductName(), cartItem.getProduct().getImageUrl(),
-                            cartItem.getQuantity(), cartItem.getProduct().getPrice());
+                            cartItem.getQuantity(), cartItem.getProduct().getPrice(), productId);
                 }
             }
         }

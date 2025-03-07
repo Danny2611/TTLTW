@@ -20,7 +20,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
     <title>Chi tiết sản phẩm</title>
+<%--    internal css--%>
+    <style>
+        .comment{
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .mb-5 {
+            margin-bottom: 5px;
+        }
+        .d-flex{
+            display: flex;
+        }
+        .flex-column {
+            flex-direction: column;
+        }
+        .text-yl {
+            color:#EAB308;
+        }
+        .btn-comment {
+            background-color: #66b840;
+            color: white;
+            border: none;
+            outline: none;
+            height: 46px;
+            border-radius: 2px;
+            text-align: center;
+            padding: 0 30px;
+        }
+        .w-50{
+            width: 50%;
+        }
+        .flex-1{
+            flex: 1;
+        }
+        .w-500px{
+            width: 500px;
+        }
+        .p-3{
+            padding: 3px;
+        }
+        .h-120px{
+            height: 120px;
+        }
+        .label-comment {
+            font-size: 14px;
+            margin-bottom:5px;
+            display: block;
+        }
+        .stars {
+            display: flex;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .fa-star {
+            color: rgb(128, 128, 128); /* Màu mặc định */
+        }
+
+        .fa-star.selected {
+            color: gold; /* Màu vàng khi được chọn */
+        }
+    </style>
 </head>
 
 <body>
@@ -227,6 +291,85 @@
         </div>
         <div class="wrapper-content">
             <div class="container related-and-upsells">
+                <h3 class="title slider-title">Bình luận về sản phẩm</h3>
+                <div class="d-flex">
+
+                    <div class="flex-1">
+                        <div class="comment mb-5">
+                            <div class="image bg-secondary rounded-circle"
+                                 style="width: 50px; height: 50px;
+               background-image: url('https://images.unsplash.com/photo-1528287942171-fbe365d1d9ac?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&w=1200&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ');
+               background-size: cover; background-position: center;">
+                            </div>
+                            <div class="d-flex flex-column gap-2 ms-3">
+                                <h4 class="fs-4 fw-bold mb-5">Đặng Hữu Quý</h4>
+                                <div>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                    <i class="fa fa-star text-warning"></i>
+                                </div>
+                                <p>2-12-2025</p>
+                                <p class="mb-0">Sản phẩm rất tốt</p>
+                            </div>
+                        </div>
+                        <c:forEach var="commnent" items="${comments}">
+                            <div class="comment mb-5">
+                                <div class="image bg-secondary rounded-circle"
+                                     style="width: 50px; height: 50px;
+               background-image: url('https://images.unsplash.com/photo-1528287942171-fbe365d1d9ac?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&w=1200&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ');
+               background-size: cover; background-position: center;">
+                                </div>
+                                <div class="d-flex flex-column gap-2 ms-3">
+                                    <h4 class="fs-4 fw-bold mb-5">${commnent.name}</h4>
+                                    <div>
+                                        <c:forEach var="i" begin="1" end="${commnent.star}">
+                                            <i class="fa fa-star text-yl"></i>
+                                        </c:forEach>
+                                    </div>
+                                    <p>${commnent.createdAt}</p>
+                                    <p class="comment-content mb-0">${commnent.content}</p>
+
+                                    <c:if test="${sessionScope.auth.id == commnent.userId}">
+                                        <p
+                                           onclick="editComment(this,'${commnent.id}')"
+                                           style="cursor: pointer; text-align: right;color: #0e3cc8;" class="change-content">Chỉnh sửa ${commnent.id}
+                                        </p>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </c:forEach>
+
+                    </div>
+                    <div class="w-50">
+                        <c:if test="${isBought}">
+                            <form id="form-comment" method="post" action="./comment">
+                                <div>
+                                    <label for="content" class="label-comment">Bình luận về sản phẩm</label>
+                                    <textarea   name="content"  class="p-3 h-120px w-500px" id="content"></textarea>
+                                    <input name="star-value" type="hidden" value="0" id="star-value"/>
+                                    <input name="productId" type="hidden" value=${product.id} />
+                                </div>
+                                <div class="stars">
+                                    <!-- Tạo 5 sao -->
+                                    <i class="fa fa-star star" data-value="1"></i>
+                                    <i class="fa fa-star star" data-value="2"></i>
+                                    <i class="fa fa-star star" data-value="3"></i>
+                                    <i class="fa fa-star star" data-value="4"></i>
+                                    <i class="fa fa-star star" data-value="5"></i>
+                                </div>
+
+                                <button style="margin-top: 10px" class="btn-comment" type="submit">Bình luận</button>
+                            </form>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="wrapper-content">
+            <div class="container related-and-upsells">
                 <div class="related-products">
                     <h3 class="title slider-title">Sản phẩm tương tự</h3>
                     <div class="products">
@@ -285,6 +428,51 @@
 </div>
 
 <script src="js/detailProduct/scripts.js"></script>
+<script>
+    const stars = document.querySelectorAll('.star');
+    const input = document.getElementById("star-value");
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const selectedValue = this.getAttribute('data-value');
+            input.value= selectedValue;
+            stars.forEach(star => {
+                const starValue = star.getAttribute('data-value');
+                if (starValue <= selectedValue) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        });
+    });
+</script>
+<script>
+    const contentBox = document.getElementById("content") //gián dô thẻ textarae
+    const form = document.getElementById("form-comment")
+
+    const editComment = (el,commentId)=>{
+        let commentParent = el.closest(".comment")
+        let content = commentParent.querySelector(".comment-content").innerText
+        contentBox.value=content
+        let oldInput = document.getElementById("commentId");
+        if (oldInput) {
+            oldInput.remove();
+        }
+
+    //     create Input
+        commentIdInput = document.createElement("input");
+        commentIdInput.type = "hidden";
+        commentIdInput.name = "commentId";
+        commentIdInput.id = "commentId";
+        commentIdInput.value = commentId;
+        form.appendChild(commentIdInput);
+        console.log("commentId" , commentId)
+        form.action = `./comment/edit`;
+    }
+
+//
+
+</script>
 </body>
 
 </html>

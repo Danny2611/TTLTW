@@ -2,8 +2,7 @@ package com.example.finallaptrinhweb.dao;
 
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.model.Order;
-import com.example.finallaptrinhweb.model.Util;
-import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -316,7 +315,7 @@ public class OrderDAO {
 
         int updated = 0;
         String sql = "INSERT INTO `orders`(`id`, `username`, `user_id`, `discounts_id`, `ship_id`, `quantity`, `status`, `totalAmount`, `phone`, `detail_address`, `payment`, `date_created`, `total_pay`, `ship_price`) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         try {
             PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
@@ -346,10 +345,10 @@ public class OrderDAO {
     }
 
     public static int addOrderProduct(int discountsId, String productName, String imageUrl,
-                                      int quantity, double price) {
+                                      int quantity, double price, int productId) {
         int updated = 0;
-        String sql = "INSERT INTO `order_products`(`id`,`order_id`, `discounts_id`, `productName`, `imageUrl`, `quantity`, `price`) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `order_products`(`id`,`order_id`, `discounts_id`, `productName`, `imageUrl`, `quantity`, `price`, `productId`) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?,?)";
 
         try {
             PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
@@ -361,6 +360,7 @@ public class OrderDAO {
             preparedStatement.setString(5, imageUrl);
             preparedStatement.setInt(6, quantity);
             preparedStatement.setDouble(7, price);
+            preparedStatement.setInt(8, productId);
 
             updated = preparedStatement.executeUpdate();
 
@@ -401,5 +401,19 @@ public class OrderDAO {
         }
         return result;
     }
-
+    public boolean checkUserBuyProduct(int userId, int idProduct){
+        try {
+            String sql = "select o.user_id, op.productId from orders o Join order_products op on o.id =op.order_id  where user_id = ? and productId = ? and status LIKE ? ";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2,idProduct);
+            preparedStatement.setString(3, "%Giao hàng thành công%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) return  true;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
