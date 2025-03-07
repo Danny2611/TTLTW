@@ -329,7 +329,14 @@
                                         </c:forEach>
                                     </div>
                                     <p>${commnent.createdAt}</p>
-                                    <p class="mb-0">${commnent.content}</p>
+                                    <p class="comment-content mb-0">${commnent.content}</p>
+
+                                    <c:if test="${sessionScope.auth.id == commnent.userId}">
+                                        <p
+                                           onclick="editComment(this,'${commnent.id}')"
+                                           style="cursor: pointer; text-align: right;color: #0e3cc8;" class="change-content">Chỉnh sửa ${commnent.id}
+                                        </p>
+                                    </c:if>
                                 </div>
                             </div>
                         </c:forEach>
@@ -337,10 +344,10 @@
                     </div>
                     <div class="w-50">
                         <c:if test="${isBought}">
-                            <form method="post" action="./comment">
+                            <form id="form-comment" method="post" action="./comment">
                                 <div>
                                     <label for="content" class="label-comment">Bình luận về sản phẩm</label>
-                                    <textarea  name="content"  class="p-3 h-120px w-500px" id="content"></textarea>
+                                    <textarea   name="content"  class="p-3 h-120px w-500px" id="content"></textarea>
                                     <input name="star-value" type="hidden" value="0" id="star-value"/>
                                     <input name="productId" type="hidden" value=${product.id} />
                                 </div>
@@ -438,6 +445,33 @@
             });
         });
     });
+</script>
+<script>
+    const contentBox = document.getElementById("content") //gián dô thẻ textarae
+    const form = document.getElementById("form-comment")
+
+    const editComment = (el,commentId)=>{
+        let commentParent = el.closest(".comment")
+        let content = commentParent.querySelector(".comment-content").innerText
+        contentBox.value=content
+        let oldInput = document.getElementById("commentId");
+        if (oldInput) {
+            oldInput.remove();
+        }
+
+    //     create Input
+        commentIdInput = document.createElement("input");
+        commentIdInput.type = "hidden";
+        commentIdInput.name = "commentId";
+        commentIdInput.id = "commentId";
+        commentIdInput.value = commentId;
+        form.appendChild(commentIdInput);
+        console.log("commentId" , commentId)
+        form.action = `./comment/edit`;
+    }
+
+//
+
 </script>
 </body>
 

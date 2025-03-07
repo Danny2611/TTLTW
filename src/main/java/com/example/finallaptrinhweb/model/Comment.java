@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Comment {
     private Long id;
     private String name;
+    private int userId;
     private  Long productId;
     private int star;
     private  String content;
@@ -61,6 +62,14 @@ public class Comment {
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override

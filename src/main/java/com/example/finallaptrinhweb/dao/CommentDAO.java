@@ -17,7 +17,7 @@ public class CommentDAO {
     }
     public List<Comment> getAllCommentForProduct(int productId) {
         List<Comment> comments = new ArrayList<>();
-        String sql = "select c.id, u.username, c.productId, c.star, c.content, c.createdAt  " +
+        String sql = "select c.id, u.username, c.userId,c.productId, c.star, c.content, c.createdAt  " +
                 "FROM comments  c JOIN users u on c.userId = u.id WHERE c.productId = ?";
         try{
             PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
@@ -30,6 +30,7 @@ public class CommentDAO {
                 comment.setProductId(resultSet.getLong("productId"));
                 comment.setStar(resultSet.getInt("star"));
                 comment.setContent(resultSet.getString("content"));
+                comment.setUserId(resultSet.getInt("userId"));
                 comment.setCreatedAt(resultSet.getDate("createdAt").toLocalDate());
                 comments.add(comment);
             }
@@ -54,5 +55,19 @@ public class CommentDAO {
             e.printStackTrace();
         }
         return  false;
+    }
+    public  boolean updatedComment(Long idComment, String content){
+
+        String sql = "Update comments set content = ? where id = ?";
+        try {
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setString(1, content);
+            preparedStatement.setLong(2, idComment);
+            int check = preparedStatement.executeUpdate();
+            return check > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
