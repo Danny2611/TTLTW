@@ -72,13 +72,13 @@
                                     </a>
                                 </div>
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                    <a class="wd-tltp wd-tooltip-inited" href="removefromwishlist?id=${p.id}"
-                                       data-added-text="Browse Wishlist">
-                                    <span class="wd-tooltip-label">
-                                        <i class="fa-solid fa-heart" style="color: red"></i>
-                                    </span>
-                                    </a>
+                                    <button class="wishlist-remove-btn" data-product-id="${p.id}" style="background: none; border: none; cursor: pointer;">
+        <span class="wd-tooltip-label">
+            <i class="fa-solid fa-heart" style="color: red"></i>
+        </span>
+                                    </button>
                                 </div>
+
                             </div>
                         </div>
                     </c:forEach>
@@ -188,6 +188,52 @@
                 slidesPerView: 3,
             },
         },
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        $(".wishlist-remove-btn").click(function () {
+            let productId = $(this).data("product-id");
+            let button = $(this);
+
+            Swal.fire({
+                title: "Bạn có chắc muốn xóa?",
+                text: "Sản phẩm sẽ bị xóa khỏi danh sách yêu thích!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/user/wishlist",
+                        data: { productId: productId },
+                        success: function (response) {
+                            console.log("Xóa thành công:", response);
+                            Swal.fire({
+                                title: "Đã xóa!",
+                                text: "Sản phẩm đã được xóa khỏi danh sách yêu thích.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            button.closest(".item").fadeOut(300, function () {
+                                $(this).remove();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Lỗi khi xóa:", error);
+                            Swal.fire("Lỗi!", "Không thể xóa sản phẩm. Vui lòng thử lại!", "error");
+                        }
+                    });
+                }
+            });
+        });
     });
 </script>
 </body>

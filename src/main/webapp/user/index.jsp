@@ -240,7 +240,14 @@
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
                                     <a class="wd-tltp wd-tooltip-inited" href="" data-added-text="Browse Wishlist">
                                         <span class="wd-tooltip-label">
-                                            <i class="fa-regular fa-heart"></i>
+                                            <c:choose>
+                                                <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(p.id)}">
+                                                    <i class="fa-solid fa-heart" style="color: red"></i>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-regular fa-heart"></i>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </span></a>
                                 </div>
                             </div>
@@ -299,7 +306,14 @@
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
                                     <a class="wd-tltp wd-tooltip-inited" href="" data-added-text="Browse Wishlist">
                                 <span class="wd-tooltip-label">
-                                    <i class="fa-regular fa-heart"></i>
+                                    <c:choose>
+                                        <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(p.id)}">
+                                            <i class="fa-solid fa-heart" style="color: red"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fa-regular fa-heart"></i>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </span>
                                     </a>
                                 </div>
@@ -359,7 +373,14 @@
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
                                     <a class="wd-tltp wd-tooltip-inited" href="" data-added-text="Browse Wishlist">
                                 <span class="wd-tooltip-label">
-                                    <i class="fa-regular fa-heart"></i>
+                                    <c:choose>
+                                        <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(p.id)}">
+                                            <i class="fa-solid fa-heart" style="color: red"></i>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fa-regular fa-heart"></i>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </span>
                                     </a>
                                 </div>
