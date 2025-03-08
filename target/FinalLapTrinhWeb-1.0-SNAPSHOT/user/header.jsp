@@ -188,7 +188,7 @@
             searchInput.val(selectedText);
             suggestionsContainer.hide();
             // Tùy chọn: tự động submit form
-            // searchInput.closest('form').submit();
+            searchInput.closest('form').submit();
         });
 
         // Ẩn danh sách gợi ý khi click ra ngoài
