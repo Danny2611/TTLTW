@@ -91,77 +91,45 @@
             <h2 class="recommendation-title">Sản phẩm gợi ý</h2>
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="product-card">
-                            <img src="../data/sp_1/Dipomax-J.jpg" alt="Product 1" class="product-image">
-                            <div class="product-info">
-                                <div class="product-name">Sản phẩm 1</div>
-                                <div class="product-price">500.000đ</div>
-                                <div class="product-actions">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <i class="fas fa-heart"></i>
+                    <c:forEach var="entry" items="${productsByCategory}">
+                        <c:forEach var="product" items="${entry.value}" varStatus="status" begin="0" end="9">
+                            <div class="swiper-slide">
+                                <div class="product-card">
+                                    <a href="${pageContext.request.contextPath}/user/product?id=${product.id}">
+                                        <img src="${pageContext.request.contextPath}/${product.imageUrl}" alt="${product.productName}" class="product-image">
+                                    </a>
+                                    <div class="product-info">
+                                        <div class="product-name">${product.productName}</div>
+                                        <div class="blockInfo" style="display: flex; margin-top: 30px">
+                                            <div class="product-price">${Util.formatCurrency(product.price)} VND</div>
+                                            <div class="product-actions">
+                                                <a href="addtocart?id=${product.id}">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </a>
+                                                <a class="wishlist-btnn" data-product-id="${product.id}">
+                                                        <%--                                                <c:choose>--%>
+                                                        <%--                                                    <c:when test="${wishlistIds != null && wishlistIds.contains(product.id)}">--%>
+                                                        <%--                                                        <i class="fa-solid fa-heart" style="color: red"></i>--%>
+                                                        <%--                                                    </c:when>--%>
+                                                        <%--                                                    <c:otherwise>--%>
+                                                        <%--                                                        <i class="fa-regular fa-heart"></i>--%>
+                                                        <%--                                                    </c:otherwise>--%>
+                                                        <%--                                                </c:choose>--%>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="product-card">
-                            <img src="../data/sp_1/Dipomax-J.jpg" alt="Product 1" class="product-image">
-                            <div class="product-info">
-                                <div class="product-name">Sản phẩm 2</div>
-                                <div class="product-price">500.000đ</div>
-                                <div class="product-actions">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="product-card">
-                            <img src="../data/sp_1/Dipomax-J.jpg" alt="Product 1" class="product-image">
-                            <div class="product-info">
-                                <div class="product-name">Sản phẩm 3</div>
-                                <div class="product-price">500.000đ</div>
-                                <div class="product-actions">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="product-card">
-                            <img src="../data/sp_1/Dipomax-J.jpg" alt="Product 1" class="product-image">
-                            <div class="product-info">
-                                <div class="product-name">Sản phẩm 4</div>
-                                <div class="product-price">500.000đ</div>
-                                <div class="product-actions">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="product-card">
-                            <img src="../data/sp_1/Dipomax-J.jpg" alt="Product 1" class="product-image">
-                            <div class="product-info">
-                                <div class="product-name">Sản phẩm 5</div>
-                                <div class="product-price">500.000đ</div>
-                                <div class="product-actions">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        </c:forEach>
+                    </c:forEach>
                 </div>
                 <div class="swiper-button-next" style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
                 <div class="swiper-button-prev" style="color: #d1d1b3; height: 50px; width: 50px; border-radius: 50%; font-size: 20px"></div>
             </div>
         </div>
     </section>
+
 </div>
 <jsp:include page="footer.jsp"/>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -191,7 +159,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
-        $(".wishlist-remove-btn").click(function () {
+        $(document).on("click", ".wishlist-remove-btn", function () {
             let productId = $(this).data("product-id");
             let button = $(this);
 
@@ -219,9 +187,12 @@
                                 timer: 1500,
                                 showConfirmButton: false
                             });
+
+                            // Xóa sản phẩm khỏi danh sách
                             button.closest(".item").fadeOut(300, function () {
                                 $(this).remove();
                             });
+                            reloadWishlistSwiper();
                         },
                         error: function (xhr, status, error) {
                             console.error("Lỗi khi xóa:", error);
@@ -232,6 +203,162 @@
             });
         });
     });
-</script>
+
+    function reloadWishlistSwiper() {
+        $.ajax({
+            type: "GET",
+            url: "${pageContext.request.contextPath}/user/wishlist",
+            success: function (data) {
+                let newContent = $(data).find(".swiper-wrapper").html(); // Lấy nội dung mới
+                let swiperContainer = $(".swiper-container")[0].swiper; // Lấy Swiper instance
+
+                if (swiperContainer) {
+                    swiperContainer.destroy(true, true); // Hủy Swiper trước khi thay đổi nội dung
+                }
+
+                $(".swiper-wrapper").html(newContent); // Cập nhật nội dung mới
+
+                // Khởi động lại Swiper sau khi cập nhật
+                new Swiper(".swiper-container", {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                    loop: true
+                });
+            },
+            error: function () {
+                console.error("Không thể tải danh sách yêu thích.");
+            }
+        });
+    }
+
+
+</script>`
+<%--<script>--%>
+<%--    $(document).ready(function () {--%>
+<%--        // Xử lý thêm/xóa wishlist--%>
+<%--        $(".wishlist-btnn").click(function () {--%>
+<%--            let productId = $(this).data("product-id");--%>
+<%--            let icon = $(this).find("i");--%>
+<%--            let isInWishlist = icon.hasClass("fa-solid");--%>
+
+<%--            Swal.fire({--%>
+<%--                title: isInWishlist ? "Bạn có chắc muốn xóa?" : "Thêm vào danh sách yêu thích?",--%>
+<%--                text: isInWishlist ? "Sản phẩm sẽ bị xóa khỏi wishlist!" : "Sản phẩm sẽ được thêm vào wishlist!",--%>
+<%--                icon: "warning",--%>
+<%--                showCancelButton: true,--%>
+<%--                confirmButtonColor: isInWishlist ? "#d33" : "#3085d6",--%>
+<%--                cancelButtonColor: "#3085d6",--%>
+<%--                confirmButtonText: isInWishlist ? "Xóa" : "Thêm",--%>
+<%--                cancelButtonText: "Hủy"--%>
+<%--            }).then((result) => {--%>
+<%--                if (result.isConfirmed) {--%>
+<%--                    $.ajax({--%>
+<%--                        type: "POST",--%>
+<%--                        url: "${pageContext.request.contextPath}/user/wishlist",--%>
+<%--                        data: { productId: productId },--%>
+<%--                        success: function (response) {--%>
+<%--                            if (response.status === "success") {--%>
+<%--                                if (response.action === "added") {--%>
+<%--                                    icon.removeClass("fa-regular").addClass("fa-solid").css("color", "red");--%>
+<%--                                } else {--%>
+<%--                                    icon.removeClass("fa-solid").addClass("fa-regular").css("color", "black");--%>
+<%--                                    $(`.item[data-product-id="${productId}"]`).fadeOut(300, function () {--%>
+<%--                                        $(this).remove();--%>
+<%--                                    });--%>
+<%--                                }--%>
+
+<%--                                Swal.fire({--%>
+<%--                                    title: response.action === "added" ? "Đã thêm!" : "Đã xóa!",--%>
+<%--                                    text: response.action === "added" ? "Sản phẩm đã được thêm vào wishlist." : "Sản phẩm đã bị xóa khỏi wishlist.",--%>
+<%--                                    icon: "success",--%>
+<%--                                    timer: 1500,--%>
+<%--                                    showConfirmButton: false--%>
+<%--                                });--%>
+
+<%--                                // Gọi hàm load lại danh sách wishlist--%>
+<%--                                reloadWishlist();--%>
+<%--                            }--%>
+<%--                        },--%>
+<%--                        error: function () {--%>
+<%--                            Swal.fire("Lỗi!", "Cần đăng nhập để thực hiện dịch vụ", "error");--%>
+<%--                        }--%>
+<%--                    });--%>
+<%--                }--%>
+<%--            });--%>
+<%--        });--%>
+
+<%--        // Xử lý xóa wishlist ở danh sách yêu thích--%>
+<%--        $(".wishlist-remove-btn").click(function () {--%>
+<%--            let productId = $(this).data("product-id");--%>
+<%--            let button = $(this);--%>
+
+<%--            Swal.fire({--%>
+<%--                title: "Bạn có chắc muốn xóa?",--%>
+<%--                text: "Sản phẩm sẽ bị xóa khỏi danh sách yêu thích!",--%>
+<%--                icon: "warning",--%>
+<%--                showCancelButton: true,--%>
+<%--                confirmButtonColor: "#d33",--%>
+<%--                cancelButtonColor: "#3085d6",--%>
+<%--                confirmButtonText: "Xóa",--%>
+<%--                cancelButtonText: "Hủy"--%>
+<%--            }).then((result) => {--%>
+<%--                if (result.isConfirmed) {--%>
+<%--                    $.ajax({--%>
+<%--                        type: "POST",--%>
+<%--                        url: "${pageContext.request.contextPath}/user/wishlist",--%>
+<%--                        data: { productId: productId },--%>
+<%--                        success: function (response) {--%>
+<%--                            if (response.status === "success") {--%>
+<%--                                Swal.fire({--%>
+<%--                                    title: "Đã xóa!",--%>
+<%--                                    text: "Sản phẩm đã được xóa khỏi danh sách yêu thích.",--%>
+<%--                                    icon: "success",--%>
+<%--                                    timer: 1500,--%>
+<%--                                    showConfirmButton: false--%>
+<%--                                });--%>
+
+<%--                                button.closest(".item").fadeOut(300, function () {--%>
+<%--                                    $(this).remove();--%>
+<%--                                });--%>
+
+<%--                                // Gọi hàm load lại danh sách wishlist--%>
+<%--                                reloadWishlist();--%>
+<%--                            }--%>
+<%--                        },--%>
+<%--                        error: function (xhr, status, error) {--%>
+<%--                            console.error("Lỗi khi xóa:", error);--%>
+<%--                            Swal.fire("Lỗi!", "Không thể xóa sản phẩm. Vui lòng thử lại!", "error");--%>
+<%--                        }--%>
+<%--                    });--%>
+<%--                }--%>
+<%--            });--%>
+<%--        });--%>
+
+<%--        // Hàm load lại danh sách wishlist mà không cần reload trang--%>
+<%--        function reloadWishlist() {--%>
+<%--            $.ajax({--%>
+<%--                type: "GET",--%>
+<%--                url: "${pageContext.request.contextPath}/user/wishlist",--%>
+<%--                success: function (data) {--%>
+<%--                    $(".wrapper-container").html($(data).find(".wrapper-container").html()); // Chỉ thay nội dung wishlist--%>
+<%--                },--%>
+<%--                error: function () {--%>
+<%--                    console.error("Không thể tải danh sách yêu thích.");--%>
+<%--                }--%>
+<%--            });--%>
+<%--        }--%>
+
+
+<%--    });--%>
+
+<%--</script>--%>
 </body>
 </html>

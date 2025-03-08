@@ -12,8 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @WebServlet("/user/wishlist")
 public class WishlistServlet  extends HttpServlet {
@@ -24,15 +23,28 @@ public class WishlistServlet  extends HttpServlet {
         WishlistDAO wishlistDAO = new WishlistDAO();
         ProductDAO productDAO = new ProductDAO();
         List<Integer> wishlist = wishlistDAO.getWishListByUserID(user.getId());
-        System.out.println(wishlist);
+
         List<Product> listProduct = new ArrayList<>();
+        Set<Integer> categoryIds = new HashSet<>();
+
         for (int productID : wishlist) {
-             Product product = productDAO.getProductById(productID);
-             listProduct.add(product);
+            Product product = productDAO.getProductById(productID);
+            if (product != null) {
+                listProduct.add(product);
+                categoryIds.add(product.getCategoryId());
+            }
         }
-        System.out.println(listProduct);
+
+        Map<Integer, List<Product>> productsByCategory = new HashMap<>();
+        for (int categoryId : categoryIds) {
+            List<Product> products = productDAO.getAllProductsByCategory(categoryId);
+            productsByCategory.put(categoryId, products);
+        }
+        System.out.println(productsByCategory);
+
         req.setAttribute("wishlist", listProduct);
         req.setAttribute("wishlistIds", wishlist);
+        req.setAttribute("productsByCategory", productsByCategory);
 
         req.getRequestDispatcher("./wishList.jsp").forward(req, resp);
     }
