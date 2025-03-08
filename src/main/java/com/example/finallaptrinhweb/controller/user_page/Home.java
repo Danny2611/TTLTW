@@ -1,12 +1,15 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
 import com.example.finallaptrinhweb.dao.ProductDAO;
+import com.example.finallaptrinhweb.dao.WishlistDAO;
 import com.example.finallaptrinhweb.model.Product;
+import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.finallaptrinhweb.controller.user_page.ImageService.Service.*;
@@ -51,6 +54,15 @@ public class Home extends HttpServlet {
         //Danh sách banner
 
         //Danh sách thương hiệu
+
+        //danh sách sản phẩm trong wishlist lấy ra để kiểm tra
+        WishlistDAO wishlistDAO = new WishlistDAO();
+        User user = (User) request.getSession().getAttribute("auth");
+        List<Integer> wishlistProductIds = new ArrayList<>();
+        if (user != null) {
+            wishlistProductIds = wishlistDAO.getWishListByUserID(user.getId());
+        }
+        request.setAttribute("wishlistProductIds", wishlistProductIds);
 
         request.getRequestDispatcher("/user/index.jsp").forward(request, response);
 

@@ -1,12 +1,15 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
 import com.example.finallaptrinhweb.dao.ProductDAO;
+import com.example.finallaptrinhweb.dao.WishlistDAO;
 import com.example.finallaptrinhweb.model.Product;
+import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -76,6 +79,15 @@ public class ProductServlet extends HttpServlet {
 
         String url = decodedQueryString.substring(decodedQueryString.indexOf("=") + 1);
         request.setAttribute("url", url);
+
+        //check sản phẩm có trong wishlist
+        WishlistDAO wishlistDAO = new WishlistDAO();
+        User user = (User) request.getSession().getAttribute("auth");
+        List<Integer> wishlistProductIds = new ArrayList<>();
+        if (user != null) {
+            wishlistProductIds = wishlistDAO.getWishListByUserID(user.getId());
+        }
+        request.setAttribute("wishlistProductIds", wishlistProductIds);
 
         request.getRequestDispatcher("./product.jsp").forward(request, response);
     }
