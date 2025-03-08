@@ -105,6 +105,26 @@ public class ProductDAO {
         return product;
     }
 
+    // suggesst Product  when search
+    public List<String> getSuggestions(String term) {
+        List<String> suggestions = new ArrayList<>();
+        String query = "SELECT DISTINCT productName FROM products WHERE productName LIKE ? LIMIT 10";
+
+        try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
+            preparedStatement.setString(1, "%" + term + "%");  // Tìm kiếm ở bất kỳ vị trí nào
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    suggestions.add(resultSet.getString("productName"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return suggestions;
+    }
+
     public List<Product> searchProducts(String searchTerm, boolean active) {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM products WHERE productName LIKE ? and active =? ";
