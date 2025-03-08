@@ -485,3 +485,33 @@
     width: calc(100% - 120px);
     margin: 0 auto;
 }
+.no-products {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    text-align: center;
+}
+
+.no-products i {
+    font-size: 48px;
+    color: #ff4d4f;
+    margin-bottom: 10px;
+}
+
+.no-products p {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+

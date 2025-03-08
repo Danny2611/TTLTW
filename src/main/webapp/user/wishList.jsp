@@ -34,53 +34,63 @@
             </div>
             <div class="wrapper-container">
                 <div class="container wrap">
-                    <c:forEach var="p" items="${wishlist}">
-                        <div class="item">
-                            <div>
-                                <div class="product-element-top">
-                                    <a href="${pageContext.request.contextPath}/user/product?id=${p.id}">
-                                        <img src="${pageContext.request.contextPath}/${p.imageUrl}"
-                                             alt="">
-                                    </a>
-                                </div>
-                                <div class="product-element-bottom">
-                                    <a href="${pageContext.request.contextPath}/user/product?id=${p.id}">
-                                            ${p.productName}
-                                    </a>
-                                </div>
-                                <div class="product-element">
-                                    <div class="price-wrap">
-                                        <div class="price">${Util.formatCurrency(p.price)}</div>
-                                        <div class="unit">VND</div>
-                                    </div>
-                                </div>
+                    <c:choose>
+                        <c:when test="${empty wishlist}">
+                            <div class="no-products">
+                                <i class="fa-solid fa-heart-crack"></i>
+                                <p>Không có sản phẩm nào trong danh sách yêu thích.</p>
                             </div>
-                            <div class="wd-buttons wd-pos-r-t">
-                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a href="addtocart?id=${p.id}"
-                                       class="button product_type_simple add-to-cart-loop" aria-label="">
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="p" items="${wishlist}">
+                                <div class="item">
+                                    <div>
+                                        <div class="product-element-top">
+                                            <a href="${pageContext.request.contextPath}/user/product?id=${p.id}">
+                                                <img src="${pageContext.request.contextPath}/${p.imageUrl}"
+                                                     alt="">
+                                            </a>
+                                        </div>
+                                        <div class="product-element-bottom">
+                                            <a href="${pageContext.request.contextPath}/user/product?id=${p.id}">
+                                                    ${p.productName}
+                                            </a>
+                                        </div>
+                                        <div class="product-element">
+                                            <div class="price-wrap">
+                                                <div class="price">${Util.formatCurrency(p.price)}</div>
+                                                <div class="unit">VND</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wd-buttons wd-pos-r-t">
+                                        <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
+                                            <a href="addtocart?id=${p.id}"
+                                               class="button product_type_simple add-to-cart-loop" aria-label="">
                                     <span>
                                         <i class="fa-solid fa-cart-shopping"></i>
                                     </span>
-                                    </a>
-                                </div>
-                                <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
-                                    <a href="" class="open-quick-view quick-view-button">
+                                            </a>
+                                        </div>
+                                        <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
+                                            <a href="" class="open-quick-view quick-view-button">
                                     <span>
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </span>
-                                    </a>
-                                </div>
-                                <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                    <button class="wishlist-remove-btn" data-product-id="${p.id}" style="background: none; border: none; cursor: pointer;">
+                                            </a>
+                                        </div>
+                                        <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
+                                            <button class="wishlist-remove-btn" data-product-id="${p.id}" style="background: none; border: none; cursor: pointer;">
                                         <span class="wd-tooltip-label">
                                             <i class="fa-solid fa-heart" style="color: red"></i>
                                         </span>
-                                    </button>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </c:forEach>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -209,6 +219,7 @@
             type: "GET",
             url: "${pageContext.request.contextPath}/user/wishlist",
             success: function (data) {
+                $(".wrapper-container").html($(data).find(".wrapper-container").html());
                 let newContent = $(data).find(".swiper-wrapper").html(); // Lấy nội dung mới
                 let swiperContainer = $(".swiper-container")[0].swiper; // Lấy Swiper instance
 

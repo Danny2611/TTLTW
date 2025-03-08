@@ -36,9 +36,14 @@ public class WishlistServlet  extends HttpServlet {
         }
 
         Map<Integer, List<Product>> productsByCategory = new HashMap<>();
-        for (int categoryId : categoryIds) {
-            List<Product> products = productDAO.getAllProductsByCategory(categoryId);
-            productsByCategory.put(categoryId, products);
+        if (categoryIds.isEmpty()) {
+            List<Product> allProducts = productDAO.getAllProducts();
+            productsByCategory.put(0, allProducts);
+        } else {
+            for (int categoryId : categoryIds) {
+                List<Product> products = productDAO.getAllProductsByCategory(categoryId);
+                productsByCategory.put(categoryId, products);
+            }
         }
         System.out.println(productsByCategory);
 
