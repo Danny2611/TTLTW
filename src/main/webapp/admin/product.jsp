@@ -78,36 +78,47 @@
                                     <!-- Thêm vào nội dung ở đây -->
                                     <tbody>
                                     <c:forEach var="p" items="${product}">
-                                        <c:set var="price" value="${p.price}"></c:set>
+                                        <c:set var="price" value="${p.price}" />
 
                                         <tr>
                                             <td>${p.id}</td>
-                                            <td><c:choose>
-                                                <c:when test="${not empty p.imageUrl}">
-                                                    <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/${p.imageUrl}" alt="Hình ảnh sản phẩm">
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/${p.imageUrl}" alt="Hình ảnh mặc định">
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${not empty p.imageUrl}">
+                                                        <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/${p.imageUrl}" alt="Hình ảnh sản phẩm">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/images/default.png" alt="Hình ảnh mặc định">
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td>${p.productName}</td>
-                                            <td><%= Util.formatCurrency((double) pageContext.getAttribute("price"))%>VND
-                                            </td>
+                                            <td><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
                                             <td>${p.quantity}</td>
                                             <td>${p.supplierId}</td>
-                                            <td class="text-right"  style="display: flex; gap: 5px;">
-                                                <a href="edit-product?type=enterEdit&id=${p.id}"
-                                                   class="btn btn-sm bg-success-light "> <i
-                                                        class="far fa-edit mr-1"></i> Sửa</a>
+                                            <td class="text-right" style="display: flex; gap: 5px;">
+                                                <a href="edit-product?type=enterEdit&id=${p.id}" class="btn btn-sm bg-success-light">
+                                                    <i class="far fa-edit mr-1"></i> Sửa
+                                                </a>
+                                                <a href="#"   onclick="confirmShowOrHiddenProduct(${p.id}, ${p.active ? 'true' : 'false'})" class="d-block text-center btn btn-warning  w-50">
+                                                    <c:choose>
+                                                        <c:when test="${p.active}">
+                                                            <i class="fa fa-eye"></i>
+                                                            <p>Đang hiện</p>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <i class="fa fa-eye-slash"></i>
+                                                            <p>Đang ẩn</p>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
+                                                </a>
                                                 <a href="#" onclick="confirmDeleteProduct(${p.id});" style="margin-top: 5px; color: red;" class="btn btn-outline-danger btn-sm">
                                                     <i class="fa fa-trash-o"></i> Xóa
                                                 </a>
-
                                             </td>
                                         </tr>
                                     </c:forEach>
-                                    <%System.out.println("DA xuong toi day");%>
                                     </tbody>
                                 </table>
                             </div>
@@ -144,6 +155,15 @@
             window.location.href = "./delete-product?id=" + productId;
         }
     }
+    function confirmShowOrHiddenProduct(productId, active) {
+        active = Boolean(active); // Chuyển active thành kiểu Boolean
+        console.log("active:", active, "typeof:", typeof active);
+        const status = active ? "ẩn" : "hiện"
+        if (confirm(`Bạn có muốn thay đổi trạng thái sản phẩm này không?`)) {
+            window.location.href = "./active?id=" + productId;
+        }
+    }
+
 
 </script>
 </body>

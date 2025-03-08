@@ -6,6 +6,41 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="css/header&footer.css">
+    <style>
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .suggestions-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <header class="header">
     <div class="container">
@@ -57,14 +92,18 @@
             </div>
         </div>
         <div class="header-right">
-            <form role="search" method="get" class="searchform" action=products?action=search data-thumbnail="1" data-price="1"
+            <!-- Sửa đổi form tìm kiếm trong header.jsp -->
+            <form role="search" method="get" class="searchform" action="products?action=search" data-thumbnail="1" data-price="1"
                   data-post_type="product" data-count="20" data-sku="0" data-symbols_count="3">
-                <input type="text" id="searchTerm" name="searchTerm" class="s" placeholder="Tìm kiếm sản phẩm" value="" aria-label="Search"
-                       title="Search for products" required=""/>
-                <input type="hidden" name="post_type" value="product"/>
-                <button type="submit" class="searchsubmit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
+                <div class="search-container">
+                    <input type="text" id="searchTerm" name="searchTerm" class="s" placeholder="Tìm kiếm sản phẩm" value="" aria-label="Search"
+                           title="Search for products" required=""/>
+                    <input type="hidden" name="post_type" value="product"/>
+                    <button type="submit" class="searchsubmit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    <div id="suggestions-container" class="suggestions-container"></div>
+                </div>
             </form>
             <div class="action">
                 <div class="cart" style="margin: 0 30px 0 30px;">
@@ -104,7 +143,64 @@
             </div>
         </div>
     </div>
-
 </header>
+<script>
+    $(document).ready(function() {
+        var searchInput = $('#searchTerm');
+        var suggestionsContainer = $('#suggestions-container');
+        var timer;
 
+        searchInput.on('keyup', function() {
+            clearTimeout(timer);
+            var term = $(this).val().trim();
 
+            // Chỉ gửi request khi có ít nhất 2 ký tự
+            if(term.length >= 2) {
+                timer = setTimeout(function() {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/suggestions',
+                        method: 'GET',
+                        data: { term: term },
+                        dataType: 'json',
+                        success: function(data) {
+                            suggestionsContainer.empty();
+
+                            if(data.length > 0) {
+                                $.each(data, function(index, suggestion) {
+                                    suggestionsContainer.append(
+                                        '<div class="suggestion-item">' + suggestion + '</div>'
+                                    );
+                                });
+                                suggestionsContainer.show();
+                            } else {
+                                suggestionsContainer.hide();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching suggestions:', error);
+                            suggestionsContainer.hide();
+                        }
+                    });
+                }, 300); // Delay 300ms để tránh gửi quá nhiều request
+            } else {
+                suggestionsContainer.hide();
+            }
+        });
+
+        // Xử lý khi click vào một gợi ý
+        $(document).on('click', '.suggestion-item', function() {
+            var selectedText = $(this).text();
+            searchInput.val(selectedText);
+            suggestionsContainer.hide();
+            // Tùy chọn: tự động submit form
+            searchInput.closest('form').submit();
+        });
+
+        // Ẩn danh sách gợi ý khi click ra ngoài
+        $(document).on('click', function(event) {
+            if (!$(event.target).closest('.search-container').length) {
+                suggestionsContainer.hide();
+            }
+        });
+    });
+</script>
