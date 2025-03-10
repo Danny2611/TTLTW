@@ -83,7 +83,6 @@ public class ProductDetailsServlet extends HttpServlet {
 
                     //check sản phẩm có trong wishlist
                     WishlistDAO wishlistDAO = new WishlistDAO();
-                    User user = (User) request.getSession().getAttribute("auth");
                     List<Integer> wishlistProductIds = new ArrayList<>();
                     if (user != null) {
                         wishlistProductIds = wishlistDAO.getWishListByUserID(user.getId());

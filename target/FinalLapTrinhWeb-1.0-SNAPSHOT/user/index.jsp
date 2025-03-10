@@ -238,10 +238,19 @@
                                         </span></a>
                                 </div>
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                    <a class="wd-tltp wd-tooltip-inited" href="" data-added-text="Browse Wishlist">
+                                    <a class="wd-tltp wd-tooltip-inited wishlist-btn" data-product-id="${p.id}" data-added-text="Browse Wishlist">
                                         <span class="wd-tooltip-label">
-                                            <i class="fa-regular fa-heart"></i>
-                                        </span></a>
+                                            <c:choose>
+                                                <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(p.id)}">
+                                                    <i class="fa-solid fa-heart" style="color: red"></i>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-regular fa-heart"></i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
+                                    </a>
+
                                 </div>
                             </div>
                         </div>
@@ -297,10 +306,17 @@
                                     </a>
                                 </div>
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                    <a class="wd-tltp wd-tooltip-inited" href="" data-added-text="Browse Wishlist">
-                                <span class="wd-tooltip-label">
-                                    <i class="fa-regular fa-heart"></i>
-                                </span>
+                                    <a class="wd-tltp wd-tooltip-inited wishlist-btn" data-product-id="${p.id}" data-added-text="Browse Wishlist">
+                                        <span class="wd-tooltip-label">
+                                            <c:choose>
+                                                <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(p.id)}">
+                                                    <i class="fa-solid fa-heart" style="color: red"></i>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-regular fa-heart"></i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </a>
                                 </div>
                             </div>
@@ -357,10 +373,17 @@
                                     </a>
                                 </div>
                                 <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                    <a class="wd-tltp wd-tooltip-inited" href="" data-added-text="Browse Wishlist">
-                                <span class="wd-tooltip-label">
-                                    <i class="fa-regular fa-heart"></i>
-                                </span>
+                                    <a class="wd-tltp wd-tooltip-inited wishlist-btn" data-product-id="${p.id}" data-added-text="Browse Wishlist">
+                                        <span class="wd-tooltip-label">
+                                            <c:choose>
+                                                <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(p.id)}">
+                                                    <i class="fa-solid fa-heart" style="color: red"></i>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-regular fa-heart"></i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </span>
                                     </a>
                                 </div>
                             </div>
@@ -470,5 +493,54 @@
         integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="./js/home/scripts.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        $(".wishlist-btn").click(function () {
+            let productId = $(this).data("product-id");
+            let icon = $(this).find("i");
+            let isInWishlist = icon.hasClass("fa-solid");
+
+            Swal.fire({
+                title: isInWishlist ? "Bạn có chắc muốn xóa?" : "Thêm vào danh sách yêu thích?",
+                text: isInWishlist ? "Sản phẩm sẽ bị xóa khỏi wishlist!" : "Sản phẩm sẽ được thêm vào wishlist!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: isInWishlist ? "#d33" : "#3085d6",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: isInWishlist ? "Xóa" : "Thêm",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/user/wishlist",
+                        data: {productId: productId},
+                        success: function (response) {
+                            if (response.status === "success") {
+                                if (response.action === "added") {
+                                    icon.removeClass("fa-regular").addClass("fa-solid").css("color", "red");
+                                } else {
+                                    icon.removeClass("fa-solid").addClass("fa-regular").css("color", "black");
+                                }
+                                Swal.fire({
+                                    title: response.action === "added" ? "Đã thêm!" : "Đã xóa!",
+                                    text: response.action === "added" ? "Sản phẩm đã được thêm vào wishlist." : "Sản phẩm đã bị xóa khỏi wishlist.",
+                                    icon: "success",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Lỗi!", "Cần đăng nhập để thực hiện dịch vụ", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
