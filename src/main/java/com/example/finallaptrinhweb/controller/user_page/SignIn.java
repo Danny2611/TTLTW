@@ -34,18 +34,32 @@ public class SignIn extends HttpServlet {
         }
 
         if (user != null && user.getRoleId() == 1) {
-            HttpSession session = request.getSession();
-            session.setAttribute("auth", user);
             if (verifiedStatus) {
+                HttpSession session = request.getSession();
+                session.setAttribute("auth", user);
                 // Chuyển hướng đến trang index.jsp
                 response.sendRedirect(request.getContextPath() + "/user/home");
             } else {
                 request.setAttribute("wrongInfor", "Tài khoản chưa kích hoạt");
                 request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
             }
-        } else if (user != null && user.getRoleId() == 2) {
-            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-        } else {
+        } else if (user != null ) {
+            HttpSession session = request.getSession();
+            session.setAttribute("adminAuth", user);
+            if(user.getRoleId() == 2) {
+                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            }
+            else if(user.getRoleId() ==3) {
+                response.sendRedirect(request.getContextPath() + "/admin/product");
+            } else if (user.getRoleId() == 4) {
+                response.sendRedirect(request.getContextPath() + "/admin/total-report");
+            } else if (user.getRoleId() == 5) {
+                response.sendRedirect(request.getContextPath() + "/admin/contact");
+
+            }
+        }
+
+        else {
             request.setAttribute("wrongInfor", "Đăng nhập thất bại hoặc bạn không có quyền truy cập");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
         }
