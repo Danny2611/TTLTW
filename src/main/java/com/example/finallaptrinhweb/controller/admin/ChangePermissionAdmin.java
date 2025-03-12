@@ -1,6 +1,7 @@
 package com.example.finallaptrinhweb.controller.admin;
 
 import com.example.finallaptrinhweb.dao.UserDAO;
+import com.example.finallaptrinhweb.session.SessionManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jakarta.servlet.ServletException;
@@ -42,6 +43,8 @@ public class ChangePermissionAdmin extends HttpServlet {
             // Trả về phản hồi JSON
             JsonObject responseJson = new JsonObject();
             if (success) {
+
+                SessionManager.removeSession(userId);
                 resp.setStatus(HttpServletResponse.SC_OK);
                 responseJson.addProperty("status", "success");
                 responseJson.addProperty("message", "Cập nhật quyền thành công!");

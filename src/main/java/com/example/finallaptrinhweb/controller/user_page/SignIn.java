@@ -3,6 +3,7 @@ package com.example.finallaptrinhweb.controller.user_page;
 
 import com.example.finallaptrinhweb.dao.UserDAO;
 import com.example.finallaptrinhweb.model.User;
+import com.example.finallaptrinhweb.session.SessionManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,9 +34,10 @@ public class SignIn extends HttpServlet {
             throw new RuntimeException(e);
         }
 
+        HttpSession session = request.getSession();
+        SessionManager.addSession(user.getId(),session);
         if (user != null && user.getRoleId() == 1) {
             if (verifiedStatus) {
-                HttpSession session = request.getSession();
                 session.setAttribute("auth", user);
                 // Chuyển hướng đến trang index.jsp
                 response.sendRedirect(request.getContextPath() + "/user/home");
@@ -44,7 +46,6 @@ public class SignIn extends HttpServlet {
                 request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
             }
         } else if (user != null ) {
-            HttpSession session = request.getSession();
             session.setAttribute("adminAuth", user);
             if(user.getRoleId() == 2) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
