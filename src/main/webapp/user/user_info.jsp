@@ -64,7 +64,7 @@
                                 </header>
                                 <%--thông tin user--%>
                                 <%
-                                    User infor = UserDAO.getInstance().GetInfor(user.getEmail());
+                                    User infor = (User) session.getAttribute("auth");
                                     String fullname = infor.getFullName();
                                     String dob = String.valueOf(infor.getDateOfBirth());
                                     String phone = infor.getPhone();
@@ -79,7 +79,7 @@
                                             <label class="col-md-3 control-label"> Họ tên: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="fullName" name="fullName"
-                                                       value="<%=fullname == null ? "Họ và tên": fullname%>"
+                                                       value="<%=fullname == null ? "": fullname%>"
                                                        placeholder="Họ tên"
                                                        class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
                                                        required>
@@ -127,7 +127,7 @@
                                                 <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" name="city"
-                                                       value="<%=city == null ? "Tỉnh/Thành Phố" : city%>"
+                                                       value="<%=city == null ? "" : city%>"
                                                        placeholder="Thành phố"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                        required>

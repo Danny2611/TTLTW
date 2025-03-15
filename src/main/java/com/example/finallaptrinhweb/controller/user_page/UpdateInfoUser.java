@@ -17,7 +17,22 @@ import java.sql.SQLException;
 public class UpdateInfoUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("auth");
+
+        if (user == null) {
+            response.sendRedirect("./signIn.jsp");
+            return;
+        }
+
+        // Lấy danh sách đơn hàng để hiển thị (nếu cần)
+        List<Order> orders = OrderDAO.loadOrderByUserId(user.getId());
+        request.setAttribute("order", orders);
+
+        // Chuyển hướng đến trang thông tin người dùng
+        RequestDispatcher dispatcher = request.getRequestDispatcher("./user_info.jsp");
+        dispatcher.forward(request, response);
+
     }
 
     @Override
@@ -49,6 +64,12 @@ public class UpdateInfoUser extends HttpServlet {
         try {
             UserDAO.getInstance().updateUserInfor(user.getEmail(), fullName, birthday, city, district, ward, detail_address, phone);
             RequestDispatcher dispatcher = request.getRequestDispatcher("./user_info.jsp");
+            User updatedUser = UserDAO.getInstance().GetInfor(user.getEmail());
+            session.removeAttribute("auth");
+            session.setAttribute("auth", updatedUser);
+            System.out.println("Updated user: " + updatedUser);
+            System.out.println("Session auth: " + session.getAttribute("auth"));
+
             dispatcher.forward(request, response);
         } catch (SQLException e) {
             throw new RuntimeException(e);

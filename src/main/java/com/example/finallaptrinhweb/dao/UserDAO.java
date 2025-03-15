@@ -126,8 +126,8 @@ public class UserDAO {
 
 
     public void updateUserInfor(String email, String fullName, String birthday, String city, String district, String ward, String detail_address, String phone) throws SQLException {
-        JDBIConnector.me().get().useHandle((handle) -> {
-            handle.createUpdate("UPDATE users SET fullName = ?, dateOfBirth = DATE(?), city = ?, district = ?, ward = ?, detail_address = ?, phone = ? WHERE email = ?")
+        JDBIConnector.me().get().useTransaction(handle -> {
+            int rowsUpdated = handle.createUpdate("UPDATE users SET fullName = ?, dateOfBirth = DATE(?), city = ?, district = ?, ward = ?, detail_address = ?, phone = ? WHERE email = ?")
                     .bind(0, fullName)
                     .bind(1, birthday)
                     .bind(2, city)
@@ -137,8 +137,11 @@ public class UserDAO {
                     .bind(6, phone)
                     .bind(7, email)
                     .execute();
+
+            System.out.println("Rows updated: " + rowsUpdated);  // Kiểm tra số dòng đã update
         });
     }
+
 
     public void updatePassword(String email, String password) throws SQLException {
         // Mã hóa mật khẩu trước khi cập nhật vào cơ sở dữ liệu
