@@ -301,17 +301,17 @@
             </div>
             <div class="col-lg-4 order-lg-1 text-center img-2">
                 <div class="img-ava">
-                    <img src="https://tienthangvet.vn/wp-content/uploads/logo-tien-thang-vet.jpg"
+                    <img id="avatarImg"
+                         src="${avata == null ? 'https://tienthangvet.vn/wp-content/uploads/logo-tien-thang-vet.jpg' : avata}"
                          class="mx-auto img-fluid img-circle d-block" alt="avatar">
                     <label class="load-ava">
                         <span class="custom-file-control">Đổi Ảnh</span>
-                        <input type="file" id="file" class="custom-file-input">
-
+                        <input type="file" id="file" class="custom-file-input" accept="image/*">
                     </label>
                 </div>
                 <h6 class="mt-2">Nhóm 30</h6>
-
             </div>
+
         </div>
     </div>
 
@@ -394,7 +394,7 @@
                         icon: "success",
                         confirmButtonText: "OK"
                     }).then(() => {
-                        location.reload();
+                        // location.reload();
                     });
                 } else {
                     Swal.fire({
@@ -416,9 +416,44 @@
         });
     });
 });
+</script>
 
+<script>
+    document.getElementById("file").addEventListener("change", function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/updateAvatar", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.querySelector(".img-ava img").src = data.avatarUrl;
+                        Swal.fire({
+                            title: "Thành công!",
+                            text: "Ảnh đại diện đã được cập nhật!",
+                            icon: "success",
+                            confirmButtonText: "OK"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Lỗi!",
+                            text: data.message,
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                })
+                .catch(error => console.error("Lỗi:", error));
+        }
+    });
 
 </script>
+
 
 </body>
 </html>

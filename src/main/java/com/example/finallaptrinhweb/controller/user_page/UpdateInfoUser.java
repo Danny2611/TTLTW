@@ -1,9 +1,6 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
-import com.example.finallaptrinhweb.dao.OrderDAO;
-import com.example.finallaptrinhweb.dao.UserDAO;
-import com.example.finallaptrinhweb.dao.UserDAOT;
-import com.example.finallaptrinhweb.dao.OrderProductDAO;
+import com.example.finallaptrinhweb.dao.*;
 import com.example.finallaptrinhweb.model.Order;
 import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.*;
@@ -16,6 +13,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet("/user/updateinfouser")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50
+)
 public class UpdateInfoUser extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,7 +28,9 @@ public class UpdateInfoUser extends HttpServlet {
             response.sendRedirect("./signIn.jsp");
             return;
         }
-
+        AvataDAO avataDAO = new AvataDAO();
+        String avata = avataDAO.getAvatarByUserId(user.getId());
+        request.setAttribute("avata", avata);
         List<Order> orders = OrderDAO.loadOrderByUserId(user.getId());
         request.setAttribute("order", orders);
 
@@ -70,6 +74,8 @@ public class UpdateInfoUser extends HttpServlet {
         } finally {
             out.flush();
         }
+
+
     }
 
 }
