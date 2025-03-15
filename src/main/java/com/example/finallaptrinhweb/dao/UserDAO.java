@@ -1,8 +1,10 @@
 package com.example.finallaptrinhweb.dao;
 
+import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.db.JDBIConnector;
 import com.example.finallaptrinhweb.model.User;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -210,6 +212,20 @@ public class UserDAO {
                 System.out.println("Tên người dùng không hợp lệ.");
             }
         }
+    }
+
+    public  boolean changePermission(int roleId, int userId){
+        try{
+            String sql = "update users  set role_id = ? where id = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, roleId);
+            preparedStatement.setInt(2, userId);
+            int check  =  preparedStatement.executeUpdate();
+            return check > 0;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return  false;
     }
 
 

@@ -171,9 +171,17 @@
                                 </a>
                             </div>
                             <div class="wd-wishlist-btn wd-action-btn wd-style-text wd-wishlist-icon">
-                                <a class="" href="">
-                                    <i class="fa-regular fa-heart"></i>
-                                    <span>Yêu thích</span>
+                                <a class="wishlist-btn" data-product-id="${product.id}">
+                                    <c:choose>
+                                        <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(product.id)}">
+                                            <i class="fa-solid fa-heart" style="color: red"></i>
+                                            <span style="color: red">Yêu thích</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <i class="fa-regular fa-heart"></i>
+                                            <span style="color: black">Yêu thích</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </a>
                             </div>
                             <div class="product_meta">
@@ -428,6 +436,59 @@
 </div>
 
 <script src="js/detailProduct/scripts.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function () {
+        $(".wishlist-btn").click(function () {
+            let productId = $(this).data("product-id");
+            let icon = $(this).find("i");
+            let text = $(this).find("span");
+            let isInWishlist = icon.hasClass("fa-solid");
+
+            Swal.fire({
+                title: isInWishlist ? "Bạn có chắc muốn xóa?" : "Thêm vào danh sách yêu thích?",
+                text: isInWishlist ? "Sản phẩm sẽ bị xóa khỏi wishlist!" : "Sản phẩm sẽ được thêm vào wishlist!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: isInWishlist ? "#d33" : "#3085d6",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: isInWishlist ? "Xóa" : "Thêm",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/user/wishlist",
+                        data: {productId: productId},
+                        success: function (response) {
+                            if (response.status === "success") {
+                                if (response.action === "added") {
+                                    icon.removeClass("fa-regular").addClass("fa-solid").css("color", "red");
+                                    text.css("color", "red");
+                                } else {
+                                    icon.removeClass("fa-solid").addClass("fa-regular").removeAttr("style");
+                                    text.removeAttr("style");
+                                }
+                                Swal.fire({
+                                    title: response.action === "added" ? "Đã thêm!" : "Đã xóa!",
+                                    text: response.action === "added" ? "Sản phẩm đã được thêm vào wishlist." : "Sản phẩm đã bị xóa khỏi wishlist.",
+                                    icon: "success",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Lỗi!", "Cần đăng nhập để thực hiện dịch vụ", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+
 <script>
     const stars = document.querySelectorAll('.star');
     const input = document.getElementById("star-value");
@@ -471,6 +532,7 @@
     }
 
 //
+
 
 </script>
 </body>
