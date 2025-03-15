@@ -374,6 +374,51 @@
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>$(document).ready(function () {
+    $(".formAcount").on("submit", function (event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "updateinfouser",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    Swal.fire({
+                        title: "Thành công!",
+                        text: response.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Lỗi!",
+                        text: response.message,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: "Có lỗi xảy ra, vui lòng thử lại!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+    });
+});
+
+
+</script>
 
 </body>
 </html>
