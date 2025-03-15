@@ -27,10 +27,27 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
+        .suggestion-header {
+            padding: 8px 10px;
+            font-weight: bold;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+
         .suggestion-item {
             padding: 10px;
             cursor: pointer;
             border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+        }
+
+        .suggestion-item i {
+            margin-right: 8px;
+            color: #66b840;
+            width: 16px;
+            text-align: center;
         }
 
         .suggestion-item:hover {
@@ -39,6 +56,10 @@
 
         .suggestion-item:last-child {
             border-bottom: none;
+        }
+
+        .history-item {
+            color: #666;
         }
     </style>
 </head>
@@ -208,12 +229,12 @@
             }
         });
 
+        // Handle autocomplete functionality
         searchInput.on('keyup', function() {
             clearTimeout(timer);
             var term = $(this).val().trim();
-
             // Chỉ gửi request khi có ít nhất 2 ký tự
-            if(term.length >= 2) {
+            if (term.length >= 2) {
                 timer = setTimeout(function() {
                     $.ajax({
                         url: '${pageContext.request.contextPath}/suggestions',
@@ -223,12 +244,17 @@
                         success: function(data) {
                             suggestionsContainer.empty();
 
-                            if(data.length > 0) {
+                            if (data.length > 0) {
+                                suggestionsContainer.append('<div class="suggestion-header">Gợi ý tìm kiếm</div>');
+
                                 $.each(data, function(index, suggestion) {
                                     suggestionsContainer.append(
-                                        '<div class="suggestion-item">' + suggestion + '</div>'
+                                        '<div class="suggestion-item">' +
+                                        '<i class="fa-solid fa-magnifying-glass"></i> ' +
+                                        suggestion + '</div>'
                                     );
                                 });
+
                                 suggestionsContainer.show();
                             } else {
                                 suggestionsContainer.hide();
@@ -239,22 +265,38 @@
                             suggestionsContainer.hide();
                         }
                     });
-                }, 300); // Delay 300ms để tránh gửi quá nhiều request
+                }, 300);
+            } else if (term.length === 0) {
+                displaySearchHistory(); // Show history when input is cleared
             } else {
                 suggestionsContainer.hide();
             }
         });
 
-        // Xử lý khi click vào một gợi ý
+        // Handle form submission to save search term
+        searchInput.closest('form').on('submit', function(e) {
+            var term = searchInput.val().trim();
+            if (term.length > 0) {
+                saveToHistory(term);
+            }
+        });
+
+        // Handle suggestion click
         $(document).on('click', '.suggestion-item', function() {
-            var selectedText = $(this).text();
+            var selectedText = $(this).text().trim();
+            // Remove the icon prefix if present
+            if ($(this).hasClass('history-item')) {
+                selectedText = selectedText.replace(/^\s*\S+\s*/, '');
+            }
             searchInput.val(selectedText);
             suggestionsContainer.hide();
-            // Tùy chọn: tự động submit form
+            // Save to history when selecting a suggestion
+            saveToHistory(selectedText);
+            // Submit the form
             searchInput.closest('form').submit();
         });
 
-        // Ẩn danh sách gợi ý khi click ra ngoài
+        // Hide suggestions when clicking outside
         $(document).on('click', function(event) {
             if (!$(event.target).closest('.search-container').length) {
                 suggestionsContainer.hide();
