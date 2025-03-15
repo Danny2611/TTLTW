@@ -149,6 +149,64 @@
         var searchInput = $('#searchTerm');
         var suggestionsContainer = $('#suggestions-container');
         var timer;
+        var MAX_HISTORY_ITEMS = 10;
+
+        // Function to load search history from localStorage
+        function getSearchHistory() {
+            var history = localStorage.getItem('searchHistory');
+            return history ? JSON.parse(history) : [];
+        }
+
+        // Function to save search term to localStorage
+        function saveToHistory(term) {
+            if (!term || term.trim() === '') return;
+
+            var history = getSearchHistory();
+
+            // Remove duplicate if exists
+            history = history.filter(function(item) {
+                return item.toLowerCase() !== term.toLowerCase();
+            });
+
+            // Add new term at the beginning
+            history.unshift(term);
+
+            // Keep only MAX_HISTORY_ITEMS items
+            if (history.length > MAX_HISTORY_ITEMS) {
+                history = history.slice(0, MAX_HISTORY_ITEMS);
+            }
+
+            // Save back to localStorage
+            localStorage.setItem('searchHistory', JSON.stringify(history));
+        }
+
+        // Function to display search history
+        function displaySearchHistory() {
+            var history = getSearchHistory();
+
+            suggestionsContainer.empty();
+
+            if (history.length > 0) {
+                suggestionsContainer.append('<div class="suggestion-header">Lịch sử tìm kiếm</div>');
+
+                $.each(history, function(index, historyItem) {
+                    suggestionsContainer.append(
+                        '<div class="suggestion-item history-item">' +
+                        '<i class="fa-solid fa-clock-rotate-left"></i> ' +
+                        historyItem + '</div>'
+                    );
+                });
+
+                suggestionsContainer.show();
+            }
+        }
+
+        // Show history when input field gains focus and is empty
+        searchInput.on('focus', function() {
+            if ($(this).val().trim() === '') {
+                displaySearchHistory();
+            }
+        });
 
         searchInput.on('keyup', function() {
             clearTimeout(timer);
