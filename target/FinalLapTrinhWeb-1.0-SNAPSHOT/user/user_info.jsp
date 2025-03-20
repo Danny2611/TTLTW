@@ -64,7 +64,7 @@
                                 </header>
                                 <%--thông tin user--%>
                                 <%
-                                    User infor = UserDAO.getInstance().GetInfor(user.getEmail());
+                                    User infor = (User) session.getAttribute("auth");
                                     String fullname = infor.getFullName();
                                     String dob = String.valueOf(infor.getDateOfBirth());
                                     String phone = infor.getPhone();
@@ -79,7 +79,7 @@
                                             <label class="col-md-3 control-label"> Họ tên: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="fullName" name="fullName"
-                                                       value="<%=fullname == null ? "Họ và tên": fullname%>"
+                                                       value="<%=fullname == null ? "": fullname%>"
                                                        placeholder="Họ tên"
                                                        class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
                                                        required>
@@ -127,7 +127,7 @@
                                                 <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" name="city"
-                                                       value="<%=city == null ? "Tỉnh/Thành Phố" : city%>"
+                                                       value="<%=city == null ? "" : city%>"
                                                        placeholder="Thành phố"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                        required>
@@ -301,17 +301,17 @@
             </div>
             <div class="col-lg-4 order-lg-1 text-center img-2">
                 <div class="img-ava">
-                    <img src="https://tienthangvet.vn/wp-content/uploads/logo-tien-thang-vet.jpg"
+                    <img id="avatarImg"
+                         src="${avata == null ? 'https://tienthangvet.vn/wp-content/uploads/logo-tien-thang-vet.jpg' : avata}"
                          class="mx-auto img-fluid img-circle d-block" alt="avatar">
                     <label class="load-ava">
                         <span class="custom-file-control">Đổi Ảnh</span>
-                        <input type="file" id="file" class="custom-file-input">
-
+                        <input type="file" id="file" class="custom-file-input" accept="image/*">
                     </label>
                 </div>
                 <h6 class="mt-2">Nhóm 30</h6>
-
             </div>
+
         </div>
     </div>
 
@@ -374,6 +374,86 @@
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>$(document).ready(function () {
+    $(".formAcount").on("submit", function (event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "updateinfouser",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    Swal.fire({
+                        title: "Thành công!",
+                        text: response.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then(() => {
+                        // location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Lỗi!",
+                        text: response.message,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: "Có lỗi xảy ra, vui lòng thử lại!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+    });
+});
+</script>
+
+<script>
+    document.getElementById("file").addEventListener("change", function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            let formData = new FormData();
+            formData.append("file", file);
+
+            fetch("/updateAvatar", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.querySelector(".img-ava img").src = data.avatarUrl;
+                        Swal.fire({
+                            title: "Thành công!",
+                            text: "Ảnh đại diện đã được cập nhật!",
+                            icon: "success",
+                            confirmButtonText: "OK"
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Lỗi!",
+                            text: data.message,
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                })
+                .catch(error => console.error("Lỗi:", error));
+        }
+    });
+
+</script>
+
 
 </body>
 </html>
