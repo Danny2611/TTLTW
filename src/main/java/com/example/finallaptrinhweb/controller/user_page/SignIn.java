@@ -2,6 +2,7 @@ package com.example.finallaptrinhweb.controller.user_page;
 
 
 import com.example.finallaptrinhweb.dao.UserDAO;
+import com.example.finallaptrinhweb.log.Log;
 import com.example.finallaptrinhweb.model.User;
 import com.example.finallaptrinhweb.session.SessionManager;
 import jakarta.servlet.ServletException;
@@ -36,6 +37,9 @@ public class SignIn extends HttpServlet {
 
         HttpSession session = request.getSession();
         SessionManager.addSession(user.getId(),session);
+        if(user !=null){
+            Log.infor(user.getId(), "Login Controller", "", user.toString());
+        }
         if (user != null && user.getRoleId() == 1) {
             if (verifiedStatus) {
                 session.setAttribute("auth", user);
