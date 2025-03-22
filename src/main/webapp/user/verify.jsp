@@ -44,7 +44,7 @@
                 <% String error = (String) request.getAttribute("wrongAuthCode"); %>
                 <p id="errorMsg" style="color: red; margin-bottom: 10px;"><%= error != null ? error : "" %></p>
 
-                <% if (!isLocked) { %>
+                <% if (!isLocked && error == null && failedAttempts > 0) { %>
                 <p style="color: blue; margin-bottom: 10px;">Bạn còn <%= 4 - failedAttempts %> lần thử.</p>
                 <% } %>
 
