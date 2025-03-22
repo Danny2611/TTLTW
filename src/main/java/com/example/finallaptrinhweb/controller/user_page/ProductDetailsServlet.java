@@ -45,6 +45,13 @@ public class ProductDetailsServlet extends HttpServlet {
 
                 // Gọi phương thức getProductById để lấy chi tiết sản phẩm
                 Product product = productDAO.getProductById(productId);
+                int categoryId = product.getCategoryId();
+                String productType = product.getProductType();
+                // Get similar products from the same category (excluding the current product)
+                List<Product> similarProducts = productDAO.getProductsByCategoryExcludingCurrent(categoryId, productType, productId, 4);
+
+                // Set the similar products in the request attribute
+                request.setAttribute("similarProducts", similarProducts);
 
                 // Sản phẩm tương tự
                 List<Product> products = productDAO.getAllProductsLimited(0, 4);
@@ -64,7 +71,7 @@ public class ProductDetailsServlet extends HttpServlet {
                 }
 //                Kiểm tra đã mua hàng chưa
                 boolean isBought = false;
-                if(user !=null  &&  orderDAO.checkUserBuyProduct(user.getId(), productId)){
+                if (user != null && orderDAO.checkUserBuyProduct(user.getId(), productId)) {
                     isBought = true;
                     System.out.println("User was bought");
                 }
@@ -113,5 +120,4 @@ public class ProductDetailsServlet extends HttpServlet {
         // Do nothing or add POST-specific logic if needed
         response.getWriter().println("POST method not allowed for this servlet");
     }
-
 }
