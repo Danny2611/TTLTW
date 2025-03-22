@@ -12,32 +12,47 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/user/verify"
-)
+@WebServlet("/user/verify")
 public class UserVerify extends HttpServlet {
-    public UserVerify() {
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        this.doPost(request, response);
-    }
+    private static final int MAX_ATTEMPTS = 3;
+    private static final long LOCK_DURATION = 5 * 60 * 1000;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         String authcode = (String) session.getAttribute("authcode");
         String code = request.getParameter("verifycode");
-        if (code.equals(authcode)) {
-            try {
-                UserDAO.getInstance().SetVerifiedStatus(authcode);
-            } catch (SQLException var7) {
-                throw new RuntimeException(var7);
-            }
 
-            response.sendRedirect("./signIn.jsp");
-        } else {
-            request.setAttribute("wrongAuthCode", "Mã xác thực chưa đúng !");
+        Integer attempts = (Integer) session.getAttribute("attempts");
+        Long lockTime = (Long) session.getAttribute("lockTime");
+
+        if (attempts == null) attempts = 0;
+
+        if (lockTime != null && System.currentTimeMillis() - lockTime < LOCK_DURATION) {
+            request.setAttribute("wrongAuthCode", "Yêu cầu nhập lại sau 5 phút!");
             request.getRequestDispatcher("./verify.jsp").forward(request, response);
+            return;
         }
 
+        if (code.equals(authcode)) {
+            session.removeAttribute("attempts");
+            session.removeAttribute("lockTime");
+            try {
+                UserDAO.getInstance().SetVerifiedStatus(authcode);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            response.sendRedirect("./signIn.jsp");
+        } else {
+            attempts++;
+            session.setAttribute("attempts", attempts);
+
+            if (attempts >= MAX_ATTEMPTS) {
+                session.setAttribute("lockTime", System.currentTimeMillis());
+                request.setAttribute("wrongAuthCode", "Bạn đã nhập sai quá nhiều lần. Yêu cầu nhập lại sau 5 phút!");
+            } else {
+                request.setAttribute("wrongAuthCode", "Mã xác thực chưa đúng! Bạn còn " + (MAX_ATTEMPTS - attempts) + " lần thử.");
+            }
+            request.getRequestDispatcher("./verify.jsp").forward(request, response);
+        }
     }
 }

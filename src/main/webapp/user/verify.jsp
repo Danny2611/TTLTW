@@ -14,6 +14,9 @@
 </head>
 
 <body>
+<% Long lockTime = (Long) session.getAttribute("lockTime");
+    boolean isLocked = lockTime != null && System.currentTimeMillis() - lockTime < 5 * 60 * 1000; %>
+
 <div class="website-wrapper">
     <jsp:include page="header.jsp"/>
 
@@ -21,20 +24,22 @@
         <div class="form-container">
             <form class="sign-in-form" method="post" action="verify">
                 <h2>Xác thực</h2>
-                <% String error = (String) request.getAttribute("wrongAuthCode");%>
-                <% if (error != null) {%>
-                <p style="color: red; margin-bottom: 10px"><%=error%>
-                </p>
+                <% String error = (String) request.getAttribute("wrongAuthCode"); %>
+                <% if (error != null) { %>
+                <p style="color: red; margin-bottom: 10px"><%=error%></p>
                 <% } %>
+
                 <div class="input-group">
-                    <input type="text" name="verifycode" placeholder="Vui lòng nhập mã xác thực" required>
+                    <input type="text" name="verifycode" placeholder="Vui lòng nhập mã xác thực" required <% if (isLocked) { %>disabled<% } %>>
                 </div>
-                <button>Gửi</button>
+                <button <% if (isLocked) { %>disabled<% } %>>Gửi</button>
             </form>
         </div>
     </div>
+
     <jsp:include page="footer.jsp"/>
 </div>
+
 
 <script src="js/sign/scipts.js"></script>
 
