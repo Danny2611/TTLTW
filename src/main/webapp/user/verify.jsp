@@ -11,6 +11,7 @@
     <link rel="icon" href="https://tienthangvet.vn/wp-content/uploads/cropped-favicon-Tien-Thang-Vet-192x192.png"
           sizes="192x192"/>
     <title>Đăng nhập</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -47,6 +48,7 @@
                 <% if (!isLocked && error == null && failedAttempts > 0) { %>
                 <p style="color: blue; margin-bottom: 10px;">Bạn còn <%= 4 - failedAttempts %> lần thử.</p>
                 <% } %>
+
 
                 <div class="input-group">
                     <input type="text" id="verifycode" name="verifycode" placeholder="Vui lòng nhập mã xác thực" required <% if (isLocked) { %>disabled<% } %>>
@@ -93,6 +95,35 @@
         let timer = setInterval(updateCountdown, 1000);
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let successMessage = "<%= request.getAttribute("success") %>";
+        let lockWarning = "<%= request.getAttribute("lockWarning") %>";
+
+        if (successMessage !== "null") {
+            Swal.fire({
+                title: "Thành công!",
+                text: successMessage,
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then(() => {
+                window.location.href = "./signIn.jsp";
+            });
+        }
+
+        if (lockWarning !== "null") {
+            Swal.fire({
+                title: "Cảnh báo!",
+                text: lockWarning,
+                icon: "warning",
+                confirmButtonText: "OK"
+            });
+        }
+    });
+</script>
+
+
+
 
 
 <script src="js/sign/scipts.js"></script>
