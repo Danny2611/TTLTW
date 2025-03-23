@@ -5,7 +5,9 @@ import com.example.finallaptrinhweb.db.JDBIConnector;
 import com.example.finallaptrinhweb.model.User;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Date;
@@ -229,6 +231,116 @@ public class UserDAO {
             e.printStackTrace();
         }
         return  false;
+    }
+    public int getRemaining(String email) {
+        int remaining= 0 ;
+        try{
+            String sql = "select remaining from users where email = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                remaining= resultSet.getInt("remaining");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  remaining;
+    }
+
+    public void updateRemaining( String email, int remaining) {
+        try{
+            String sql = "update users set remaining = ? where email = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, remaining);
+            preparedStatement.setString(2, email);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void resetRemain(int userId){
+        try{
+            String sql = "update users set remaining = 10 where id = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getUserIdByEmail(String email){
+        int id= 0 ;
+        try{
+            String sql = "select id from users where email = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                id= resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  id;
+    }
+
+
+    public boolean isLocked(String email) {
+        String query = "SELECT locked_until FROM users WHERE email = ?";
+        try (
+             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Timestamp lockedUntil = rs.getTimestamp("locked_until");
+                if (lockedUntil != null && lockedUntil.after(new Timestamp(System.currentTimeMillis()))) {
+                    return true; // Tài khoản vẫn đang bị khóa
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void lockAccount(String email) {
+        String query = "UPDATE users SET locked_until = NOW() + INTERVAL 5 MINUTE WHERE email = ?";
+        try (
+             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetAttempts(String email) {
+        String query = "UPDATE users SET remaining = 10, locked_until = NULL WHERE email = ?";
+        try (
+             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public long getLockTime(String email) {
+        long lockTime = 0;
+        String sql = "SELECT locked_until FROM users WHERE email = ?";
+        try (
+             PreparedStatement ps = DBCPDataSource.preparedStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                lockTime = rs.getTimestamp("locked_until").getTime();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lockTime;
     }
 
 

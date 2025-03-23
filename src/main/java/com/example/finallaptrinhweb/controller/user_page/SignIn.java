@@ -1,7 +1,7 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
-
 import com.example.finallaptrinhweb.dao.UserDAO;
+import com.example.finallaptrinhweb.log.Log;
 import com.example.finallaptrinhweb.model.User;
 import com.example.finallaptrinhweb.session.SessionManager;
 import jakarta.servlet.ServletException;
@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.sql.SQLException;
 
 @WebServlet("/user/signin")
@@ -26,44 +27,94 @@ public class SignIn extends HttpServlet {
         String pass = request.getParameter("password");
         User user = null;
 
-        boolean verifiedStatus;
+        // Kiểm tra xem tài khoản có đang bị khóa không
+        System.out.println("isLocked: "+ UserDAO.getInstance().isLocked(email));
+        if (UserDAO.getInstance().isLocked(email)) {
+            request.setAttribute("wrongInfor", "Tài khoản của bạn đang bị khóa. Vui lòng thử lại sau 5 phút.");
+            request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+            return;
+        }
+
+        int currentRemaining = UserDAO.getInstance().getRemaining(email);
         try {
             user = UserDAO.getInstance().CheckLogin(email, pass);
-            verifiedStatus = UserDAO.getInstance().CheckVerifiedStatus(email);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        HttpSession session = request.getSession();
-        SessionManager.addSession(user.getId(),session);
-        if (user != null && user.getRoleId() == 1) {
-            if (verifiedStatus) {
-                session.setAttribute("auth", user);
-                // Chuyển hướng đến trang index.jsp
-                response.sendRedirect(request.getContextPath() + "/user/home");
-            } else {
-                request.setAttribute("wrongInfor", "Tài khoản chưa kích hoạt");
-                request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+        if (currentRemaining > 0) {
+            boolean verifiedStatus;
+            try {
+                verifiedStatus = UserDAO.getInstance().CheckVerifiedStatus(email);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } else if (user != null ) {
-            session.setAttribute("adminAuth", user);
-            if(user.getRoleId() == 2) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-            }
-            else if(user.getRoleId() ==3) {
-                response.sendRedirect(request.getContextPath() + "/admin/product");
-            } else if (user.getRoleId() == 4) {
-                response.sendRedirect(request.getContextPath() + "/admin/total-report");
-            } else if (user.getRoleId() == 5) {
-                response.sendRedirect(request.getContextPath() + "/admin/contact");
 
+            if (user != null) {
+                UserDAO.getInstance().resetRemain(user.getId()); // Reset số lần nhập sai
+                HttpSession session = request.getSession();
+                SessionManager.addSession(user.getId(), session);
+                Log.infor(user.getId(), "Login Controller", "", user.toString());
+
+                if (user.getRoleId() == 1) {
+                    if (verifiedStatus) {
+                        session.setAttribute("auth", user);
+                        response.sendRedirect(request.getContextPath() + "/user/home");
+                        return;
+                    } else {
+                        request.setAttribute("wrongInfor", "Tài khoản chưa kích hoạt.");
+                    }
+                } else {
+                    session.setAttribute("adminAuth", user);
+                    switch (user.getRoleId()) {
+                        case 2 -> response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                        case 3 -> response.sendRedirect(request.getContextPath() + "/admin/product");
+                        case 4 -> response.sendRedirect(request.getContextPath() + "/admin/total-report");
+                        case 5 -> response.sendRedirect(request.getContextPath() + "/admin/contact");
+                    }
+                    return;
+                }
             }
+
+            // Nếu đăng nhập thất bại
+            UserDAO.getInstance().updateRemaining(email, currentRemaining - 1);
+            int newRemaining = UserDAO.getInstance().getRemaining(email); // Lấy lại số lần thử mới nhất
+
+            if (newRemaining == 0) {
+                UserDAO.getInstance().lockAccount(email);
+                request.setAttribute("wrongInfor", "Bạn đã nhập sai quá nhiều lần. Tài khoản sẽ bị khóa trong 5 phút.");
+            } else {
+                request.setAttribute("wrongInfor", "Đăng nhập thất bại. Bạn còn " + newRemaining + " lần thử.");
+            }
+            System.out.println("Số lần đăng nhập còn lại: " + newRemaining);
+
+        } else {
+            if (UserDAO.getInstance().isLocked(email) == false && user != null) {
+                UserDAO.getInstance().resetRemain(user.getId());
+                redirect(user, request,response);
+            }
+
+            request.setAttribute("wrongInfor", "Bạn tạm thời không thể đăng nhập. Hãy thử lại sau 5 phút.");
         }
 
-        else {
-            request.setAttribute("wrongInfor", "Đăng nhập thất bại hoặc bạn không có quyền truy cập");
-            request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+        request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+    }
+
+    private void redirect(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        if (user.getRoleId() == 1) {
+            session.setAttribute("auth", user);
+            response.sendRedirect(request.getContextPath() + "/user/home");
+        } else {
+            session.setAttribute("adminAuth", user);
+            String path = switch (user.getRoleId()) {
+                case 2 -> "/admin/dashboard";
+                case 3 -> "/admin/product";
+                case 4 -> "/admin/total-report";
+                case 5 -> "/admin/contact";
+                default -> "/admin";
+            };
+            response.sendRedirect(request.getContextPath() + path);
         }
     }
 }
-
