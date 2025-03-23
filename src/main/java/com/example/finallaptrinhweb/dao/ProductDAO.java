@@ -64,8 +64,30 @@ public class ProductDAO {
 
         return products;
     }
+    // lấy danh sách sản phẩm tương tự theo cùng loại và danh mục
+    public List<Product> getProductsByCategoryExcludingCurrent(int categoryId, String productType,  int currentProductId, int limit) {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT * FROM products WHERE category_id = ? AND productType = ? AND id != ? AND active = ? LIMIT ?";
 
+        try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.setString(2, productType);
+            preparedStatement.setInt(3, currentProductId);
+            preparedStatement.setBoolean(4, true);
+            preparedStatement.setInt(5, limit);
 
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Product product = mapResultSetToProduct(resultSet);
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
     public int getTotalProducts() {
         int total = 0;
         String query = "SELECT COUNT(*) FROM products";
