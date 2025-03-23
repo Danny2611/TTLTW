@@ -80,14 +80,9 @@
                                          style="align-items: center;display: flex;justify-content: center;">
                                         <div class="pro-qty"
                                              style="display: flex;justify-content: center;align-items: center;">
-                                            <a style="padding: 0 10px;"
-                                               href="updatecart?action=decrement&id=<%=item.getProduct().getId()%>">-</a>
-                                            <form action="updatecart?action=update&id=<%=item.getProduct().getId()%>"
-                                                  method="post">
-                                                <input type="text" name="amount" value="<%=item.getQuantity()%>">
-                                            </form>
-                                            <a style="padding: 0 10px;"
-                                               href="updatecart?action=increment&id=<%=item.getProduct().getId()%>">+</a>
+                                            <a href="javascript:void(0);" class="update-cart-btn" data-action="decrement" data-id="<%= item.getProduct().getId() %>">-</a>
+                                            <p ><%= item.getQuantity() %></p>
+                                            <a href="javascript:void(0);" class="update-cart-btn" data-action="increment" data-id="<%= item.getProduct().getId() %>">+</a>
                                         </div>
                                     </div>
                                 </td>
@@ -156,6 +151,40 @@
         var header = document.querySelector('.container')
         header.classList.toggle('sticky', window.scrollY > 100)
     })
+
+
+
+
+</script>
+<script>
+
+
+    // Hàm gọi API cập nhật giỏ hàng
+    // function updateCart(action, productId, amount = 0, currentQuantity = 0) {
+    //     fetch('/user/updatecart', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/x-www-form-urlencoded'
+    //         },
+    //         body: new URLSearchParams({
+    //             action: action,
+    //             id: productId,
+    //             amount: amount,
+    //             currentQuantity: currentQuantity
+    //         })
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.status === "success") {
+    //                 console.log("✅ Cập nhật giỏ hàng:", data.message);
+    //                 location.reload(); // Reload lại trang để cập nhật UI
+    //             } else {
+    //                 alert("Lỗi: " + data.message);
+    //             }
+    //         })
+    //         .catch(error => console.error("❌ Lỗi kết nối:", error));
+    // }
+
 </script>
 
 </body>
