@@ -47,6 +47,12 @@ public class Product {
         this.supplierImageUrl = supplierImageUrl;
     }
 
+    public Product(int productId, String productName, double price) {
+        this.id = productId;
+        this.productName = productName;
+        this.price = price;
+    }
+
     public int getId() {
         return this.id;
     }

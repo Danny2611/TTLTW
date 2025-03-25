@@ -164,7 +164,7 @@ increment.onclick = async  ()=>{
     console.log(productId);
 
 //     Call api
-    
+
 }
 
 </script>

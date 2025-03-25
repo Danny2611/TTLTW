@@ -1,11 +1,15 @@
 package com.example.finallaptrinhweb.dao;
 
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
+import com.example.finallaptrinhweb.model.CartItem;
+import com.example.finallaptrinhweb.model.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartDAO {
 
@@ -15,6 +19,7 @@ public class CartDAO {
             // 1. Kiểm tra giỏ hàng 'pending' của user
             int cartId = getOrCreateCart(userId);
 
+            System.out.println("cartId"+ cartId);
             // 2. Thêm sản phẩm vào chi tiết giỏ hàng hoặc cập nhật số lượng
             return addToCartDetailOrUpdateQuantity(cartId, productId, 1);
         } catch (SQLException e) {
@@ -29,7 +34,7 @@ public class CartDAO {
         }
         try {
             // 1. Kiểm tra sản phẩm đã có trong giỏ chưa
-            String checkQuery = "SELECT quantity FROM cart_detail WHERE cartId = ? AND productId = ?";
+            String checkQuery = "SELECT quantity FROM cart_details WHERE id = ? AND productId = ?";
             try (PreparedStatement checkStmt = DBCPDataSource.preparedStatement(checkQuery)) {
                 checkStmt.setInt(1, cartId);
                 checkStmt.setInt(2, productId);
@@ -52,30 +57,38 @@ public class CartDAO {
 
 
     private int getOrCreateCart(int userId) throws SQLException {
-        String findCartQuery = "SELECT id FROM cart WHERE userId = ? AND status = 'pending'";
+        // 1. Kiểm tra giỏ hàng 'pending' của user
+        String findCartQuery = "SELECT cartId FROM carts WHERE userId = ? AND status = 'pending'";
         try (PreparedStatement findCartStmt = DBCPDataSource.preparedStatement(findCartQuery)) {
             findCartStmt.setInt(1, userId);
             ResultSet rs = findCartStmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("id");
+                return rs.getInt("cartId"); // Trả về cartId nếu đã tồn tại
             }
         }
-        String createCartQuery = "INSERT INTO cart (userId, status) VALUES (?, 'pending')";
-        try (PreparedStatement createCartStmt = DBCPDataSource.preparedStatement(createCartQuery)) {
+
+        // 2. Nếu chưa có, tạo giỏ hàng mới
+        String createCartQuery = "INSERT INTO carts (userId, status) VALUES (?, 'pending')";
+        try (PreparedStatement createCartStmt = DBCPDataSource.preparedStatementReturnKey(createCartQuery, Statement.RETURN_GENERATED_KEYS)) {
             createCartStmt.setInt(1, userId);
             createCartStmt.executeUpdate();
 
-            ResultSet generatedKeys = createCartStmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1); // Trả về cartId mới tạo
+            // 3. Lấy cartId vừa tạo
+            try (ResultSet generatedKeys = createCartStmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
             }
         }
 
-        throw new SQLException("Không thể tạo giỏ hàng!");
+        throw new SQLException("Không thể tạo hoặc tìm thấy giỏ hàng!");
     }
 
+
+
+
     private boolean updateQuantity(int cartId, int productId, int newQuantity) throws SQLException {
-        String updateQuery = "UPDATE cart_detail SET quantity = ? WHERE cartId = ? AND productId = ?";
+        String updateQuery = "UPDATE cart_details SET quantity = ? WHERE id = ? AND productId = ?";
         try (PreparedStatement updateStmt = DBCPDataSource.preparedStatement(updateQuery)) {
             updateStmt.setInt(1, newQuantity);
             updateStmt.setInt(2, cartId);
@@ -84,7 +97,7 @@ public class CartDAO {
         }
     }
     private boolean insertIntoCartDetail(int cartId, int productId, int quantity) throws SQLException {
-        String insertQuery = "INSERT INTO cart_detail (cartId, productId, quantity) VALUES (?, ?, ?)";
+        String insertQuery = "INSERT INTO cart_details (id, productId, quantity) VALUES (?, ?, ?)";
         try (PreparedStatement insertStmt = DBCPDataSource.preparedStatement(insertQuery)) {
             insertStmt.setInt(1, cartId);
             insertStmt.setInt(2, productId);
@@ -92,4 +105,63 @@ public class CartDAO {
             return insertStmt.executeUpdate() > 0;
         }
     }
+    public boolean incrementProduct(int userId, int productId) {
+        try {
+            int cartId = getOrCreateCart(userId);
+            int stock = productDAO.getQuantityByProductId(productId);
+
+            String query = "UPDATE cart_details SET quantity = quantity + 1 " +
+                    "WHERE cartId = ? AND productId = ? AND quantity < ?";
+            try (PreparedStatement stmt = DBCPDataSource.preparedStatement(query)) {
+                stmt.setInt(1, cartId);
+                stmt.setInt(2, productId);
+                stmt.setInt(3, stock);
+                return stmt.executeUpdate() > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean decrementProduct(int userId, int productId) {
+        try {
+            int cartId = getOrCreateCart(userId);
+
+            String query = "UPDATE cart_details SET quantity = quantity - 1 " +
+                    "WHERE cartId = ? AND productId = ? AND quantity > 0";
+            try (PreparedStatement stmt = DBCPDataSource.preparedStatement(query)) {
+                stmt.setInt(1, cartId);
+                stmt.setInt(2, productId);
+                return stmt.executeUpdate() > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public List<CartItem> getCartByUserId(int userId) {
+        List<CartItem> cartItems = new ArrayList<>();
+        String query = "SELECT p.productId, p.productName, p.price, cd.quantity  FROM cart_details cd JOIN carts c ON cd.cartId = c.cartId JOIN product p ON cd.productId = p.productId WHERE c.userId = ? ";
+
+        try (
+             PreparedStatement stmt = DBCPDataSource.preparedStatement(query)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product(
+                            rs.getInt("productId"),
+                            rs.getString("productName"),
+                            rs.getDouble("price")
+                    );
+                    CartItem item = new CartItem(product, rs.getInt("quantity"));
+                    cartItems.add(item);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cartItems;
+    }
+
 }
