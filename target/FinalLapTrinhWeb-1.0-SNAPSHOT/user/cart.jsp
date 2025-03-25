@@ -80,9 +80,9 @@
                                          style="align-items: center;display: flex;justify-content: center;">
                                         <div class="pro-qty"
                                              style="display: flex;justify-content: center;align-items: center;">
-                                            <a href="javascript:void(0);" class="update-cart-btn" data-action="decrement" data-id="<%= item.getProduct().getId() %>">-</a>
-                                            <p ><%= item.getQuantity() %></p>
-                                            <a href="javascript:void(0);" class="update-cart-btn" data-action="increment" data-id="<%= item.getProduct().getId() %>">+</a>
+                                            <a style="display: block;padding: 5px 16px;font-size: 20px;" href="javascript:void(0);" class="update-cart-btn" id="decrement" data-id="<%= item.getProduct().getId() %>">-</a>
+                                            <p style="padding: 5px 10px;"><%= item.getQuantity() %></p>
+                                            <a style="display: block;padding: 5px 16px;font-size: 20px;"  href="javascript:void(0);" class="update-cart-btn" id="increment" data-id="<%= item.getProduct().getId() %>">+</a>
                                         </div>
                                     </div>
                                 </td>
@@ -157,33 +157,15 @@
 
 </script>
 <script>
+<%--    Increase quantity--%>
+const increment = document.getElementById("increment");
+increment.onclick = async  ()=>{
+    const productId = increment.getAttribute("data-id");
+    console.log(productId);
 
-
-    // Hàm gọi API cập nhật giỏ hàng
-    // function updateCart(action, productId, amount = 0, currentQuantity = 0) {
-    //     fetch('/user/updatecart', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/x-www-form-urlencoded'
-    //         },
-    //         body: new URLSearchParams({
-    //             action: action,
-    //             id: productId,
-    //             amount: amount,
-    //             currentQuantity: currentQuantity
-    //         })
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data.status === "success") {
-    //                 console.log("✅ Cập nhật giỏ hàng:", data.message);
-    //                 location.reload(); // Reload lại trang để cập nhật UI
-    //             } else {
-    //                 alert("Lỗi: " + data.message);
-    //             }
-    //         })
-    //         .catch(error => console.error("❌ Lỗi kết nối:", error));
-    // }
+//     Call api
+    
+}
 
 </script>
 

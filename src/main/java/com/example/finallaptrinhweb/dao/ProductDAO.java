@@ -600,4 +600,20 @@ public class ProductDAO {
         return product;
     }
 
+    public int getQuantityByProductId(int productId){
+        int quantity = 0;
+        String sql = "select quantity from products where id = ?";
+        try {
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                quantity = resultSet.getInt("quantity");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  quantity;
+
+    }
+
 }
