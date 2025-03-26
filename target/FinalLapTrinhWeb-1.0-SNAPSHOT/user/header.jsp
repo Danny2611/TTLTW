@@ -128,12 +128,12 @@
             </form>
             <div class="action">
                 <div class="cart" style="margin: 0 30px 0 30px;">
-                    <%
-                        Cart cart = (Cart) session.getAttribute("cart");
-                        if (cart != null) {
-                    %>
-                    <span class="count"><%=cart.getTotalQuantity()%></span>
-                    <%}%>
+<%--                    <%--%>
+<%--                        Cart cart = (Cart) session.getAttribute("cart");--%>
+<%--                        if (cart != null) {--%>
+<%--                    %>--%>
+<%--                    <span class="count"><%=1%></span>--%>
+<%--                    <%}%>--%>
                     <a href="cart">
                         <i class="fa-solid fa-cart-shopping material-icons"></i>
                     </a>
