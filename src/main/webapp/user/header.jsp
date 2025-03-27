@@ -134,7 +134,7 @@
 <%--                    %>--%>
 <%--                    <span class="count"><%=1%></span>--%>
 <%--                    <%}%>--%>
-                    <a href="cart">
+                    <a href="cart.jsp">
                         <i class="fa-solid fa-cart-shopping material-icons"></i>
                     </a>
                 </div>

@@ -142,7 +142,7 @@ public class CartDAO {
     }
     public List<CartItem> getCartByUserId(int userId) {
         List<CartItem> cartItems = new ArrayList<>();
-        String query = "SELECT p.id, p.productName, p.price, cd.quantity  FROM cart_details cd JOIN carts c ON cd.id = c.cartId JOIN products p ON cd.productId = p.id WHERE c.userId = ? ";
+        String query = "SELECT p.id, p.productName, p.price,p.imageUrl, cd.quantity  FROM cart_details cd JOIN carts c ON cd.id = c.cartId JOIN products p ON cd.productId = p.id WHERE c.userId = ? ";
 
         try (
              PreparedStatement stmt = DBCPDataSource.preparedStatement(query)) {
@@ -152,7 +152,8 @@ public class CartDAO {
                     Product product = new Product(
                             rs.getInt("id"),
                             rs.getString("productName"),
-                            rs.getDouble("price")
+                            rs.getDouble("price"),
+                            rs.getString("imageUrl")
                     );
                     CartItem item = new CartItem(product, rs.getInt("quantity"));
                     cartItems.add(item);
