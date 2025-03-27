@@ -33,10 +33,10 @@ function renderCart(cart) {
                         </td>
                         <td class="shoping__cart__price">${product.price.toLocaleString()} VND</td>
                         <td class="shoping__cart__quantity">
-                            <div class="quantity">
-                                <button class="update-cart-btn" data-action="decrement" data-id="${product.id}">-</button>
+                            <div class="quantity" style=" display: flex;gap: 14px;">
+                                <button style="padding: 5px 10px;outline: none;border: none;" class="update-cart-btn" data-action="decrement" data-id="${product.id}">-</button>
                                 <p>${item.quantity}</p>
-                                <button class="update-cart-btn" data-action="increment" data-id="${product.id}">+</button>
+                                <button style="padding: 5px 10px;outline: none;border: none;" class="update-cart-btn" data-action="increment" data-id="${product.id}">+</button>
                             </div>
                         </td>
                         <td class="shoping__cart__total">${totalPrice.toLocaleString()} VND</td>
@@ -63,7 +63,7 @@ function renderCart(cart) {
                 </div>
                 <div class="shoping__checkout">
                     <h5>TỔNG TIỀN GIỎ HÀNG</h5>
-                    <p>Tổng: <span>${cart.totalAmount.toLocaleString()} VND</span></p>
+                    <p style="text-align: right;font-size: 18px;color: red;">Tổng: <span style="font-size: 18px;font-weight: bold;">${cart.totalAmount.toLocaleString()} VND</span></p>
                     <a href="checkout" class="primary-btn">TIẾN HÀNH THANH TOÁN</a>
                 </div>`;
 
