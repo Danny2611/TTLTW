@@ -111,7 +111,7 @@ public class CartDAO {
             int stock = productDAO.getQuantityByProductId(productId);
 
             String query = "UPDATE cart_details SET quantity = quantity + 1 " +
-                    "WHERE cartId = ? AND productId = ? AND quantity < ?";
+                    "WHERE id = ? AND productId = ? AND quantity < ?";
             try (PreparedStatement stmt = DBCPDataSource.preparedStatement(query)) {
                 stmt.setInt(1, cartId);
                 stmt.setInt(2, productId);
@@ -127,9 +127,8 @@ public class CartDAO {
     public boolean decrementProduct(int userId, int productId) {
         try {
             int cartId = getOrCreateCart(userId);
-
-            String query = "UPDATE cart_details SET quantity = quantity - 1 " +
-                    "WHERE cartId = ? AND productId = ? AND quantity > 0";
+            System.out.println("cartId " + cartId);
+            String query = "UPDATE cart_details SET quantity = quantity - 1 WHERE id = ? AND productId = ? AND quantity > 0";
             try (PreparedStatement stmt = DBCPDataSource.preparedStatement(query)) {
                 stmt.setInt(1, cartId);
                 stmt.setInt(2, productId);
@@ -164,5 +163,21 @@ public class CartDAO {
         }
         return cartItems;
     }
+    public  int getCartIdByUserId(int userId){
+        int res = 0;
+        String sql = "select cartId form carts where userId = ?";
+        try{
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
+            while (resultSet.next()){
+                res = resultSet.getInt("cartId");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  res;
+    }
 }

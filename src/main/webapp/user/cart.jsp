@@ -29,7 +29,7 @@
 
 <body>
 <jsp:include page="header.jsp"/>
-<div class="container" id="cart-container"></div>
+<div style="margin-top: 40px;" class="container" id="cart-container"></div>
 <jsp:include page="footer.jsp"/>
 </body>
 

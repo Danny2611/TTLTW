@@ -41,7 +41,7 @@ function renderCart(cart) {
                         </td>
                         <td class="shoping__cart__total">${totalPrice.toLocaleString()} VND</td>
                         <td class="shoping__cart__item__close">
-                            <button class="delete-cart-btn" data-id="${product.id}">X</button>
+                            <button style="padding: 5px 10px;outline: none;border: none;" class="delete-cart-btn" data-id="${product.id}">X</button>
                         </td>
                     </tr>`;
     }).join("");
@@ -74,6 +74,7 @@ function attachCartEvents() {
     document.querySelectorAll(".update-cart-btn").forEach(btn => {
         btn.addEventListener("click", async () => {
             const productId = btn.getAttribute("data-id");
+            console.log("productId" , productId)
             const action = btn.getAttribute("data-action");
             await updateCart(productId, action);
         });
@@ -88,15 +89,30 @@ function attachCartEvents() {
 }
 
 async function updateCart(productId, action) {
-    try {
-        await fetch("${pageContext.request.contextPath}/api/cart/update", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ productId, action })
-        });
-        fetchCart();
-    } catch (error) {
-        console.error("Error updating cart:", error);
+    if(action === "decrement"){
+        console.log('decrement')
+        try {
+            await fetch("http://localhost:8080/FinalLapTrinhWeb_war/api/cart/decrement", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ productId})
+            });
+            fetchCart();
+        } catch (error) {
+            console.error("Error updating cart:", error);
+        }
+    }
+    if(action === "increment"){
+        try {
+            await fetch("http://localhost:8080/FinalLapTrinhWeb_war/api/cart/increment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ productId})
+            });
+            fetchCart();
+        } catch (error) {
+            console.error("Error updating cart:", error);
+        }
     }
 }
 
