@@ -1,8 +1,6 @@
 package com.example.finallaptrinhweb.dao;
 
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
-import com.example.finallaptrinhweb.db.JDBIConnector;
-import com.example.finallaptrinhweb.model.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

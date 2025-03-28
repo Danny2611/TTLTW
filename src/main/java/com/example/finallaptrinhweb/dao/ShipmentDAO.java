@@ -1,15 +1,10 @@
 package com.example.finallaptrinhweb.dao;
 
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
-import com.example.finallaptrinhweb.model.ShippingInfo;
-import com.example.finallaptrinhweb.dao.OrderDAO;
-import com.example.finallaptrinhweb.model.Order;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.math.BigDecimal;
 
 public class ShipmentDAO {

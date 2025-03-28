@@ -333,3 +333,16 @@ body {
 .user-dropdown:hover .user-dropdown-content {
     display: block;
 } */
+.quantity {
+    display: flex;
+    gap: 14px;
+}
+.update-cart-btn{
+    padding: 5px 10px;outline: none;border: none;
+}
+.shoping__checkout  p {
+    text-align: right;font-size: 18px;color: red;
+}
+.shoping__checkout  p   span{
+    font-size: 18px;font-weight: bold;
+}

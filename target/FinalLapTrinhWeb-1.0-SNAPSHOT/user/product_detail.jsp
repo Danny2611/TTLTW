@@ -379,52 +379,67 @@
         <div class="wrapper-content">
             <div class="container related-and-upsells">
                 <div class="related-products">
-                    <h3 class="title slider-title">Sản phẩm tương tự</h3>
+                    <h3 class="title slider-title">Có thể bạn cũng thích</h3>
                     <div class="products">
                         <div class="wrapper-container">
                             <div class="container">
-                                <c:forEach var="product" items="${products}">
+                                <c:forEach var="similarProduct" items="${similarProducts}">
                                     <div class="item">
                                         <div>
                                             <div class="product-element-top">
-                                                <a href="${pageContext.request.contextPath}/user/product?id=${product.id}">
-                                                    <img src="${pageContext.request.contextPath}/${product.imageUrl}"
+                                                <a href="${pageContext.request.contextPath}/user/product?id=${similarProduct.id}">
+                                                    <img src="${pageContext.request.contextPath}/${similarProduct.imageUrl}"
                                                          alt="">
                                                 </a>
                                             </div>
                                             <div class="product-element-bottom">
-                                                <a href="${pageContext.request.contextPath}/user/product?id=${product.id}">
-                                                        ${product.productName}
+                                                <a href="${pageContext.request.contextPath}/user/product?id=${similarProduct.id}">
+                                                        ${similarProduct.productName}
                                                 </a>
                                             </div>
                                             <div class="product-element">
                                                 <div class="price-wrap">
-                                                    <div class="price">${Util.formatCurrency(product.price)}</div>
+                                                    <div class="price">${Util.formatCurrency(similarProduct.price)}</div>
                                                     <div class="unit">VND</div>
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="wd-buttons wd-pos-r-t">
                                             <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                                <a href="" class="button product_type_simple add-to-cart-loop">
-                                                    <span>
-                                                        <i class="fa-solid fa-cart-shopping"></i> </span></a>
+                                                <a href="${pageContext.request.contextPath}/user/addtocart?id=${similarProduct.id}" class="button product_type_simple add-to-cart-loop">
+                                            <span>
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </span>
+                                                </a>
                                             </div>
                                             <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
-                                                <a href="" class="open-quick-view quick-view-button">
-                                                    <span>
-                                                        <i class="fa-solid fa-magnifying-glass"></i> </span></a>
+                                                <a href="${pageContext.request.contextPath}/user/product?id=${similarProduct.id}" class="open-quick-view quick-view-button">
+                                            <span>
+                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                            </span>
+                                                </a>
                                             </div>
                                             <div class="wd-wishlist-btn wd-action-btn wd-style-icon wd-wishlist-icon">
-                                                <a class="wd-tltp wd-tooltip-inited" href=""
-                                                   data-added-text="Browse Wishlist">
-                                                    <span class="wd-tooltip-label">
-                                                        <i class="fa-regular fa-heart"></i> </span></a>
+                                                <a class="wishlist-btn" data-product-id="${similarProduct.id}">
+                                                    <c:choose>
+                                                        <c:when test="${wishlistProductIds != null && wishlistProductIds.contains(similarProduct.id)}">
+                                                            <i class="fa-solid fa-heart" style="color: red"></i>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <i class="fa-regular fa-heart"></i>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </c:forEach>
+
+                                <c:if test="${empty similarProducts}">
+                                    <div class="no-products-message">
+
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>

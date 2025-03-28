@@ -11,10 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.finallaptrinhweb.db.JDBIConnector;
 import com.example.finallaptrinhweb.model.Product;
 import com.example.finallaptrinhweb.model.Supplier;
-import com.example.finallaptrinhweb.dao.SupplierDAO;
 
 public class ProductDAO {
     private static Connection connection = null;
@@ -598,6 +596,23 @@ public class ProductDAO {
         // Bổ sung các trường thông tin khác nếu cần
 
         return product;
+    }
+
+    public int getQuantityByProductId(int productId){
+        int quantity = 0;
+        String sql = "select quantity from products where id = ?";
+        try {
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, productId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                quantity = resultSet.getInt("quantity");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  quantity;
+
     }
 
 }

@@ -47,4 +47,8 @@ public class DBCPDataSource {
         ds.setMaxIdle(100);
         ds.setMaxOpenPreparedStatements(100);
     }
+
+    public static PreparedStatement preparedStatementReturnKey(String createCartQuery, int returnGeneratedKeys) throws SQLException {
+        return getConnection().prepareStatement(createCartQuery, returnGeneratedKeys);
+    }
 }
