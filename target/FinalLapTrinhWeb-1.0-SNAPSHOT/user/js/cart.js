@@ -118,7 +118,7 @@ async function updateCart(productId, action) {
 
 async function deleteFromCart(productId) {
     try {
-        await fetch("${pageContext.request.contextPath}/api/cart/delete", {
+        await fetch("http://localhost:8080/FinalLapTrinhWeb_war/api/cart/delete", {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ productId })

@@ -180,4 +180,18 @@ public class CartDAO {
         }
         return  res;
     }
+
+    public boolean deleteCartItem(int userId, int productId) throws SQLException {
+        int cartId = getOrCreateCart(userId);
+        String sql = " delete from cart_details where id = ? and productId = ?";
+        try{
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setInt(1, cartId);
+            preparedStatement.setInt(2, productId);
+            return  preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
