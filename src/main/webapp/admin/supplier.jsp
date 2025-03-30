@@ -139,8 +139,8 @@
                                             </td>
                                             <td class="text-right">
                                                 <a href="add-supplier?type=enterEdit&id=${su.id}" class="btn btn-sm bg-success-light mr-2">	<i class="far fa-edit mr-1"></i> Sửa</a>
-                                                <a href="#" style="margin-top: 5px;color: red" class="btn btn-outline-danger btn-sm"
-                                                   onclick="confirmDelete(${su.id})">
+                                                <a href="#" style="margin-top: 5px; color: red" class="btn btn-outline-danger btn-sm"
+                                                   onclick="confirmDelete(${su.id}, this)">
                                                     <i class="fa fa-trash-o"></i> Xóa
                                                 </a>
                                             </td>
@@ -173,14 +173,63 @@
 
 <!-- Custom JS -->
 <script src="assets/js/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function confirmDelete(supplierId) {
-        if (confirm("Bạn có chắc chắn muốn xóa nhà cung cấp này không?")) {
-            // Chuyển hướng đến Servlet để xóa nhà cung cấp
-            window.location.href = "./delete-supplier?id=" + supplierId;
+    function confirmDelete(supplierId, element) {
+        Swal.fire({
+            title: "Bạn có chắc chắn muốn xóa?",
+            text: "Thao tác này không thể hoàn tác!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "./delete-supplier",
+                    type: "POST",
+                    data: { id: supplierId },
+                    success: function(response) {
+                        Swal.fire({
+                            title: "Đã xóa!",
+                            text: "Nhà cung cấp đã bị xóa thành công.",
+                            icon: "success",
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // Xóa dòng chứa nhà cung cấp khỏi UI
+                        $(element).closest("tr").fadeOut(500, function() {
+                            $(this).remove();
+                        });
+                        updatePaginationInfo();
+                    },
+                    error: function() {
+                        Swal.fire("Lỗi!", "Xóa nhà cung cấp thất bại.", "error");
+                    }
+                });
+            }
+        });
+    }
+
+    function updatePaginationInfo() {
+        var info = dataTable.page.info();
+        var total = info.recordsTotal;
+        var currentPage = info.page + 1;
+        var start = info.start + 1;
+        var end = info.end;
+
+        // Nếu là dòng cuối cùng của trang cuối
+        if (total % info.length === 0 && currentPage === Math.ceil(total / info.length)) {
+            dataTable.page('previous').draw('page');
         }
     }
 </script>
+
+
 </body>
 
 </html>

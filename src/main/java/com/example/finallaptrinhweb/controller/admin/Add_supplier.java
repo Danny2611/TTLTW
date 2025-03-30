@@ -68,11 +68,13 @@ public class Add_supplier extends HttpServlet {
 
             boolean isInsert = SupplierDAO.insertSupplier(name, address, phone, email, logoUrl);
             if (isInsert) {
-                response.sendRedirect("supplier");
+                request.setAttribute("success", "Thêm nhà cung cấp thành công!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Thêm nhà cung cấp thất bại!");
                 request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
             }
+
         } else if (type.equalsIgnoreCase("edit")) {
             request.setAttribute("type", "edit");
             request.setAttribute("title", "Chỉnh sửa nhà cung cấp");
@@ -100,11 +102,13 @@ public class Add_supplier extends HttpServlet {
 
             boolean isUpdate = SupplierDAO.updateSupplier(id, name, address, phone, email, logoUrl);
             if (isUpdate) {
-                response.sendRedirect("supplier");
+                request.setAttribute("success", "Cập nhật nhà cung cấp thành công!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Cập nhật thất bại!");
                 request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
             }
+
 
         }
 

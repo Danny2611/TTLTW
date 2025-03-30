@@ -57,7 +57,7 @@ public class SupplierDAO {
     }
 
     public static boolean updateSupplier(int id, String name, String email, String phone, String detailAddress, String logoUrl) {
-        String sql = "UPDATE suppliers SET supplierName=?,  email=?, phone=?, detail_address=?, imageUrl=? WHERE id=?";
+        String sql = "UPDATE suppliers SET supplierName=?, detail_address=?, phone=?, email=?, imageUrl=? WHERE id=?";
         int update = 0;
         try (Connection connection = DBCPDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
