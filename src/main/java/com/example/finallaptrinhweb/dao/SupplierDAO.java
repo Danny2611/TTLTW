@@ -37,14 +37,14 @@ public class SupplierDAO {
         return supplierList;
     }
 
-    public static boolean insertSupplier(String name, String address, int phone, String email, String logoUrl) {
+    public static boolean insertSupplier(String name, String address, String phone, String email, String logoUrl) {
         String sql = "INSERT INTO suppliers (supplierName,detail_address,phone,email, imageUrl) VALUES (?, ?, ?, ?, ?)";
         int update = 0;
         try (Connection connection = DBCPDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, address);
-            preparedStatement.setInt(3, phone);
+            preparedStatement.setString(3, phone);
             preparedStatement.setString(4, email);
             preparedStatement.setString(5, logoUrl);
 
@@ -56,16 +56,17 @@ public class SupplierDAO {
         return update == 1;
     }
 
-    public static boolean updateSupplier(int id, String name, String email, int phone, String detailAddress) {
-        String sql = "UPDATE suppliers SET supplierName=?,  email=?, phone=?, detail_address=? WHERE id=?";
+    public static boolean updateSupplier(int id, String name, String email, String phone, String detailAddress, String logoUrl) {
+        String sql = "UPDATE suppliers SET supplierName=?,  email=?, phone=?, detail_address=?, imageUrl=? WHERE id=?";
         int update = 0;
         try (Connection connection = DBCPDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, email);
-            preparedStatement.setInt(3, phone);
+            preparedStatement.setString(3, phone);
             preparedStatement.setString(4, detailAddress);
-            preparedStatement.setInt(5, id);
+            preparedStatement.setString(5, logoUrl);
+            preparedStatement.setInt(6, id);
 
             update = preparedStatement.executeUpdate();
         } catch (SQLException throwables) {

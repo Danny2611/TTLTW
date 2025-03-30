@@ -50,7 +50,7 @@ public class Add_supplier extends HttpServlet {
             String name = request.getParameter("name");
             String address = request.getParameter("address");
             String email = request.getParameter("email");
-            int phone = Integer.parseInt(request.getParameter("phone"));
+            String phone = request.getParameter("phone");
 
             Part filePart = request.getPart("logo");
             String logoUrl = null;
@@ -79,14 +79,32 @@ public class Add_supplier extends HttpServlet {
             System.out.println("co vao edit");
             String name = request.getParameter("name");
             String address = request.getParameter("address");
-            int phone = Integer.parseInt(request.getParameter("phone"));
+            String phone = request.getParameter("phone");
             String email = request.getParameter("email");
             int id = Integer.parseInt(request.getParameter("id"));
             System.out.println(id);
-            boolean isUpdate = SupplierDAO.updateSupplier(id, name, address, phone, email);
-            Supplier su = SupplierDAO.loadSupplier(id);
-            request.setAttribute("supplier", su);
-            request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            Supplier supplier = SupplierDAO.loadSupplier(id);
+            String logoUrl = supplier.getImageUrl(); // Mặc định giữ logo cũ
+
+            Part filePart = request.getPart("logo");
+            if (filePart != null && filePart.getSize() > 0) {
+                try {
+                    InputStream fileInputStream = filePart.getInputStream();
+                    byte[] fileBytes = fileInputStream.readAllBytes();
+                    Map uploadResult = CloudinaryConfig.getInstance().uploader().upload(fileBytes, ObjectUtils.emptyMap());
+                    logoUrl = (String) uploadResult.get("secure_url");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            boolean isUpdate = SupplierDAO.updateSupplier(id, name, address, phone, email, logoUrl);
+            if (isUpdate) {
+                response.sendRedirect("supplier");
+            } else {
+                request.setAttribute("error", "Cập nhật thất bại!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            }
 
         }
 

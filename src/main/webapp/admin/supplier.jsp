@@ -128,9 +128,15 @@
                                             <td class="truncate-cell">
                                                 <span class="truncate-text">${su.supplierName}</span>
                                             </td>
-                                            <td>${su.detailAddress}</td>
-                                            <td>${su.phone}</td>
-                                            <td>${su.email}</td>
+                                            <td class="truncate-cell">
+                                                <span class="truncate-text  address-text">${su.detailAddress}</span>
+                                            </td>
+                                            <td class="truncate-cell">
+                                                <span class="truncate-text">${su.phone}</span>
+                                            </td>
+                                            <td class="truncate-cell">
+                                                <span class="truncate-text">${su.email}</span>
+                                            </td>
                                             <td class="text-right">
                                                 <a href="add-supplier?type=enterEdit&id=${su.id}" class="btn btn-sm bg-success-light mr-2">	<i class="far fa-edit mr-1"></i> Sửa</a>
                                                 <a href="#" style="margin-top: 5px;color: red" class="btn btn-outline-danger btn-sm"
