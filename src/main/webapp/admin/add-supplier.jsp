@@ -52,7 +52,7 @@
                     <div class="card">
                         <div class="card-body">
                             <form action="add-supplier" method="post"
-                                  accept-charset="UTF-8">
+                                  accept-charset="UTF-8" enctype="multipart/form-data">
                                 <c:if test="${type=='add'}">
                                     <div class="form-group" style="display: none">
                                         <input class="form-control" type="text" value="add" name="type">
@@ -76,6 +76,10 @@
                                     <div class="form-group">
                                         <label>Email</label>
                                         <input id="email" class="form-control" type="text"  name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Logo</label>
+                                        <input class="form-control" type="file" name="logo" accept="image/*">
                                     </div>
                                     <div class="mt-4">
                                         <button class="btn btn-primary" type="submit">Lưu thay đổi</button>

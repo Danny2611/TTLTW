@@ -110,7 +110,7 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <%--										<th>Hình</th>--%>
+                                        <th>Logo</th>
                                         <th>Tên nhà cung cấp</th>
                                         <th>Địa chỉ</th>
                                         <th>Điện thoại</th>
@@ -121,9 +121,13 @@
                                     <tbody>
                                     <c:forEach items="${sup_view}" var="su">
                                         <tr>
-                                            <td>${su.id}</td>
-                                                <%--										<td><img class="rounded service-img mr-1" src="${su.imgUrl}" alt="Hình ảnh danh mục"></td>--%>
-                                            <td>${su.supplierName}</td>
+                                            <td class="truncate-cell">
+                                                <span class="truncate-text">${su.id}</span>
+                                            </td>
+                                            <td><img class="rounded service-img mr-1" src="${su.imageUrl}" alt="Hình ảnh danh mục"></td>
+                                            <td class="truncate-cell">
+                                                <span class="truncate-text">${su.supplierName}</span>
+                                            </td>
                                             <td>${su.detailAddress}</td>
                                             <td>${su.phone}</td>
                                             <td>${su.email}</td>

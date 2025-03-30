@@ -37,8 +37,8 @@ public class SupplierDAO {
         return supplierList;
     }
 
-    public static boolean insertSupplier(String name, String address, int phone, String email) {
-        String sql = "INSERT INTO suppliers (supplierName,detail_address,phone,email) VALUES (?, ?, ?, ?)";
+    public static boolean insertSupplier(String name, String address, int phone, String email, String logoUrl) {
+        String sql = "INSERT INTO suppliers (supplierName,detail_address,phone,email, imageUrl) VALUES (?, ?, ?, ?, ?)";
         int update = 0;
         try (Connection connection = DBCPDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -46,6 +46,7 @@ public class SupplierDAO {
             preparedStatement.setString(2, address);
             preparedStatement.setInt(3, phone);
             preparedStatement.setString(4, email);
+            preparedStatement.setString(5, logoUrl);
 
             update = preparedStatement.executeUpdate();
 

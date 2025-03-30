@@ -1,20 +1,26 @@
 package com.example.finallaptrinhweb.controller.admin;
 
+import com.cloudinary.utils.ObjectUtils;
 import com.example.finallaptrinhweb.dao.SupplierDAO;
 import com.example.finallaptrinhweb.model.Supplier;
+import com.example.finallaptrinhweb.utill.CloudinaryConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+@MultipartConfig
 @WebServlet(urlPatterns = "/admin/add-supplier")
 public class Add_supplier extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,14 +47,32 @@ public class Add_supplier extends HttpServlet {
             }
         }
         if (type.equalsIgnoreCase("add")) {
-            request.setAttribute("type", "add");
-            request.setAttribute("title", "Thêm nhà cung cấp");
             String name = request.getParameter("name");
             String address = request.getParameter("address");
-            int phone = Integer.parseInt(request.getParameter("phone"));
             String email = request.getParameter("email");
-            boolean isInsert = SupplierDAO.insertSupplier(name, address, phone, email);
-            request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            int phone = Integer.parseInt(request.getParameter("phone"));
+
+            Part filePart = request.getPart("logo");
+            String logoUrl = null;
+
+            if (filePart != null && filePart.getSize() > 0) {
+                try {
+                    InputStream fileInputStream = filePart.getInputStream();
+                    byte[] fileBytes = fileInputStream.readAllBytes();
+                    Map uploadResult = CloudinaryConfig.getInstance().uploader().upload(fileBytes, ObjectUtils.emptyMap());
+                    logoUrl = (String) uploadResult.get("secure_url");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            boolean isInsert = SupplierDAO.insertSupplier(name, address, phone, email, logoUrl);
+            if (isInsert) {
+                response.sendRedirect("supplier");
+            } else {
+                request.setAttribute("error", "Thêm nhà cung cấp thất bại!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            }
         } else if (type.equalsIgnoreCase("edit")) {
             request.setAttribute("type", "edit");
             request.setAttribute("title", "Chỉnh sửa nhà cung cấp");

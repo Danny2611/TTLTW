@@ -5278,3 +5278,15 @@ table.table-inbox tbody tr.checked {
 		max-width: 160px;
 	}
 }
+.truncate-cell {
+	vertical-align: middle;
+}
+
+.truncate-text {
+	display: inline-block;
+	max-width: 300px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+}
