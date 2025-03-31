@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/admin/delete-supplier")
 public class Delete_supplier extends HttpServlet {
@@ -18,18 +19,18 @@ public class Delete_supplier extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lấy ID của nhà cung cấp từ tham số truyền vào
-        int supplierId = Integer.parseInt(request.getParameter("id"));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        // Gọi phương thức xóa nhà cung cấp từ SupplierDAO
+        int supplierId = Integer.parseInt(request.getParameter("id"));
         boolean isDeleted = SupplierDAO.deleteSupplier(supplierId);
 
-        // Chuyển hướng lại trang danh sách nhà cung cấp
+        PrintWriter out = response.getWriter();
         if (isDeleted) {
-            response.sendRedirect(request.getContextPath() + "/admin/supplier");
+            out.print("{\"status\": \"success\"}");
         } else {
-            // Xử lý lỗi xóa, có thể chuyển hướng hoặc hiển thị thông báo lỗi
-            response.getWriter().println("Failed to delete supplier.");
+            out.print("{\"status\": \"error\"}");
         }
+        out.flush();
     }
 }

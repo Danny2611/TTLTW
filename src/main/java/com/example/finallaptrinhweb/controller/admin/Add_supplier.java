@@ -1,20 +1,26 @@
 package com.example.finallaptrinhweb.controller.admin;
 
+import com.cloudinary.utils.ObjectUtils;
 import com.example.finallaptrinhweb.dao.SupplierDAO;
 import com.example.finallaptrinhweb.model.Supplier;
+import com.example.finallaptrinhweb.utill.CloudinaryConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+@MultipartConfig
 @WebServlet(urlPatterns = "/admin/add-supplier")
 public class Add_supplier extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,28 +47,68 @@ public class Add_supplier extends HttpServlet {
             }
         }
         if (type.equalsIgnoreCase("add")) {
-            request.setAttribute("type", "add");
-            request.setAttribute("title", "Thêm nhà cung cấp");
             String name = request.getParameter("name");
             String address = request.getParameter("address");
-            int phone = Integer.parseInt(request.getParameter("phone"));
             String email = request.getParameter("email");
-            boolean isInsert = SupplierDAO.insertSupplier(name, address, phone, email);
-            request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            String phone = request.getParameter("phone");
+
+            Part filePart = request.getPart("logo");
+            String logoUrl = null;
+
+            if (filePart != null && filePart.getSize() > 0) {
+                try {
+                    InputStream fileInputStream = filePart.getInputStream();
+                    byte[] fileBytes = fileInputStream.readAllBytes();
+                    Map uploadResult = CloudinaryConfig.getInstance().uploader().upload(fileBytes, ObjectUtils.emptyMap());
+                    logoUrl = (String) uploadResult.get("secure_url");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            boolean isInsert = SupplierDAO.insertSupplier(name, address, phone, email, logoUrl);
+            if (isInsert) {
+                request.setAttribute("success", "Thêm nhà cung cấp thành công!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            } else {
+                request.setAttribute("error", "Thêm nhà cung cấp thất bại!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            }
+
         } else if (type.equalsIgnoreCase("edit")) {
             request.setAttribute("type", "edit");
             request.setAttribute("title", "Chỉnh sửa nhà cung cấp");
             System.out.println("co vao edit");
             String name = request.getParameter("name");
             String address = request.getParameter("address");
-            int phone = Integer.parseInt(request.getParameter("phone"));
+            String phone = request.getParameter("phone");
             String email = request.getParameter("email");
             int id = Integer.parseInt(request.getParameter("id"));
             System.out.println(id);
-            boolean isUpdate = SupplierDAO.updateSupplier(id, name, address, phone, email);
-            Supplier su = SupplierDAO.loadSupplier(id);
-            request.setAttribute("supplier", su);
-            request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            Supplier supplier = SupplierDAO.loadSupplier(id);
+            String logoUrl = supplier.getImageUrl(); // Mặc định giữ logo cũ
+
+            Part filePart = request.getPart("logo");
+            if (filePart != null && filePart.getSize() > 0) {
+                try {
+                    InputStream fileInputStream = filePart.getInputStream();
+                    byte[] fileBytes = fileInputStream.readAllBytes();
+                    Map uploadResult = CloudinaryConfig.getInstance().uploader().upload(fileBytes, ObjectUtils.emptyMap());
+                    logoUrl = (String) uploadResult.get("secure_url");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            boolean isUpdate = SupplierDAO.updateSupplier(id, name, address, phone, email, logoUrl);
+            if (isUpdate) {
+                request.setAttribute("success", "Cập nhật nhà cung cấp thành công!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            } else {
+                request.setAttribute("error", "Cập nhật thất bại!");
+                request.getRequestDispatcher("./add-supplier.jsp").forward(request, response);
+            }
+
 
         }
 
