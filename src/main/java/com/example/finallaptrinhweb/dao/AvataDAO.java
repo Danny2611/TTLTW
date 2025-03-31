@@ -1,7 +1,6 @@
 package com.example.finallaptrinhweb.dao;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.utill.CloudinaryConfig;
 
