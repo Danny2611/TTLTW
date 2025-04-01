@@ -1,50 +1,74 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
-import com.example.finallaptrinhweb.model.Cart;
-import com.example.finallaptrinhweb.model.OrderProduct;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 @WebServlet("/user/checkout")
 public class CheckoutService extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
+    private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-
-        if (cart != null && !cart.isEmpty()) {
-            // Add logic to set other attributes as needed
-            double price = cart.getPriceSaled() != 0 ? cart.getPriceSaled() : cart.getTotalPrice();
-            int typeWeight = cart.getMaxTypeWeight();
-            double priceShipment = calculateShipmentPrice();
-            double totalPrice = price + priceShipment;
-
-            // Set attributes for the JSP
-            request.setAttribute("totalPrice", totalPrice);
-            request.setAttribute("price", price);
-            request.setAttribute("priceShipment", priceShipment);
-            request.setAttribute("typeWeight", typeWeight);
-
-            // Forward to the checkout JSP
-            request.getRequestDispatcher("/user/check_out.jsp").forward(request, response);
-        } else {
-            // Handle the case when the cart is empty
-            // You might want to redirect or display a message
-            response.sendRedirect("/user/cart");
+        String city = request.getParameter("city");
+        String district = request.getParameter("district");
+        String value = request.getParameter("value");
+        System.out.println(city + district);
+        // 🛠 Kiểm tra giá trị đầu vào
+        if (city == null || district == null || value == null || city.isEmpty() || district.isEmpty() || value.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Missing parameters\"}");
+            return;
         }
-    }
 
-    private double calculateShipmentPrice() {
-        return 20000;
+        // ✅ Mã hóa tham số URL
+        String apiUrl = "https://services.giaohangtietkiem.vn/services/shipment/fee?"
+                + "pick_province=" + URLEncoder.encode("Hồ Chí Minh", StandardCharsets.UTF_8.toString())
+                + "&pick_district=" + URLEncoder.encode("Thủ Đức", StandardCharsets.UTF_8.toString())
+                + "&province=" + URLEncoder.encode(city, StandardCharsets.UTF_8.toString())
+                + "&district=" + URLEncoder.encode(district, StandardCharsets.UTF_8.toString())
+                + "&weight=" + URLEncoder.encode("1", StandardCharsets.UTF_8.toString())
+                + "&value=" + URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
+                + "&deliver_option=" + URLEncoder.encode("none", StandardCharsets.UTF_8.toString());
+
+        System.out.println("API URL: " + apiUrl);
+
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json"); // ✅ Fix: Thêm Header
+            conn.setRequestProperty("Token", "1IWspuqjIDEeKZd4S32CPHt8ajxOtfUPO1YKShf");
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("Response Code: " + responseCode); // ✅ Debug lỗi
+
+            if (responseCode == 200) {
+                Scanner scanner = new Scanner(new InputStreamReader(conn.getInputStream()));
+                StringBuilder jsonResponse = new StringBuilder();
+                while (scanner.hasNext()) {
+                    jsonResponse.append(scanner.nextLine());
+                }
+                scanner.close();
+
+                response.setContentType("application/json");
+                response.getWriter().write(jsonResponse.toString());
+            } else {
+                response.setStatus(responseCode);
+                response.getWriter().write("{\"error\": \"Failed to fetch data\"}");
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
+        }
     }
 }

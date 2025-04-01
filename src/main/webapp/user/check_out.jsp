@@ -28,6 +28,7 @@
           sizes="192x192" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Checkout</title>
+
   </head>
   <body>
   <jsp:include page="header.jsp"/>
@@ -38,7 +39,6 @@
       <h1 class="title">Thanh toán</h1>
     </div>
   </div>
-
   <section class="checkout spad">
     <div class="container">
       <div class="row">
@@ -118,13 +118,13 @@
                 </div>
               </c:forEach>
               <div class="checkout__order__subtotal">
-                <p>Tổng: ${ Util.formatCurrency(cart.priceSaled) } VND</p>
+                <p id="totalAmount"></p>
               </div>
               <div class="checkout__order__subtotal">
-                <p>Phí vận chuyển: ${ Util.formatCurrency(priceShipment) } VND</p>
+                <p id="fee">Phí vận chuyển: 0 VND</p>
               </div>
               <div class="checkout__order__total">
-                <p style="color: red;">Tổng tiền thanh toán: ${ Util.formatCurrency(totalPrice) } VND</p>
+                <p id="totalPayment" style="color: red;">Tổng tiền thanh toán: 0 VND</p>
               </div>
             </div>
             <div class="checkout__input__checkbox" >
@@ -320,6 +320,7 @@
   </script>
 
   <jsp:include page="footer.jsp"/>
+  <script src="js/checkout/fee.js"></script>
   </body>
 
   </html>

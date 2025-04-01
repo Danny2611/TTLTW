@@ -87,3 +87,6 @@
     document.getElementById("checkoutForm").submit();
 }
 
+
+
+
