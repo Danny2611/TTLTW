@@ -3,6 +3,9 @@ const city = document.getElementById('city')
 const district= document.getElementById('district')
 const fee = document.getElementById('fee')
 const totalPayment = document.getElementById("totalPayment")
+const feeInput = document.getElementById("fee-input")
+const totalAmountInput = document.getElementById("totalAmount-input")
+const quantity = document.getElementById("quantity")
 let valueOfGoods=0;
  async function getCart() {
     try {
@@ -10,8 +13,10 @@ let valueOfGoods=0;
         const cart = await response.json();
         console.log("cart" , cart)
         valueOfGoods = cart.totalAmount
+        quantity.value = cart.cartItems.reduce((acc, item)=>acc+ item.quantity , 0 )
+        console.log("quantity" , quantity)
         totalAmount.innerHTML = `Tổng: ${cart.totalAmount} VND`
-        totalPayment.innerHTML= `Tổng tiền thanh toán: ${totalAmount} VND`
+        totalPayment.innerHTML= `Tổng tiền thanh toán: ${valueOfGoods} VND`
     } catch (error) {
         console.error("Error fetching cart:", error);
         }
@@ -31,6 +36,8 @@ const getFee = async () => {
             const response = await fetch(url);
             const data = await response.json();
             fee.innerHTML = `Phí vận chuyển: ${data.fee.fee} VND`
+            feeInput.value= data.fee.fee
+            totalAmountInput.value = valueOfGoods +data.fee.fee
             totalPayment.innerHTML= `Tổng tiền thanh toán: ${valueOfGoods + data.fee.fee} VND`
         } catch (error) {
             console.error("Lỗi khi lấy phí:", error);

@@ -50,7 +50,7 @@
         </div>
       </div>
       <h4>Chi tiết đơn hàng</h4>
-      <form id="checkoutForm" action="order-handle" method="post">
+      <form id="checkoutForm" action="order-handle"  method="post">
         <div class="row">
           <div class="col-lg-8 col-md-6">
             <div class="row">
@@ -108,7 +108,7 @@
             <div class="checkout__order">
             <div >
               <h2>Thông tin sản phẩm trong giỏ hàng:</h2>
-
+              <input  name="quantity" style="display: none" id="quantity" />
               <c:forEach var="item" items="${cart.products.values()}">
                 <div class="checkout__order__subtotal">
                   <p>Tên sản phẩm: ${item.product.productName}</p>
@@ -119,9 +119,11 @@
               </c:forEach>
               <div class="checkout__order__subtotal">
                 <p id="totalAmount"></p>
+                <input  name="totalAmount" style="display: none;" id="totalAmount-input"/>
               </div>
               <div class="checkout__order__subtotal">
-                <p id="fee">Phí vận chuyển: 0 VND</p>
+                <p  id="fee">Phí vận chuyển: 0 VND</p>
+                <input name="fee"  style="display: none;" id="fee-input"/>
               </div>
               <div class="checkout__order__total">
                 <p id="totalPayment" style="color: red;">Tổng tiền thanh toán: 0 VND</p>
@@ -131,7 +133,7 @@
               <span  class="payment-validation-message"></span>
               <label for="cash">
                 Cash on delivery (COD)
-                <input type="checkbox" id="cash" name="cash" class="payment-option" />
+                <input type="checkbox" id="cash" name="cash" value="COD" class="payment-option" />
                 <span class="checkmark"></span>
               </label>
             </div>
@@ -144,7 +146,7 @@
             </div>
 
             <div>
-              <form action="<c:url value='/user/checkout' />" method="post" id="paymentValidationMessage" class="payment-validation-message">
+              <form id="paymentValidationMessage" class="payment-validation-message">
                 <!-- ... Form content ... -->
                 <button id="validateAndSubmitBtn" type="button" type="submit"  class="site-btn">Đặt hàng</button>
               </form>
@@ -277,9 +279,48 @@
             // Hiển thị thông báo đỏ nếu form không hợp lệ
             $(".payment-validation-message").text("Vui lòng chọn một phương thức thanh toán (COD hoặc MOMO).").show();
           } else if (isCashChecked) {
+            $("#checkoutForm").submit()
             // Nếu đã chọn COD, hiển thị modal
-            $("#orderSuccessModal").modal("show");
-
+            // $("#orderSuccessModal").modal("show");
+            <%--let formData = new FormData();--%>
+            <%--const fee = document.getElementById("fee-input").value--%>
+            <%--const totalPayment = document.getElementById('totalAmount-input').value--%>
+            <%--const quantity = document.getElementById("quantity").value--%>
+            <%--console.log("quantity value", quantity)--%>
+            <%--console.log("fee value", fee)--%>
+            <%--console.log("total value", totalPayment)--%>
+            <%--formData.append("paymentMethod", "COD");--%>
+            <%--formData.append("firstName", document.getElementById('firstName').value)--%>
+            <%--formData.append("lastName", document.getElementById('lastName').value)--%>
+            <%--formData.append("addressLine1", document.getElementById('addressLine1').value)--%>
+            <%--formData.append("addressLine2", document.getElementById('addressLine2').value)--%>
+            <%--formData.append("district", document.getElementById('district').value)--%>
+            <%--formData.append("city", document.getElementById('city').value)--%>
+            <%--formData.append("phoneNumber", document.getElementById('phoneNumber').value)--%>
+            <%--formData.append("email", document.getElementById('email').value)--%>
+            <%--formData.append("fee", fee)--%>
+            <%--formData.append("totalAmount" , totalPayment)--%>
+            <%--formData.append("quantity", quantity)--%>
+            <%--console.log(formData)--%>
+            <%--console.log("📝 Dữ liệu trong FormData:");--%>
+            <%--for (let pair of formData.entries()) {--%>
+            <%--  console.log(`${pair[0]}: ${pair[1]}`);--%>
+            <%--}--%>
+            <%--fetch("http://localhost:8080/FinalLapTrinhWeb_war/user/order-handle", {--%>
+            <%--  method: "POST",--%>
+            <%--  body: formData--%>
+            <%--})--%>
+            <%--        .then(response => response.text())--%>
+            <%--        .then(data => {--%>
+            <%--          console.log(data);--%>
+            <%--          if (data.trim() === "success") {--%>
+            <%--            alert("Đặt hàng thành công!");--%>
+            <%--            window.location.href = "/thank-you"; // Chuyển hướng sau khi đặt hàng--%>
+            <%--          } else {--%>
+            <%--            alert("Đặt hàng thất bại. Vui lòng thử lại.");--%>
+            <%--          }--%>
+            <%--        })--%>
+            <%--        .catch(error => console.error("Lỗi khi gửi đơn hàng:", error));--%>
           } else if (isMomoChecked) {
             // Nếu đã chọn Momo, hiển thị mã QR code
             $("#momoQrCodeModal").modal("show");
