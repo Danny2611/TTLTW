@@ -26,7 +26,7 @@ public class DbProperties {
     public static String GOOGLE_LINK_GET_TOKEN;
     public static String GOOGLE_LINK_GET_USER_INFO;
     public static String GOOGLE_GRANT_TYPE;
-
+    public static String AUTH_ENDPOINT;
     public DbProperties() {
     }
 
@@ -60,5 +60,6 @@ public class DbProperties {
         GOOGLE_LINK_GET_TOKEN = prop.getProperty("GOOGLE_LINK_GET_TOKEN");
         GOOGLE_LINK_GET_USER_INFO = prop.getProperty("GOOGLE_LINK_GET_USER_INFO");
         GOOGLE_GRANT_TYPE = prop.getProperty("GOOGLE_GRANT_TYPE");
+        AUTH_ENDPOINT = prop.getProperty("AUTH_ENDPOINT");
     }
 }

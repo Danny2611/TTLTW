@@ -40,7 +40,7 @@
 <!-- /Header -->
 
 <!-- Sidebar -->
-<div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar" style="height: auto">
     <div class="sidebar-logo">
         <a href="dashboard">
             <img src="assets/img/logo-icon.png" class="img-fluid" alt="">
