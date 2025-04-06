@@ -69,8 +69,8 @@
                                         <th>Ảnh</th>
                                         <th>Tên sản phẩm</th>
                                         <th>Giá bán</th>
-                                        <th>Số lượng</th>
-                                        <th>ID nhà cung cấp</th>
+                                        <th class="table-nowrap">Số lượng</th>
+                                        <th class="table-nowrap">Nhà cung cấp</th>
                                         <th class="text-right">Hành Động</th>
                                     </tr>
                                     </thead>
@@ -93,9 +93,9 @@
                                                 </c:choose>
                                             </td>
                                             <td>${p.productName}</td>
-                                            <td><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
+                                            <td class="table-nowrap"><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
                                             <td>${p.quantity}</td>
-                                            <td>${p.supplierId}</td>
+                                            <td>${supplierMap[p.supplierId].contactName}</td>
                                             <td class="text-right" style="display: flex; gap: 5px;">
                                                 <a href="edit-product?type=enterEdit&id=${p.id}" class="btn btn-sm bg-success-light">
                                                     <i class="far fa-edit mr-1"></i> Sửa
