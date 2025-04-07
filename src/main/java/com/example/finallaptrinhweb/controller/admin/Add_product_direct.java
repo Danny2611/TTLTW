@@ -87,7 +87,8 @@ public class Add_product_direct extends HttpServlet {
         dao.addProduct(product);
 
         // Chuyển hướng sau khi thêm
-        response.sendRedirect("product");
+        response.sendRedirect("add-product?success=true");
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

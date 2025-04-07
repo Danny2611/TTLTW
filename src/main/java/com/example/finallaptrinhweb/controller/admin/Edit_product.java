@@ -84,8 +84,8 @@ public class Edit_product extends HttpServlet {
                     supplierId, currentImageUrl);
             Product product = ProductDAO.loadProductById(id);
             request.setAttribute("product", product);
-            response.sendRedirect("product");
-//            request.getRequestDispatcher("edit-products.jsp").forward(request, response);
+            request.setAttribute("editSuccess", "true");
+            request.getRequestDispatcher("edit-products.jsp").forward(request, response);
         }
     }
 }

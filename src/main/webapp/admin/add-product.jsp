@@ -178,6 +178,28 @@
 <!-- Custom JS -->
 <script src="assets/js/admin.js"></script>
 
+<%--Sweetalert--%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+
+    if (success === 'true') {
+        Swal.fire({
+            title: 'Thành công!',
+            text: 'Thêm sản phẩm thành công.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'product';
+            }
+        });
+    }
+</script>
+
+
+
 </body>
 
 </html>
