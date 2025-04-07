@@ -4,6 +4,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.example.finallaptrinhweb.dao.ProductDAO;
 import com.example.finallaptrinhweb.model.Product;
 import com.example.finallaptrinhweb.utill.CloudinaryConfig;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 
 import jakarta.servlet.ServletException;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+@MultipartConfig
 @WebServlet(urlPatterns = "/admin/edit-product")
 public class Edit_product extends HttpServlet {
 
@@ -82,7 +84,8 @@ public class Edit_product extends HttpServlet {
                     supplierId, currentImageUrl);
             Product product = ProductDAO.loadProductById(id);
             request.setAttribute("product", product);
-            request.getRequestDispatcher("edit-products.jsp").forward(request, response);
+            response.sendRedirect("product");
+//            request.getRequestDispatcher("edit-products.jsp").forward(request, response);
         }
     }
 }

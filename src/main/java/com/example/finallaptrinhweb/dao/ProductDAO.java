@@ -444,11 +444,11 @@ public class ProductDAO {
     public static boolean updateProduct(int id, String productName, int categoryId, double price, int quantity,
                                         String purpose, String contraindications, int stockQuantity, String ingredients, String dosage,
                                         String instructions, String warrantyPeriod, String storageCondition, String productType,
-                                        int supplierId) {
+                                        int supplierId, String currentImageUrl) {
 
         String sql = "UPDATE products SET productName=?, category_id=?, price=?, quantity=?, purpose=?, "
                 + "contraindications=?, stockQuantity=?, ingredients=?, dosage=?, instructions=?, warrantyPeriod=?, "
-                + "storageCondition=?, productType=?, supplier_id=? WHERE id=?";
+                + "storageCondition=?, productType=?, supplier_id=?, imageUrl=? WHERE id=?";
 
         int update = 0;
 
@@ -467,7 +467,8 @@ public class ProductDAO {
             preparedStatement.setString(12, storageCondition);
             preparedStatement.setString(13, productType);
             preparedStatement.setInt(14, supplierId);
-            preparedStatement.setInt(15, id);
+            preparedStatement.setString(15, currentImageUrl);
+            preparedStatement.setInt(16, id);
 
             update = preparedStatement.executeUpdate();
 

@@ -62,7 +62,7 @@
                     <!-- /Page Header -->
                     <div class="card">
                         <div class="card-body">
-                            <form action="edit-product?type=edit&id=${product.id}" method="post">
+                            <form action="edit-product?type=edit&id=${product.id}" method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <label class="col-form-label col-md-2 table-nowrap">Mã sản phẩm</label>
                                     <div class="col-md-10">

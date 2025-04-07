@@ -31,14 +31,18 @@ public class Home extends HttpServlet {
         String basePath = getServletContext().getRealPath("data\\sp_");
         for (Product product : allProduct) {
             int productId = product.getId();
-            String imageUrl = basePath + productId;
 
-            // Lấy đường dẫn của hình ảnh đầu tiên
-            String firstImagePath = getFirstImagePath(imageUrl);
+            // Nếu imageUrl là null hoặc rỗng, cập nhật lại
+            if (product.getImageUrl() == null || product.getImageUrl().isEmpty()) {
+                String imageUrl = basePath + productId;
+                String firstImagePath = getFirstImagePath(imageUrl);
 
-            // Lưu đường dẫn vào csdl
-            productDAO.updateImgUrl(productId, firstImagePath);
-
+                // Nếu có hình ảnh, cập nhật lại DB
+                if (firstImagePath != null) {
+                    productDAO.updateImgUrl(productId, firstImagePath);
+                    product.setImageUrl(firstImagePath); // Cập nhật lại trong object để sử dụng sau này
+                }
+            }
         }
 
         // Danh sách sản phẩm
