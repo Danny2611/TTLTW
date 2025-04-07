@@ -71,7 +71,7 @@
                                         <th>Giá bán</th>
                                         <th class="table-nowrap">Số lượng</th>
                                         <th class="table-nowrap">Nhà cung cấp</th>
-                                        <th class="text-right">Hành Động</th>
+                                        <th class="text-center">Hành Động</th>
                                     </tr>
                                     </thead>
 
@@ -84,6 +84,9 @@
                                             <td>${p.id}</td>
                                             <td>
                                                 <c:choose>
+                                                    <c:when test="${not empty p.imageUrl and fn:contains(p.imageUrl, 'res.cloudinary.com')}">
+                                                        <img class="rounded service-img mr-1" src="${p.imageUrl}" alt="Hình ảnh sản phẩm">
+                                                    </c:when>
                                                     <c:when test="${not empty p.imageUrl}">
                                                         <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/${p.imageUrl}" alt="Hình ảnh sản phẩm">
                                                     </c:when>
@@ -91,6 +94,7 @@
                                                         <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/images/default.png" alt="Hình ảnh mặc định">
                                                     </c:otherwise>
                                                 </c:choose>
+
                                             </td>
                                             <td>${p.productName}</td>
                                             <td class="table-nowrap"><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
