@@ -4,6 +4,7 @@ import com.example.finallaptrinhweb.dao.UserDAO;
 import com.example.finallaptrinhweb.log.Log;
 import com.example.finallaptrinhweb.model.User;
 import com.example.finallaptrinhweb.session.SessionManager;
+import com.example.finallaptrinhweb.utill.ReCaptchaVerifier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.net.http.HttpRequest;
 import java.sql.SQLException;
 
 @WebServlet("/user/signin")
@@ -25,10 +25,30 @@ public class SignIn extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
         User user = null;
 
+        System.out.println("reCAPTCHA response from form: " + gRecaptchaResponse);
+
+        // Kiểm tra nếu email không tồn tại
+        if (email == null || email.isEmpty()) {
+            request.setAttribute("wrongInfor", "Vui lòng nhập email");
+            request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+            return;
+        }
+
+        // Xác thực reCAPTCHA
+        boolean isRecaptchaValid = ReCaptchaVerifier.verify(gRecaptchaResponse);
+        System.out.println("reCAPTCHA verification result: " + isRecaptchaValid);
+
+        if (!isRecaptchaValid) {
+            request.setAttribute("wrongInfor", "Vui lòng xác nhận reCAPTCHA");
+            request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+            return;
+        }
+
         // Kiểm tra xem tài khoản có đang bị khóa không
-        System.out.println("isLocked: "+ UserDAO.getInstance().isLocked(email));
+        System.out.println("isLocked: " + UserDAO.getInstance().isLocked(email));
         if (UserDAO.getInstance().isLocked(email)) {
             request.setAttribute("wrongInfor", "Tài khoản của bạn đang bị khóa. Vui lòng thử lại sau 5 phút.");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
@@ -96,6 +116,7 @@ public class SignIn extends HttpServlet {
 
             request.setAttribute("wrongInfor", "Bạn tạm thời không thể đăng nhập. Hãy thử lại sau 5 phút.");
         }
+
 
         request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
     }
