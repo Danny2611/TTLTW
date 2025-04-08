@@ -40,6 +40,7 @@ public class SignIn extends HttpServlet {
         try {
             user = UserDAO.getInstance().CheckLogin(email, pass);
         } catch (SQLException e) {
+            logger.error("ERR in login with "+ e);
             throw new RuntimeException(e);
         }
 
@@ -56,7 +57,7 @@ public class SignIn extends HttpServlet {
                 HttpSession session = request.getSession();
                 SessionManager.addSession(user.getId(), session);
 //                Log.infor(user.getId(), "Login Controller", "", user.toString());
-                logger.info("User " + user.getUsername() + "Login Successfully");
+                logger.info("User " + user.getUsername() + " Login Successfully");
                 if (user.getRoleId() == 1) {
                     if (verifiedStatus) {
                         session.setAttribute("auth", user);
@@ -83,6 +84,7 @@ public class SignIn extends HttpServlet {
 
             if (newRemaining == 0) {
                 UserDAO.getInstance().lockAccount(email);
+                logger.warn("User with email " +email  + "Login Fail");
                 request.setAttribute("wrongInfor", "Bạn đã nhập sai quá nhiều lần. Tài khoản sẽ bị khóa trong 5 phút.");
             } else {
                 request.setAttribute("wrongInfor", "Đăng nhập thất bại. Bạn còn " + newRemaining + " lần thử.");
@@ -94,7 +96,7 @@ public class SignIn extends HttpServlet {
                 UserDAO.getInstance().resetRemain(user.getId());
                 redirect(user, request,response);
             }
-            logger.warn("User " + user.getUsername() + "Login Fail");
+            logger.warn("Email " + email + " Login Fail");
             request.setAttribute("wrongInfor", "Bạn tạm thời không thể đăng nhập. Hãy thử lại sau 5 phút.");
         }
 

@@ -69,9 +69,9 @@
                                         <th>Ảnh</th>
                                         <th>Tên sản phẩm</th>
                                         <th>Giá bán</th>
-                                        <th>Số lượng</th>
-                                        <th>ID nhà cung cấp</th>
-                                        <th class="text-right">Hành Động</th>
+                                        <th class="table-nowrap">Số lượng</th>
+                                        <th class="table-nowrap">Nhà cung cấp</th>
+                                        <th class="text-center">Hành Động</th>
                                     </tr>
                                     </thead>
 
@@ -84,6 +84,9 @@
                                             <td>${p.id}</td>
                                             <td>
                                                 <c:choose>
+                                                    <c:when test="${not empty p.imageUrl and fn:contains(p.imageUrl, 'res.cloudinary.com')}">
+                                                        <img class="rounded service-img mr-1" src="${p.imageUrl}" alt="Hình ảnh sản phẩm">
+                                                    </c:when>
                                                     <c:when test="${not empty p.imageUrl}">
                                                         <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/${p.imageUrl}" alt="Hình ảnh sản phẩm">
                                                     </c:when>
@@ -91,11 +94,12 @@
                                                         <img class="rounded service-img mr-1" src="${pageContext.request.contextPath}/images/default.png" alt="Hình ảnh mặc định">
                                                     </c:otherwise>
                                                 </c:choose>
+
                                             </td>
                                             <td>${p.productName}</td>
-                                            <td><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
+                                            <td class="table-nowrap"><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
                                             <td>${p.quantity}</td>
-                                            <td>${p.supplierId}</td>
+                                            <td>${supplierMap[p.supplierId].contactName}</td>
                                             <td class="text-right" style="display: flex; gap: 5px;">
                                                 <a href="edit-product?type=enterEdit&id=${p.id}" class="btn btn-sm bg-success-light">
                                                     <i class="far fa-edit mr-1"></i> Sửa
