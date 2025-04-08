@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class CartIncrementController extends HttpServlet {
 
     private final CartDAO cartDAO = new CartDAO();
     private final Gson gson = new Gson();
+    private  static  final Logger logger = Logger.getLogger(CartIncrementController.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -47,6 +49,7 @@ public class CartIncrementController extends HttpServlet {
             }
 
         } catch (Exception e) {
+            logger.error("ERR server in Increment Cart");
             sendResponse(resp, false, "Lỗi hệ thống: " + e.getMessage());
         }
     }

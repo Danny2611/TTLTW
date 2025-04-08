@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.http.HttpRequest;
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 
 @WebServlet("/user/signin")
 public class SignIn extends HttpServlet {
-
+    private static  final Logger logger = Logger.getLogger(SignIn.class);
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -54,8 +55,8 @@ public class SignIn extends HttpServlet {
                 UserDAO.getInstance().resetRemain(user.getId()); // Reset số lần nhập sai
                 HttpSession session = request.getSession();
                 SessionManager.addSession(user.getId(), session);
-                Log.infor(user.getId(), "Login Controller", "", user.toString());
-
+//                Log.infor(user.getId(), "Login Controller", "", user.toString());
+                logger.info("User " + user.getUsername() + "Login Successfully");
                 if (user.getRoleId() == 1) {
                     if (verifiedStatus) {
                         session.setAttribute("auth", user);
@@ -93,7 +94,7 @@ public class SignIn extends HttpServlet {
                 UserDAO.getInstance().resetRemain(user.getId());
                 redirect(user, request,response);
             }
-
+            logger.warn("User " + user.getUsername() + "Login Fail");
             request.setAttribute("wrongInfor", "Bạn tạm thời không thể đăng nhập. Hãy thử lại sau 5 phút.");
         }
 

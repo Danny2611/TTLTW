@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class CartDecrementController extends HttpServlet {
 
     private final CartDAO cartDAO = new CartDAO();
     private final Gson gson = new Gson();
+    private static  final Logger logger = Logger.getLogger(CartDecrementController.class);
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
@@ -31,6 +33,7 @@ public class CartDecrementController extends HttpServlet {
             // Lấy userId từ query parameter
             String userIdParam = req.getParameter("userId");
             if (userIdParam == null || userIdParam.isEmpty()) {
+                logger.error("Miss user id in decrement cart");
                 sendErrorResponse(resp, "Thiếu userId");
                 return;
             }
@@ -44,10 +47,13 @@ public class CartDecrementController extends HttpServlet {
             JsonObject jsonResponse = new JsonObject();
             jsonResponse.addProperty("success", true);
             jsonResponse.add("cartItems", gson.toJsonTree(cartItems));
-            resp.getWriter().write(gson.toJson(jsonResponse));
 
+            logger.info("Decrement Cart Successfully");
+
+            resp.getWriter().write(gson.toJson(jsonResponse));
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("ERR server in Decrement Cart");
             sendErrorResponse(resp, "Lỗi hệ thống: " + e.getMessage());
         }
     }

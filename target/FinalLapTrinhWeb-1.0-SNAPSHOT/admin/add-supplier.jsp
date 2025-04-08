@@ -27,6 +27,7 @@
     <script src="assets/js/tinymce/tinymce.min.js"></script>
     <%--    <script src="assets/js/tinymce.js"></script>--%>
     <script type="text/javascript" src="lib/ckeditor/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div class="main-wrapper">
@@ -52,7 +53,7 @@
                     <div class="card">
                         <div class="card-body">
                             <form action="add-supplier" method="post"
-                                  accept-charset="UTF-8">
+                                  accept-charset="UTF-8" enctype="multipart/form-data">
                                 <c:if test="${type=='add'}">
                                     <div class="form-group" style="display: none">
                                         <input class="form-control" type="text" value="add" name="type">
@@ -76,6 +77,10 @@
                                     <div class="form-group">
                                         <label>Email</label>
                                         <input id="email" class="form-control" type="text"  name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Logo</label>
+                                        <input class="form-control" type="file" name="logo" accept="image/*">
                                     </div>
                                     <div class="mt-4">
                                         <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
@@ -107,6 +112,15 @@
                                         <label>Email</label>
                                         <input id="email" class="form-control" type="text" value="${supplier.email}" name="email">
                                     </div>
+                                    <div class="form-group">
+                                        <label>Logo</label>
+                                        <div>
+                                            <label for="logoInput">
+                                                <img id="logoPreview" src="${supplier.imageUrl}" width="150" alt="Logo của ${supplier.supplierName}" style="cursor: pointer;">
+                                            </label>
+                                            <input id="logoInput" class="form-control" type="file" name="logo" accept="image/*" style="display: none;" onchange="previewLogo(event)">
+                                        </div>
+                                    </div>
                                     <div class="mt-4">
                                         <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                                         <a href="supplier" class="btn btn-link">Hủy</a>
@@ -134,4 +148,33 @@
         <script src="assets/js/admin.js"></script>
     </div>
 </body>
+<script>
+    function previewLogo(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('logoPreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let successMessage = "${requestScope.success}";
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành công!',
+                text: successMessage,
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = "supplier";
+            });
+        }
+    });
+</script>
+
+
+
 </html>

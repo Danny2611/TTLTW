@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import java.util.*;
 
 @WebServlet("/user/wishlist")
 public class WishlistServlet  extends HttpServlet {
+    private static  final Logger logger = Logger.getLogger(WishlistServlet.class);
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("auth");
@@ -78,10 +80,12 @@ public class WishlistServlet  extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         if (success) {
+            logger.info("Wishlist push successfully");
             String action = isInWishlist ? "removed" : "added";
             out.print("{\"status\": \"success\", \"productId\": " + productId + ", \"action\": \"" + action + "\"}");
             resp.setStatus(HttpServletResponse.SC_OK);
         } else {
+            logger.error("Wishlist push failure");
             out.print("{\"status\": \"error\"}");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

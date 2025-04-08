@@ -1,10 +1,12 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
+import com.example.finallaptrinhweb.controller.admin.LogInByGoogle;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,6 +18,7 @@ import java.util.Scanner;
 
 @WebServlet("/user/checkout")
 public class CheckoutService extends HttpServlet {
+    private static  final Logger logger = Logger.getLogger(CheckoutService.class);
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,7 +62,7 @@ public class CheckoutService extends HttpServlet {
                     jsonResponse.append(scanner.nextLine());
                 }
                 scanner.close();
-
+                logger.info("Checkout successfully");
                 response.setContentType("application/json");
                 response.getWriter().write(jsonResponse.toString());
             } else {
@@ -67,6 +70,7 @@ public class CheckoutService extends HttpServlet {
                 response.getWriter().write("{\"error\": \"Failed to fetch data\"}");
             }
         } catch (Exception e) {
+            logger.error("ERR server in checkout");
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
         }

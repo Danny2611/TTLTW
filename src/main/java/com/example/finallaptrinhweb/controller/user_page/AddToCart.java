@@ -6,13 +6,16 @@ import com.example.finallaptrinhweb.model.CouponCode;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
 @WebServlet("/user/addtocart")
 public class AddToCart extends HttpServlet {
+    private  static  final Logger logger = Logger.getLogger(AddToCart.class);
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info("Get cart");
         doPost(request, response);
     }
 
