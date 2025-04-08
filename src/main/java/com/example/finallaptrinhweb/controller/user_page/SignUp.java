@@ -3,6 +3,7 @@ package com.example.finallaptrinhweb.controller.user_page;
 
 import com.example.finallaptrinhweb.controller.user_page.MailService.SendEmail;
 import com.example.finallaptrinhweb.dao.UserDAO;
+import com.example.finallaptrinhweb.utill.ReCaptchaVerifier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,10 +31,23 @@ public class SignUp extends HttpServlet {
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
         String repass = request.getParameter("repassword");
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
         SendEmail send = new SendEmail();
         String code = send.getRandomVerifyCode();
         String roleParam = request.getParameter("role");
         int roleId = Integer.parseInt(roleParam);
+
+        // Xác thực reCAPTCHA
+        boolean isRecaptchaValid = ReCaptchaVerifier.verify(gRecaptchaResponse);
+        System.out.println("reCAPTCHA verification result: " + isRecaptchaValid);
+
+        if (!isRecaptchaValid) {
+            request.setAttribute("wrongInfor", "Vui lòng xác nhận reCAPTCHA");
+            request.getRequestDispatcher("/user/signUp.jsp").forward(request, response);
+            return;
+        }
+
+
         if (repass.equals(pass)) {
             try {
                 // Kiểm tra độ dài và thành phần của mật khẩu
