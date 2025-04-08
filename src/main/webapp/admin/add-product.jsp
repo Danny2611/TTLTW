@@ -58,15 +58,15 @@
                         <div class="card-body">
 
                             <!-- Form -->
-                            <form action="add-product?type=add" method="post">
+                            <form action="add-product?type=add" method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">Tên sản phẩm</label>
+                                    <label class="col-form-label col-md-2 table-nowrap">Tên sản phẩm</label>
                                     <div class="col-md-10">
                                         <input name="name" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">Giá sản phẩm</label>
+                                    <label class="col-form-label col-md-2 table-nowrap">Giá sản phẩm</label>
                                     <div class="col-md-10">
                                         <input name="price" type="text" class="form-control">
                                     </div>
@@ -121,13 +121,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">Thời hạn sử dụng</label>
+                                    <label class="col-form-label col-md-2">Thời hạn</label>
                                     <div class="col-md-10">
                                         <input name="period" type="text" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">Loại sản phẩm</label>
+                                    <label class="col-form-label col-md-2 table-nowrap">Loại sản phẩm</label>
                                     <div class="col-md-10">
                                         <input name="type" type="text" class="form-control">
                                     </div>
@@ -139,9 +139,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">ID NCC</label>
+                                    <label class="col-form-label col-md-2 table-nowrap">Nhà cung cấp</label>
                                     <div class="col-md-10">
                                         <input name="idsup" type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-2 table-nowrap">Ảnh sản phẩm</label>
+                                    <div class="col-md-10">
+                                        <input name="image" type="file" class="form-control">
                                     </div>
                                 </div>
                                 <div class="mt-4">
@@ -171,6 +177,28 @@
 
 <!-- Custom JS -->
 <script src="assets/js/admin.js"></script>
+
+<%--Sweetalert--%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+
+    if (success === 'true') {
+        Swal.fire({
+            title: 'Thành công!',
+            text: 'Thêm sản phẩm thành công.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'product';
+            }
+        });
+    }
+</script>
+
+
 
 </body>
 
