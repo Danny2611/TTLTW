@@ -102,7 +102,10 @@
                 </div>
               </div>
             </div>
-
+            <div class="checkout__input">
+              <p>Mã giảm</p>
+              <input type="text" id="discount" name="discount" />
+            </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="checkout__order">
@@ -124,6 +127,10 @@
               <div class="checkout__order__subtotal">
                 <p  id="fee">Phí vận chuyển: 0 VND</p>
                 <input name="fee"  style="display: none;" id="fee-input"/>
+              </div>
+              <div class="checkout__order__subtotal">
+                <p  id="discount-fee">Giảm giá: 0 VND</p>
+                <input name="fee-input"  style="display: none;" id="discount-fee-input"/>
               </div>
               <div class="checkout__order__total">
                 <p id="totalPayment" style="color: red;">Tổng tiền thanh toán: 0 VND</p>

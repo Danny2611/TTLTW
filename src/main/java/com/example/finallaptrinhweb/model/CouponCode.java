@@ -7,6 +7,7 @@ public class CouponCode {
     private String discountType;
     private double discountValue;
     private Date expirationDate;
+    private boolean isUse;
 
     public CouponCode() {
     }
@@ -44,6 +45,14 @@ public class CouponCode {
 
     public Date getExpirationDate() {
         return expirationDate;
+    }
+
+    public boolean isUse() {
+        return isUse;
+    }
+
+    public void setUse(boolean use) {
+        isUse = use;
     }
 
     public void setExpirationDate(Date expirationDate) {

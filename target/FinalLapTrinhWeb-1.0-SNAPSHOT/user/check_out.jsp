@@ -102,7 +102,10 @@
                 </div>
               </div>
             </div>
-
+            <div class="checkout__input">
+              <p>Mã giảm</p>
+              <input type="text" id="discount" name="discount" />
+            </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="checkout__order">

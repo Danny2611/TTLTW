@@ -1,8 +1,10 @@
 package com.example.finallaptrinhweb.dao;
 
+import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.db.JDBIConnector;
 import com.example.finallaptrinhweb.model.CouponCode;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,6 +120,14 @@ public class CouponCodeDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public  boolean setUseCouponIsUse(int id) throws SQLException {
+
+        String sql = "update  discounts set isUse = 1 where id =?";
+        PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+        preparedStatement.setInt(1,id);
+        return  preparedStatement.executeUpdate() >0;
     }
 
     public static void main(String[] args) throws SQLException {

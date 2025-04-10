@@ -7,6 +7,11 @@ const feeInput = document.getElementById("fee-input")
 const totalAmountInput = document.getElementById("totalAmount-input")
 const quantity = document.getElementById("quantity")
 let valueOfGoods=0;
+
+ // discount
+const discount = document.getElementById("discount");
+const discountFee = document.getElementById("discount-fee")
+const discountFeeInput = document.getElementById("discount-fee-input")
  async function getCart() {
     try {
         const response = await fetch("http://localhost:8080/FinalLapTrinhWeb_war/api/cart");
@@ -45,6 +50,9 @@ const getFee = async () => {
     }
 
 };
-
+const getDiscount = async  ()=>{
+    
+}
 city.addEventListener("input", getFee);
 district.addEventListener("input", getFee);
+discount.addEventListener("input", getDiscount)
