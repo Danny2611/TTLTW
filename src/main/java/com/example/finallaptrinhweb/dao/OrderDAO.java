@@ -1,14 +1,12 @@
 package com.example.finallaptrinhweb.dao;
 
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
+import com.example.finallaptrinhweb.model.CartItem;
 import com.example.finallaptrinhweb.model.Order;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Timestamp;
 
 public class OrderDAO {
 
@@ -315,7 +313,7 @@ public class OrderDAO {
 
         int updated = 0;
         String sql = "INSERT INTO `orders`(`id`, `username`, `user_id`, `discounts_id`, `ship_id`, `quantity`, `status`, `totalAmount`, `phone`, `detail_address`, `payment`, `date_created`, `total_pay`, `ship_price`) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
@@ -323,7 +321,11 @@ public class OrderDAO {
             preparedStatement.setInt(1, getNextOrderId());
             preparedStatement.setString(2, username);
             preparedStatement.setInt(3, user_id);
-            preparedStatement.setInt(4, discounts_id);
+            if (discounts_id != null) {
+                preparedStatement.setInt(4, discounts_id);
+            } else {
+                preparedStatement.setNull(4, Types.INTEGER);
+            }
             preparedStatement.setInt(5, ship_id);
             preparedStatement.setInt(6, quantity);
             preparedStatement.setString(7, status);
@@ -333,7 +335,7 @@ public class OrderDAO {
             preparedStatement.setInt(11, payment);
             preparedStatement.setTimestamp(12, date_created);
             preparedStatement.setDouble(13, total_pay);
-            preparedStatement.setDouble(14, 20000);
+            preparedStatement.setDouble(14, ship_price);
 
             updated = preparedStatement.executeUpdate();
 
@@ -341,35 +343,59 @@ public class OrderDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        if(updated > 0 ){
+            addCartToOrder(user_id, discounts_id);
+        }
         return updated;
     }
 
-    public static int addOrderProduct(int discountsId, String productName, String imageUrl,
-                                      int quantity, double price, int productId) {
-        int updated = 0;
-        String sql = "INSERT INTO `order_products`(`id`,`order_id`, `discounts_id`, `productName`, `imageUrl`, `quantity`, `price`, `productId`) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?,?)";
+    public static int addCartToOrder(int userId, Integer discountsId) {
+        CartDAO cartDAO = new CartDAO();
+        List<CartItem> cartItems = cartDAO.getCartByUserId(userId);
+        if (cartItems.isEmpty()) {
+            return 0; // Không có sản phẩm nào trong giỏ
+        }
+
+        int updatedRows = 0;
+        String sql = "INSERT INTO `order_products`(`id`, `order_id`, `discounts_id`, `productName`, `imageUrl`, `quantity`, `price`, `productId`) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
 
-            preparedStatement.setInt(1, getNextOrderProId());
-            preparedStatement.setInt(2, getNextOrderId() - 1);
-            preparedStatement.setInt(3, discountsId);
-            preparedStatement.setString(4, productName);
-            preparedStatement.setString(5, imageUrl);
-            preparedStatement.setInt(6, quantity);
-            preparedStatement.setDouble(7, price);
-            preparedStatement.setInt(8, productId);
+            for (CartItem item : cartItems) {
+                preparedStatement.setInt(1, getNextOrderProId());
+                preparedStatement.setInt(2, getNextOrderId() - 1); // Lấy Order mới nhất
 
-            updated = preparedStatement.executeUpdate();
+                // Nếu discountsId là null, đặt giá trị NULL trong DB
+                if (discountsId == null) {
+                    preparedStatement.setNull(3, java.sql.Types.INTEGER);
+                } else {
+                    preparedStatement.setInt(3, discountsId);
+                }
 
+                preparedStatement.setString(4, item.getProduct().getProductName());
+                preparedStatement.setString(5, item.getProduct().getImageUrl());
+                preparedStatement.setInt(6, item.getQuantity());
+                preparedStatement.setDouble(7, item.getProduct().getPrice());
+                preparedStatement.setInt(8, item.getProduct().getId());
+
+                updatedRows += preparedStatement.executeUpdate();
+            }
             preparedStatement.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return updated;
+
+        // Xoá giỏ hàng sau khi đặt hàng thành công (tùy chọn)
+        if (updatedRows > 0) {
+            cartDAO.clearCart(userId);
+        }
+
+        return updatedRows;
     }
+
+
 
     private static int getNextOrderProId() {
         int result = 0;

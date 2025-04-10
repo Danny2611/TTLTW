@@ -1,0 +1,26 @@
+2025-04-09 00:51:22 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquyLogin Successfully
+2025-04-09 00:59:16 WARN  com.example.finallaptrinhweb.controller.user_page.SignIn - Email 21130503@st.hcmuaf.edu.vn Login Fail
+2025-04-09 00:59:41 WARN  com.example.finallaptrinhweb.controller.user_page.SignIn - Email 21130503@st.hcmuaf.edu.vn Login Fail
+2025-04-09 00:59:57 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-09 01:00:13 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-04-09 01:00:22 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:26 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:29 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:37 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:39 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:40 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:40 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:40 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:43 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:43 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:00:44 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:01:24 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:01:33 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-04-09 01:01:34 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-04-09 01:02:39 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:02:42 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:02:43 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:02:44 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:02:44 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:02:45 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-09 01:02:45 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully

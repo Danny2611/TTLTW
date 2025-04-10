@@ -194,4 +194,17 @@ public class CartDAO {
             throw new RuntimeException(e);
         }
     }
+    public  void clearCart(int userId) {
+        String sql = "DELETE FROM cart_details WHERE id IN (SELECT cd.id FROM cart_details cd JOIN carts c ON cd.id = c.cartId WHERE c.userId = ?)";
+
+        try {
+            PreparedStatement stmt = DBCPDataSource.preparedStatement(sql);
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

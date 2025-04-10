@@ -62,15 +62,16 @@
                     <!-- /Page Header -->
                     <div class="card">
                         <div class="card-body">
-                            <form action="edit-product?type=edit&id=${product.id}" method="post">
+                            <input type="hidden" id="editSuccessFlag" value="${editSuccess}">
+                            <form action="edit-product?type=edit&id=${product.id}" method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
-                                    <label class="col-form-label col-md-2">Mã sản phẩm</label>
+                                    <label class="col-form-label col-md-2 table-nowrap">Mã sản phẩm</label>
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="productId" value="${product.id}" readonly>
                                     </div>
                                 </div>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-md-2">Tên sản phẩm</label>
+                                        <label class="col-form-label col-md-2 table-nowrap">Tên sản phẩm</label>
                                         <div class="col-md-10">
                                             <input name="productName" type="text" class="form-control"
                                                    value="${product.productName}">
@@ -140,7 +141,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-md-2">Thời hạn sử dụng</label>
+                                        <label class="col-form-label col-md-2 table-nowrap">Thời hạn</label>
                                         <div class="col-md-10">
                                             <input name="warrantyPeriod" type="text" class="form-control"
                                                    value="${product.warrantyPeriod}">
@@ -161,16 +162,28 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-form-label col-md-2">ID NCC</label>
+                                        <label class="col-form-label col-md-2 table-nowrap">Nhà cung cấp</label>
                                         <div class="col-md-10">
                                             <input name="supplierId" type="text" class="form-control"
                                                    value="${product.supplierId}">
                                         </div>
                                     </div>
-                                    <div class="mt-4">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-md-2">Ảnh sản phẩm</label>
+                                    <div class="col-md-10">
+                                        <label for="image" style="cursor: pointer;">
+                                            <!-- Hiển thị ảnh hiện tại -->
+                                            <img id="imageUrl" src="${product.imageUrl}" alt="Ảnh sản phẩm" style="max-height: 150px; border: 1px solid #ddd;">
+                                        </label>
+                                        <input type="file" id="image" name="image" class="form-control" accept="image/*" style="display: none;" onchange="previewLogo(event)">
+                                        <input type="hidden" name="currentImageUrl" value="${product.imageUrl}">
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
                                         <button class="btn btn-primary">Lưu thay đổi</button>
                                         <a href="product" class="btn btn-link">Hủy</a>
-                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -191,6 +204,35 @@
 
 <!-- Custom JS -->
 <script src="assets/js/admin.js"></script>
+
+<%--Sweetalert--%>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const flag = document.getElementById("editSuccessFlag");
+        if (flag && flag.value === "true") {
+            Swal.fire({
+                title: "Cập nhật thành công!",
+                text: "Sản phẩm đã được cập nhật.",
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then(() => {
+                window.location.href = "product";
+            });
+        }
+    });
+</script>
+
+<script>
+    function previewLogo(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('imageUrl');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 
 </body>
 
