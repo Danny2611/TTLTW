@@ -130,7 +130,7 @@
               </div>
               <div class="checkout__order__subtotal">
                 <p  id="discount-fee">Giảm giá: 0 VND</p>
-                <input name="fee-input"  style="display: none;" id="discount-fee-input"/>
+                <input name="discounts_id"  style="display: none;" id="discount-fee-input"/>
               </div>
               <div class="checkout__order__total">
                 <p id="totalPayment" style="color: red;">Tổng tiền thanh toán: 0 VND</p>
