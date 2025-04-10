@@ -54,8 +54,8 @@ public class CouponCodeDAO {
     public CouponCode getCouponByName(String name) {
         try {
             CouponCode coupons = (CouponCode) JDBIConnector.me().get().withHandle((handle) -> {
-                return handle.createQuery("SELECT * FROM discounts WHERE discountType =?")
-                        .bind(0, name)
+                return handle.createQuery("SELECT * FROM discounts WHERE discountType =? and isUse = ?")
+                        .bind(0, name).bind(1,1)
                         .mapToBean(CouponCode.class)
                         .findFirst()
                         .orElse(null);

@@ -42,31 +42,12 @@ public class DiscountFeeController extends HttpServlet {
             resp.getWriter().write("{\"error\": \"Discount code has already been used\"}");
             return;
         }
-
-        // ✅ Nếu hợp lệ, trả về couponCode dưới dạng JSON
-        try {
             // Set isUse = true
-            boolean update = CouponCodeDAO.getInstance().setUseCouponIsUse(couponCode.getId());
-
-            if (update) {
-                // Gửi thông tin couponCode về FE
-                // Cách 1: Dùng Gson (nên dùng)
                 Gson gson = new Gson();
                 String json = gson.toJson(couponCode);
                 resp.setStatus(HttpServletResponse.SC_OK);
                 resp.getWriter().write(json);
 
-            } else {
-                logger.error("Failed to update discount code");
-                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                resp.getWriter().write("{\"error\": \"Failed to update discount code\"}");
-            }
-
-        } catch (SQLException e) {
-            logger.error("DISCOUNT CHANGE ERR", e);
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"Server error while updating discount code\"}");
-        }
     }
 
 }
