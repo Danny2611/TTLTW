@@ -1,6 +1,6 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
-import com.example.finallaptrinhweb.controller.user_page.GoogleService.Service;
+import com.example.finallaptrinhweb.controller.user_page.FacebookService.Service;
 import com.example.finallaptrinhweb.dao.UserDAO;
 import com.example.finallaptrinhweb.log.Log;
 import com.example.finallaptrinhweb.model.User;
@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/user/loginbygoogle")
-public class LogInByGoogle extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(LogInByGoogle.class);
+@WebServlet("/user/loginbyfacebook")
+public class LogInByFacebook extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(LogInByFacebook.class);
 
-    public LogInByGoogle() {
+    public LogInByFacebook() {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,9 +29,8 @@ public class LogInByGoogle extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-
         if (code == null || code.isEmpty()) {
-            response.sendRedirect("./login");
+            response.sendRedirect("/user/signIn.jsp");
             return;
         }
 
@@ -40,15 +39,15 @@ public class LogInByGoogle extends HttpServlet {
             User user = Service.getUserInfo(accessToken);
 
             if (user == null || user.getEmail() == null || user.getEmail().isEmpty()) {
-                logger.warn("Failed to get valid user information from Google");
-                request.setAttribute("wrongInfor", "Không thể lấy thông tin từ Google. Vui lòng thử lại.");
+                logger.warn("Failed to get valid user information from Facebook");
+                request.setAttribute("wrongInfor", "Không thể lấy thông tin từ Facebook. Vui lòng thử lại.");
                 request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
                 return;
             }
 
             // Kiểm tra tài khoản có bị khóa không
             if (UserDAO.getInstance().isLocked(user.getEmail())) {
-                logger.warn("Google login attempt with locked account: " + user.getEmail());
+                logger.warn("Facebook login attempt with locked account: " + user.getEmail());
                 request.setAttribute("wrongInfor", "Tài khoản của bạn đang bị khóa. Vui lòng thử lại sau 5 phút.");
                 request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
                 return;
@@ -57,9 +56,9 @@ public class LogInByGoogle extends HttpServlet {
             boolean userExists = UserDAO.getInstance().CheckExistUser(user.getEmail());
 
             if (!userExists) {
-                // Đăng ký người dùng mới từ Google (verified và role_id = 1)
+                // Đăng ký người dùng mới từ Facebook (verified và role_id = 1)
                 UserDAO.getInstance().SignUp(user.getUsername(), user.getEmail(), null, "verified", 1);
-                logger.info("New user registered via Google: " + user.getEmail());
+                logger.info("New user registered via Facebook: " + user.getEmail());
             }
 
             // Lấy thông tin đầy đủ của user từ database
@@ -68,7 +67,7 @@ public class LogInByGoogle extends HttpServlet {
             // Kiểm tra trạng thái verify
             boolean verifiedStatus = UserDAO.getInstance().CheckVerifiedStatus(dbUser.getEmail());
             if (!verifiedStatus) {
-                logger.warn("Google login attempt with unverified account: " + dbUser.getEmail());
+                logger.warn("Facebook login attempt with unverified account: " + dbUser.getEmail());
                 request.setAttribute("wrongInfor", "Tài khoản chưa kích hoạt.");
                 request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
                 return;
@@ -82,18 +81,18 @@ public class LogInByGoogle extends HttpServlet {
             SessionManager.addSession(dbUser.getId(), session);
 
             // Ghi log đăng nhập thành công
-            logger.info("User " + dbUser.getUsername() + " logged in via Google successfully");
-            // Log.infor(dbUser.getId(), "Google Login", "", dbUser.toString());
+            logger.info("User " + dbUser.getUsername() + " logged in via Facebook successfully");
+            // Log.infor(dbUser.getId(), "Facebook Login", "", dbUser.toString());
 
             // Xử lý chuyển hướng dựa trên role
             redirect(dbUser, request, response);
 
         } catch (SQLException e) {
-            logger.error("Error during Google login: " + e.getMessage(), e);
-            request.setAttribute("wrongInfor", "Đã xảy ra lỗi khi đăng nhập bằng Google. Vui lòng thử lại.");
+            logger.error("Error during Facebook login: " + e.getMessage(), e);
+            request.setAttribute("wrongInfor", "Đã xảy ra lỗi khi đăng nhập bằng Facebook. Vui lòng thử lại.");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
         } catch (Exception e) {
-            logger.error("Unexpected error during Google login: " + e.getMessage(), e);
+            logger.error("Unexpected error during Facebook login: " + e.getMessage(), e);
             request.setAttribute("wrongInfor", "Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
         }
