@@ -11,26 +11,26 @@ import java.util.List;
 public class OrderDAO {
 
 
-    public static List<Order> loadOderByUserId(int user_id) {
-        List<Order> orderList = new ArrayList<>();
-        try {
-            String query = "SELECT * FROM `orders` WHERE user_id = ?";
-
-            try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
-                preparedStatement.setInt(1, user_id);
-
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        Order order = getOrder(resultSet);
-                        orderList.add(order);
-                    }
-                }
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return orderList;
-    }
+//    public static List<Order> loadOderByUserId(int user_id) {
+//        List<Order> orderList = new ArrayList<>();
+//        try {
+//            String query = "SELECT * FROM `orders` WHERE user_id = ?";
+//
+//            try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
+//                preparedStatement.setInt(1, user_id);
+//
+//                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+//                    while (resultSet.next()) {
+//                        Order order = getOrder(resultSet);
+//                        orderList.add(order);
+//                    }
+//                }
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        return orderList;
+//    }
 
     private static Order getOrder(ResultSet resultSet) {
         if (resultSet == null)

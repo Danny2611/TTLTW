@@ -190,7 +190,7 @@
                                             thú y</a></span>
                             </div>
                             <div class="container">
-                                <a style="color: #fff;" href="addtocart?id=${product.id}">
+                                <p data-id="${product.id}" class="add-cart-btn button " style="color: #fff;" >
                                     <button class="add-to-cart-button">
                                         <svg class="add-to-cart-box box-1" width="24" height="24" viewBox="0 0 24 24"
                                              fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -217,7 +217,7 @@
                                         <span class="add-to-cart">Thêm vào giỏ hàng</span>
                                         <span class="added-to-cart">Đã thêm</span>
                                     </button>
-                                </a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -549,6 +549,35 @@
 //
 
 
+</script>
+<script>
+</script>
+<script>
+    $(document).ready(function () {
+        $(".add-cart-btn").click(function () {
+            let productId = $(this).data("id")
+            console.log(productId)
+
+            //     call api
+            fetch(`${pageContext.request.contextPath}/api/cart`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("Success")
+                    } else {
+                        alert("Lỗi: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Lỗi hệ thống:", error));
+
+        })
+    });
 </script>
 </body>
 
