@@ -225,12 +225,16 @@
                                 </div>
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
-                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon"><a
-                                        href="addtocart?id=${p.id}"
-                                        class="button product_type_simple add-to-cart-loop">
+                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
+                                    <a class="button product_type_simple add-to-cart-loop"
+                                       data-id="${p.id}"
+                                       data-stock="${p.stockQuantity}">
                                         <span>
                                             <i class="fa-solid fa-cart-shopping"></i>
-                                        </span></a></div>
+                                        </span>
+                                    </a>
+                                </div>
+
                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
                                     <a href="" class="open-quick-view quick-view-button">
                                         <span>
@@ -292,10 +296,12 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a href="addtocart?id=${p.id}" class="button product_type_simple add-to-cart-loop">
-                                <span>
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                </span>
+                                    <a class="button product_type_simple add-to-cart-loop"
+                                       data-id="${p.id}"
+                                       data-stock="${p.stockQuantity}">
+                                        <span>
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </span>
                                     </a>
                                 </div>
                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
@@ -359,10 +365,12 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a href="addtocart?id=${p.id}" class="button product_type_simple add-to-cart-loop">
-                                <span>
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                </span>
+                                    <a class="button product_type_simple add-to-cart-loop"
+                                       data-id="${p.id}"
+                                       data-stock="${p.stockQuantity}">
+                                        <span>
+                                            <i class="fa-solid fa-cart-shopping"></i>
+                                        </span>
                                     </a>
                                 </div>
                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
@@ -539,6 +547,61 @@
                     });
                 }
             });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".add-to-cart-loop").click(function (e) {
+            e.preventDefault();
+
+            const productId = $(this).data("id");
+            const stock = parseInt($(this).data("stock"));
+
+            if (stock <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Hết hàng',
+                    text: 'Sản phẩm này hiện đã hết hàng. Vui lòng chọn sản phẩm khác.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Gọi API thêm vào giỏ hàng
+            fetch(`${pageContext.request.contextPath}/api/cart`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Đã thêm vào giỏ hàng',
+                            text: 'Sản phẩm đã được thêm vào giỏ!',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: data.message || 'Không thể thêm sản phẩm.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi khi gửi request:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống',
+                        text: 'Đã xảy ra lỗi khi thêm vào giỏ hàng.'
+                    });
+                });
         });
     });
 </script>
