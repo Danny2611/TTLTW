@@ -4,20 +4,21 @@ import com.example.finallaptrinhweb.dao.UserDAO;
 import com.example.finallaptrinhweb.log.Log;
 import com.example.finallaptrinhweb.model.User;
 import com.example.finallaptrinhweb.session.SessionManager;
+import com.example.finallaptrinhweb.utill.ReCaptchaVerifier;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.http.HttpRequest;
 import java.sql.SQLException;
 
 @WebServlet("/user/signin")
 public class SignIn extends HttpServlet {
-
+    private static  final Logger logger = Logger.getLogger(SignIn.class);
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -25,10 +26,30 @@ public class SignIn extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
         User user = null;
 
+        System.out.println("reCAPTCHA response from form: " + gRecaptchaResponse);
+
+        // Kiểm tra nếu email không tồn tại
+        if (email == null || email.isEmpty()) {
+            request.setAttribute("wrongInfor", "Vui lòng nhập email");
+            request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+            return;
+        }
+
+        // Xác thực reCAPTCHA
+        boolean isRecaptchaValid = ReCaptchaVerifier.verify(gRecaptchaResponse);
+        System.out.println("reCAPTCHA verification result: " + isRecaptchaValid);
+
+        if (!isRecaptchaValid) {
+            request.setAttribute("wrongInfor", "Vui lòng xác nhận reCAPTCHA");
+            request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
+            return;
+        }
+
         // Kiểm tra xem tài khoản có đang bị khóa không
-        System.out.println("isLocked: "+ UserDAO.getInstance().isLocked(email));
+        System.out.println("isLocked: " + UserDAO.getInstance().isLocked(email));
         if (UserDAO.getInstance().isLocked(email)) {
             request.setAttribute("wrongInfor", "Tài khoản của bạn đang bị khóa. Vui lòng thử lại sau 5 phút.");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
@@ -39,6 +60,7 @@ public class SignIn extends HttpServlet {
         try {
             user = UserDAO.getInstance().CheckLogin(email, pass);
         } catch (SQLException e) {
+            logger.error("ERR in login with "+ e);
             throw new RuntimeException(e);
         }
 
@@ -54,8 +76,8 @@ public class SignIn extends HttpServlet {
                 UserDAO.getInstance().resetRemain(user.getId()); // Reset số lần nhập sai
                 HttpSession session = request.getSession();
                 SessionManager.addSession(user.getId(), session);
-                Log.infor(user.getId(), "Login Controller", "", user.toString());
-
+//                Log.infor(user.getId(), "Login Controller", "", user.toString());
+                logger.info("User " + user.getUsername() + " Login Successfully");
                 if (user.getRoleId() == 1) {
                     if (verifiedStatus) {
                         session.setAttribute("auth", user);
@@ -82,6 +104,7 @@ public class SignIn extends HttpServlet {
 
             if (newRemaining == 0) {
                 UserDAO.getInstance().lockAccount(email);
+                logger.warn("User with email " +email  + "Login Fail");
                 request.setAttribute("wrongInfor", "Bạn đã nhập sai quá nhiều lần. Tài khoản sẽ bị khóa trong 5 phút.");
             } else {
                 request.setAttribute("wrongInfor", "Đăng nhập thất bại. Bạn còn " + newRemaining + " lần thử.");
@@ -93,9 +116,10 @@ public class SignIn extends HttpServlet {
                 UserDAO.getInstance().resetRemain(user.getId());
                 redirect(user, request,response);
             }
-
+            logger.warn("Email " + email + " Login Fail");
             request.setAttribute("wrongInfor", "Bạn tạm thời không thể đăng nhập. Hãy thử lại sau 5 phút.");
         }
+
 
         request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
     }

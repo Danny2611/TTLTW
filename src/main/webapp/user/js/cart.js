@@ -1,5 +1,5 @@
 
-async function fetchCart() {
+ async function fetchCart() {
     try {
         const response = await fetch("http://localhost:8080/FinalLapTrinhWeb_war/api/cart");
         const cart = await response.json();
@@ -64,7 +64,7 @@ function renderCart(cart) {
                 <div class="shoping__checkout">
                     <h5>TỔNG TIỀN GIỎ HÀNG</h5>
                     <p style="text-align: right;font-size: 18px;color: red;">Tổng: <span style="font-size: 18px;font-weight: bold;">${cart.totalAmount.toLocaleString()} VND</span></p>
-                    <a href="checkout" class="primary-btn">TIẾN HÀNH THANH TOÁN</a>
+                    <a href="check_out.jsp" class="primary-btn">TIẾN HÀNH THANH TOÁN</a>
                 </div>`;
 
     attachCartEvents();

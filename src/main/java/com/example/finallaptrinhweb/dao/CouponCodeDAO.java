@@ -1,8 +1,10 @@
 package com.example.finallaptrinhweb.dao;
 
+import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.db.JDBIConnector;
 import com.example.finallaptrinhweb.model.CouponCode;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,8 +54,8 @@ public class CouponCodeDAO {
     public CouponCode getCouponByName(String name) {
         try {
             CouponCode coupons = (CouponCode) JDBIConnector.me().get().withHandle((handle) -> {
-                return handle.createQuery("SELECT * FROM discounts WHERE discountType =?")
-                        .bind(0, name)
+                return handle.createQuery("SELECT * FROM discounts WHERE discountType =? and isUse = ?")
+                        .bind(0, name).bind(1,1)
                         .mapToBean(CouponCode.class)
                         .findFirst()
                         .orElse(null);
@@ -118,6 +120,14 @@ public class CouponCodeDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public  boolean setUseCouponIsUse(int id) throws SQLException {
+
+        String sql = "update  discounts set isUse = 1 where id =?";
+        PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+        preparedStatement.setInt(1,id);
+        return  preparedStatement.executeUpdate() >0;
     }
 
     public static void main(String[] args) throws SQLException {

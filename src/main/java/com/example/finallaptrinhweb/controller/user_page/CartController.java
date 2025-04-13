@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class CartController extends HttpServlet {
 
     private final CartDAO cartDAO = new CartDAO();
     private final Gson gson = new Gson();
+    private static  final Logger logger = Logger.getLogger(CartController.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,14 +51,17 @@ public class CartController extends HttpServlet {
 
             // 3. Trả về phản hồi JSON
             if (success) {
+                logger.info("Add product successfully");
                 resp.setStatus(HttpServletResponse.SC_OK);
                 resp.getWriter().write(jsonResponse(true, "Sản phẩm đã được thêm vào giỏ hàng"));
             } else {
+                logger.error("Add product failure");
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 resp.getWriter().write(jsonResponse(false, "Không thể thêm sản phẩm vào giỏ hàng"));
             }
 
         } catch (Exception e) {
+            logger.error("ERR in cart");
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(jsonResponse(false, "Lỗi hệ thống: " + e.getMessage()));
         }
@@ -78,6 +83,7 @@ public class CartController extends HttpServlet {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("auth");
         if (user==null) {
+
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\": \"Missing userId\"}");
             return;
@@ -100,7 +106,7 @@ public class CartController extends HttpServlet {
 
         Gson gson = new Gson();
         String cartJsonString = gson.toJson(cartJson);
-
+        logger.info("Get cart successfully");
         // Trả về JSON response
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");

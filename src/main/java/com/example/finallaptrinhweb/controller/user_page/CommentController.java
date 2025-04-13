@@ -8,11 +8,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
 @WebServlet(value = "/user/comment")
 public class CommentController extends HttpServlet {
+    private  static  final Logger logger = Logger.getLogger(CommentController.class);
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        get user
@@ -28,6 +30,7 @@ public class CommentController extends HttpServlet {
             System.out.println("Value:" + content + star+productId);
 
             CommentDAO commentDAO = new CommentDAO();
+            logger.info("UserId " + user.getId() + "Comment product ");
 
             if(commentDAO.insertComment(user.getId(), productId,star, content)){
                 resp.sendRedirect(req.getContextPath() +"/user/product?id=" + productId);

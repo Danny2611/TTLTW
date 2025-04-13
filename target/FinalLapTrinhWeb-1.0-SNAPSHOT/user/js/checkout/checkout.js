@@ -2,7 +2,25 @@
     $(document).ready(function () {
     $("#validateAndSubmitBtn").click(function () {
         if ($("#cash").prop("checked") && !$("#momo").prop("checked")) {
-            $("#checkoutForm").submit();
+            let formData = new FormData(document.getElementById("checkoutForm"));
+            console.log("form", formData)
+            formData.append("paymentMethod", "COD");
+
+            fetch("http://localhost:8080/FinalLapTrinhWeb_war/user/order-handle", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    if (data.trim() === "success") {
+                        alert("Đặt hàng thành công!");
+                        window.location.href = "/thank-you"; // Chuyển hướng sau khi đặt hàng
+                    } else {
+                        alert("Đặt hàng thất bại. Vui lòng thử lại.");
+                    }
+                })
+                .catch(error => console.error("Lỗi khi gửi đơn hàng:", error));
         } else if ($("#momo").prop("checked") && !$("#cash").prop("checked")) {
             $("#momo-payment").modal("show");
             startCountdownTimer();
@@ -86,4 +104,7 @@
     // Nếu validation thành công, có thể gửi form
     document.getElementById("checkoutForm").submit();
 }
+
+
+
 
