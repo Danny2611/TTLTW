@@ -151,5 +151,16 @@
 
 <!-- Custom JS -->
 <script src="assets/js/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<c:if test="${param.update_success == 'true'}">
+    <script>
+        Swal.fire({
+            title: 'Cập nhật thành công!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+</c:if>
+
 </body>
 </html>
