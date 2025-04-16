@@ -1,5 +1,6 @@
 package com.example.finallaptrinhweb.controller.admin;
 
+import com.example.finallaptrinhweb.dao.ProductDAO;
 import com.example.finallaptrinhweb.model.Order;
 import com.example.finallaptrinhweb.model.OrderProduct;
 import jakarta.servlet.ServletException;
@@ -26,9 +27,19 @@ public class ViewOrder extends HttpServlet {
 
         int id = Integer.parseInt(request.getParameter("id"));
         String status = request.getParameter("status");
+        ProductDAO productDAO = new ProductDAO();
+        if (status != null) {
+            // Nếu là "Giao hàng thành công", cập nhật tồn kho
+            if (status.equals("Giao hàng thành công")) {
+                List<OrderProduct> productList = loadOrderProductByOrderId(id);
+                for (OrderProduct op : productList) {
+                   productDAO.updateStockProduct(op.getProductId(), op.getQuantity());
+                }
+            }
 
-        if (status != null)
+            // Cập nhật trạng thái đơn hàng
             updateStatusById(id, status);
+        }
 
         Order order = loadOrder_view(id);
         request.setAttribute("view_order", order);
