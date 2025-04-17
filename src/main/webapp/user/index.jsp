@@ -226,8 +226,7 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon"><a
-                                        href="addtocart?id=${p.id}"
-                                        class="button product_type_simple add-to-cart-loop">
+                                        data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
                                         <span>
                                             <i class="fa-solid fa-cart-shopping"></i>
                                         </span></a></div>
@@ -292,7 +291,7 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a href="addtocart?id=${p.id}" class="button product_type_simple add-to-cart-loop">
+                                    <a data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
                                 <span>
                                     <i class="fa-solid fa-cart-shopping"></i>
                                 </span>
@@ -359,7 +358,7 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a href="addtocart?id=${p.id}" class="button product_type_simple add-to-cart-loop">
+                                    <a data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
                                 <span>
                                     <i class="fa-solid fa-cart-shopping"></i>
                                 </span>
@@ -540,6 +539,33 @@
                 }
             });
         });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".add-cart-btn").click(function () {
+            let productId = $(this).data("id")
+            console.log(productId)
+
+            //     call api
+            fetch(`${pageContext.request.contextPath}/api/cart`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Thêm sản phẩm vào giỏ hàng thành công!");
+                    } else {
+                        alert("Lỗi: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Lỗi hệ thống:", error));
+
+        })
     });
 </script>
 </body>
