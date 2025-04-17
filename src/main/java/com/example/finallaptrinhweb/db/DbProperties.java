@@ -27,6 +27,8 @@ public class DbProperties {
     public static String GOOGLE_LINK_GET_USER_INFO;
     public static String GOOGLE_GRANT_TYPE;
     public static String AUTH_ENDPOINT;
+    public static String RECAPTCHA_SITE_KEY;
+    public static String RECAPTCHA_SECRET_KEY;
     public DbProperties() {
     }
 
@@ -61,5 +63,7 @@ public class DbProperties {
         GOOGLE_LINK_GET_USER_INFO = prop.getProperty("GOOGLE_LINK_GET_USER_INFO");
         GOOGLE_GRANT_TYPE = prop.getProperty("GOOGLE_GRANT_TYPE");
         AUTH_ENDPOINT = prop.getProperty("AUTH_ENDPOINT");
+        RECAPTCHA_SITE_KEY = prop.getProperty("RECAPTCHA_SITE_KEY");
+        RECAPTCHA_SECRET_KEY = prop.getProperty("RECAPTCHA_SECRET_KEY");
     }
 }
