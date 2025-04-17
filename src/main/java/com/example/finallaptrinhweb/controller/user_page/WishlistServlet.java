@@ -22,7 +22,8 @@ public class WishlistServlet  extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("auth");
         if(user ==null) {
-            resp.sendRedirect(req.getContextPath() +"/signIn");
+            resp.sendRedirect(req.getContextPath() +"/user/signIn.jsp");
+            return;
         }
         WishlistDAO wishlistDAO = new WishlistDAO();
         ProductDAO productDAO = new ProductDAO();
