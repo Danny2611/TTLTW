@@ -112,7 +112,7 @@
                                         <div class="blockInfo" style="display: flex; margin-top: 30px">
                                             <div class="product-price">${Util.formatCurrency(product.price)} VND</div>
                                             <div class="product-actions">
-                                                <a href="addtocart?id=${product.id}">
+                                                <a data-id="${product.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
                                                     <i class="fas fa-shopping-cart"></i>
                                                 </a>
                                                 <a class="wishlist-btnn" data-product-id="${product.id}">
