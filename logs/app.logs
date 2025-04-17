@@ -181,3 +181,25 @@
 2025-04-11 22:07:27 WARN  com.example.finallaptrinhweb.controller.user_page.SignIn - Email security@gmail.com Login Fail
 2025-04-11 22:07:41 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
 2025-04-11 22:37:33 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
+2025-04-12 18:50:36 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 18:55:54 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 19:25:33 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 19:26:52 INFO  com.example.finallaptrinhweb.controller.user_page.CommentController - UserId 18Comment product 
+2025-04-12 19:28:25 INFO  com.example.finallaptrinhweb.controller.user_page.AddToCart - Get cart
+2025-04-12 19:35:25 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 19:35:28 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:35:39 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:35:41 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:35:43 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:36:07 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:48:45 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 19:49:19 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:53:08 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 19:53:13 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:53:29 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-04-12 19:53:34 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:55:08 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-12 19:55:12 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:55:21 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-04-12 19:55:24 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-12 19:56:07 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
