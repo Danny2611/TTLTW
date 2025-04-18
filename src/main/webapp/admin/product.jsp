@@ -209,8 +209,24 @@
             return;
         }
         // Xử lý file ở đây
-        alert('File đã được chọn: ' + file.name);
-        closeModal();
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Gửi file lên server
+        fetch('/api/import-excel', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert('Đã xử lý file Excel thành công!');
+                console.log(data); // Có thể hiện danh sách sản phẩm được cập nhật/tạo mới
+                closeModal();
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Lỗi khi xử lý file Excel!');
+            });
     });
 </script>
 
