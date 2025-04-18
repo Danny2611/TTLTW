@@ -42,6 +42,22 @@ public class ExcelController extends HttpServlet {
                 String id = getCellValueAsString(row.getCell(0)); // Cột ID
                 String name = getCellValueAsString(row.getCell(1));; // Cột Name
                 int quantity = (int) row.getCell(2).getNumericCellValue(); // Cột Quantity
+
+                String price = getCellValueAsString(row.getCell(3));
+                String supplierName = getCellValueAsString(row.getCell(4));
+                String productCode = getCellValueAsString(row.getCell(5));
+                String category = getCellValueAsString(row.getCell(6));
+                String purpose = getCellValueAsString(row.getCell(7));
+                String contraindication = getCellValueAsString(row.getCell(8));
+                String stock = getCellValueAsString(row.getCell(9));
+                String ingredients = getCellValueAsString(row.getCell(10));
+                String dosage = getCellValueAsString(row.getCell(11));
+                String instructions = getCellValueAsString(row.getCell(12));
+                String warrantyPeriod = getCellValueAsString(row.getCell(13));
+                String storageCondition = getCellValueAsString(row.getCell(14));
+                String productType = getCellValueAsString(row.getCell(15));
+                String image = getCellValueAsString(row.getCell(16));
+                String active = getCellValueAsString(row.getCell(17));
                 System.out.println("name" + name);
                 ProductDAO productDAO = new ProductDAO();
                 Product existing = productDAO.getProductById(Integer.parseInt(id));
