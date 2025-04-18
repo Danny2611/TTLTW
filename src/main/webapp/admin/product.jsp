@@ -213,7 +213,7 @@
         formData.append('file', file);
 
         // Gửi file lên server
-        fetch('/api/import-excel', {
+        fetch('http://localhost:8080/FinalLapTrinhWeb_war/admin/ImportExcelServlet', {
             method: 'POST',
             body: formData
         })

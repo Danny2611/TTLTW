@@ -10,9 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("admin/ImportExcelServlet")
+@WebServlet("/admin/ImportExcelServlet")
 @MultipartConfig
 public class ExcelController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,7 +30,7 @@ public class ExcelController extends HttpServlet {
         PrintWriter out = response.getWriter();
         List<Map<String, Object>> result = new ArrayList<>();
 
-        Part filePart = request.getPart("excelFile");
+        Part filePart = request.getPart("file");
         InputStream fileContent = filePart.getInputStream();
 
         try (Workbook workbook = new XSSFWorkbook(fileContent)) {
@@ -41,10 +39,10 @@ public class ExcelController extends HttpServlet {
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Bỏ dòng tiêu đề
 
-                String id = row.getCell(0).getStringCellValue(); // Cột ID
-                String name = row.getCell(1).getStringCellValue(); // Cột Name
+                String id = getCellValueAsString(row.getCell(0)); // Cột ID
+                String name = getCellValueAsString(row.getCell(1));; // Cột Name
                 int quantity = (int) row.getCell(2).getNumericCellValue(); // Cột Quantity
-
+                System.out.println("name" + name);
                 ProductDAO productDAO = new ProductDAO();
                 Product existing = productDAO.getProductById(Integer.parseInt(id));
 
@@ -65,4 +63,23 @@ public class ExcelController extends HttpServlet {
             out.println(new Gson().toJson(Map.of("success", false, "message", e.getMessage())));
         }
     }
+    public static String getCellValueAsString(Cell cell) {
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf((long) cell.getNumericCellValue()); // hoặc giữ dạng double nếu muốn
+                }
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            default:
+                return "";
+        }
+    }
+
 }
