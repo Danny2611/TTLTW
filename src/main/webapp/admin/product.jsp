@@ -191,6 +191,11 @@
     function closeModal() {
         excelModal.style.display = 'none'; // Ẩn modal
     }
+    excelModal.addEventListener('click', function(event) {
+        if (event.target === excelModal) {
+            closeModal();
+        }
+    });
 
     document.getElementById('uploadExcelBtn').addEventListener('click', () => {
         const fileInput = document.getElementById('excelFileInput');
