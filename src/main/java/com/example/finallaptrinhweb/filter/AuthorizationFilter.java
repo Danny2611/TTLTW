@@ -19,7 +19,7 @@ public class AuthorizationFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        roleAccessMap.put(3, List.of("/admin/product", "/admin/delete-product", "/admin/edit-product"));
+        roleAccessMap.put(3, List.of("/admin/product", "/admin/delete-product", "/admin/edit-product", "/admin/ImportExcelServlet", "/admin/add-product"));
         roleAccessMap.put(4, List.of("/admin/total-report"));
         roleAccessMap.put(5, List.of("/admin/contact"));
     }

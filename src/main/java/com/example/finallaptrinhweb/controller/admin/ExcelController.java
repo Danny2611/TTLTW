@@ -35,35 +35,34 @@ public class ExcelController extends HttpServlet {
         Part filePart = request.getPart("excelFile");
         InputStream fileContent = filePart.getInputStream();
 
-//        try (Workbook workbook = new XSSFWorkbook(fileContent)) {
-//            Sheet sheet = workbook.getSheetAt(0);
-//
-//            for (Row row : sheet) {
-//                if (row.getRowNum() == 0) continue; // Bỏ dòng tiêu đề
-//
-//                String id = row.getCell(0).getStringCellValue(); // Cột ID
-//                String name = row.getCell(1).getStringCellValue(); // Cột Name
-//                int quantity = (int) row.getCell(2).getNumericCellValue(); // Cột Quantity
-//
-//                ProductDAO productDAO = new ProductDAO();
-//                Product existing = productDAO.getProductById(Integer.parseInt(id));
-//
-//                if (existing != null) {
-//                    existing.setQuantity(existing.getQuantity() + quantity);
-//                    productDAO.(existing);
-//                    result.add(Map.of("id", id, "action", "updated"));
-//                } else {
+        try (Workbook workbook = new XSSFWorkbook(fileContent)) {
+            Sheet sheet = workbook.getSheetAt(0);
+
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) continue; // Bỏ dòng tiêu đề
+
+                String id = row.getCell(0).getStringCellValue(); // Cột ID
+                String name = row.getCell(1).getStringCellValue(); // Cột Name
+                int quantity = (int) row.getCell(2).getNumericCellValue(); // Cột Quantity
+
+                ProductDAO productDAO = new ProductDAO();
+                Product existing = productDAO.getProductById(Integer.parseInt(id));
+
+                if (existing != null) {
+                    productDAO.updateQuantity(existing.getId(), quantity);
+                    result.add(Map.of("id", id, "action", "updated"));
+                } else {
 //                    Product newProduct = new Product(id, name, quantity);
-//                    ProductDAO.insert(newProduct);
-//                    result.add(Map.of("id", id, "action", "created"));
-//                }
-//            }
-//
-//            out.println(new Gson().toJson(Map.of("success", true, "data", result)));
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            out.println(new Gson().toJson(Map.of("success", false, "message", e.getMessage())));
-//        }
+//                    ProductDAO.addProduct(newProduct);
+                    result.add(Map.of("id", id, "action", "created"));
+                }
+            }
+
+            out.println(new Gson().toJson(Map.of("success", true, "data", result)));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            out.println(new Gson().toJson(Map.of("success", false, "message", e.getMessage())));
+        }
     }
 }
