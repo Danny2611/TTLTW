@@ -47,9 +47,9 @@
                         <h3 class="page-title">Sản phẩm</h3>
                     </div>
                     <div class="col-auto text-right">
-                        <a class="btn btn-white filter-btn" href="javascript:void(0);" id="filter_search">
-                            <i class="fas fa-filter"></i>
-                        </a>
+                        <button class="btn btn-white filter-btn"  id="filter_search">
+                            <i class="fas fa-file-excel"></i>
+                        </button>
                         <a href="add-product?type=enterAdd" class="btn btn-primary add-button ml-3">
                             <i class="fas fa-plus"></i>
                         </a>
@@ -133,6 +133,16 @@
         </div>
     </div>
 </div>
+<div id="excelModal" class="modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 20px; border-radius: 8px; width: 400px; text-align: center;">
+        <h4>Nhập file Excel</h4>
+        <input type="file" id="excelFileInput" accept=".xlsx, .xls" />
+        <br/><br/>
+        <button class="btn btn-primary" id="uploadExcelBtn">Nhập</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+    </div>
+</div>
 <!-- jQuery -->
 <script src="assets/js/jquery-3.5.0.min.js"></script>
 
@@ -170,5 +180,34 @@
 
 
 </script>
+<script>
+    const btnExcel = document.getElementById('filter_search');
+    const excelModal = document.getElementById('excelModal');
+
+    btnExcel.addEventListener('click', () => {
+        excelModal.style.display = 'flex'; // Hiện modal
+    });
+
+    function closeModal() {
+        excelModal.style.display = 'none'; // Ẩn modal
+    }
+
+    document.getElementById('uploadExcelBtn').addEventListener('click', () => {
+        const fileInput = document.getElementById('excelFileInput');
+        const file = fileInput.files[0];
+        if (!file) {
+            alert('Vui lòng chọn file Excel!');
+            return;
+        }
+        if (!/\.(xlsx|xls)$/i.test(file.name)) {
+            alert('Chỉ chấp nhận file Excel!');
+            return;
+        }
+        // Xử lý file ở đây
+        alert('File đã được chọn: ' + file.name);
+        closeModal();
+    });
+</script>
+
 </body>
 </html>
