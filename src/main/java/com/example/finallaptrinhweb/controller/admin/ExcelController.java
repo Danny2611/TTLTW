@@ -1,15 +1,16 @@
 package com.example.finallaptrinhweb.controller.admin;
 
+import com.example.finallaptrinhweb.dao.CategoryDao;
 import com.example.finallaptrinhweb.dao.ProductDAO;
+import com.example.finallaptrinhweb.dao.SupplierDAO;
 import com.example.finallaptrinhweb.model.Product;
+import com.example.finallaptrinhweb.model.User;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
+import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -23,8 +24,17 @@ import java.util.Map;
 @WebServlet("/admin/ImportExcelServlet")
 @MultipartConfig
 public class ExcelController extends HttpServlet {
+    private static  final Logger logger = Logger.getLogger(ExcelController.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+
+
+//         user
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("adminAuth");
+
+
 
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
@@ -62,12 +72,37 @@ public class ExcelController extends HttpServlet {
                 ProductDAO productDAO = new ProductDAO();
                 Product existing = productDAO.getProductById(Integer.parseInt(id));
 
+                logger.info("User "+ user.getEmail() + "import inventory with excel");
                 if (existing != null) {
-                    productDAO.updateQuantity(existing.getId(), quantity);
+                    System.out.println("update quantity with productName" + existing.getProductName() + "with quantity "+ quantity);
+                    productDAO.updateStockQuantity(existing.getId(), quantity);
+                    logger.info("update stockQuantity successfully");
                     result.add(Map.of("id", id, "action", "updated"));
                 } else {
-//                    Product newProduct = new Product(id, name, quantity);
-//                    ProductDAO.addProduct(newProduct);
+                    System.out.println("create");
+                    int idCate = CategoryDao.getInstance().getCategory(category);
+                    Product product = new Product();
+                    product.setProductName(name);
+                    product.setPrice(Double.valueOf(price));
+                    product.setCategoryId(idCate);
+                    product.setQuantity(quantity);
+                    product.setPurpose(purpose);
+                    product.setContraindications(contraindication);
+                    product.setStockQuantity(Integer.parseInt(stock));
+                    product.setIngredients(ingredients);
+                    product.setDosage(dosage);
+                    product.setInstructions(instructions);
+                    product.setWarrantyPeriod(warrantyPeriod);
+                    product.setProductType(productType);
+                    product.setStorageCondition(storageCondition);
+                    product.setSupplierId(SupplierDAO.getSupplierByName(supplierName));
+                    product.setImageUrl(image); // Lưu URL ảnh
+                    product.setSupplierImageUrl(null); // Nếu không dùng thì có thể bỏ
+                    product.setActive(true);
+
+                    // Lưu vào DB
+                    productDAO.addProduct(product);
+                    logger.info("create product successfully");
                     result.add(Map.of("id", id, "action", "created"));
                 }
             }
@@ -87,7 +122,7 @@ public class ExcelController extends HttpServlet {
                 if (DateUtil.isCellDateFormatted(cell)) {
                     return cell.getDateCellValue().toString();
                 } else {
-                    return String.valueOf((long) cell.getNumericCellValue()); // hoặc giữ dạng double nếu muốn
+                    return String.valueOf((long) cell.getNumericCellValue());
                 }
             case BOOLEAN:
                 return String.valueOf(cell.getBooleanCellValue());

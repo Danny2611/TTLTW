@@ -155,7 +155,17 @@ public class SupplierDAO {
         return sum;
     }
 
-
+    public static int getSupplierByName(String supplierName) throws SQLException {
+        int id=1;
+        String sql = "select id from suppliers where supplierName like ?";
+        PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+        preparedStatement.setString(1, supplierName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            id = resultSet.getInt("id");
+        }
+        return  id;
+    }
     public static void main(String[] args) {
         // Test loadSupplierList
         System.out.println("Load Supplier List:");

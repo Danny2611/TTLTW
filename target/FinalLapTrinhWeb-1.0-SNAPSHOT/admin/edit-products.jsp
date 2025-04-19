@@ -47,6 +47,7 @@
             <div class="row">
                 <div class="col-xl-8 offset-xl-2">
 
+
                     <!-- Page Header -->
                     <div class="page-header">
                         <div class="row">

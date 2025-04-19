@@ -609,3 +609,25 @@
         transform: translateY(1px);
     }
 }
+.stock-status {
+    background-color: #f0f9ff;
+    border: 1px solid #b6e0fe;
+    color: #007acc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 5px rgba(0, 122, 204, 0.1);
+}
+
+.stock-status i {
+    font-size: 18px;
+}
+/*.low-stock {*/
+/*    background-color: #fff3cd;*/
+/*    border: 1px solid #ffeeba;*/
+/*    color: #856404;*/
+/*}*/
