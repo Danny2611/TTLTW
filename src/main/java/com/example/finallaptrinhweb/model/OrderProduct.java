@@ -9,6 +9,7 @@ public class OrderProduct {
     private int quantity;
     private double price;
     private double total;
+    private int productId;
 
     public OrderProduct() {
         // Default constructor
@@ -91,6 +92,14 @@ public class OrderProduct {
     public void setTotal(double price, int quantity) {
         this.total = price*quantity;
     }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
     @Override
     public String toString() {
         return "OrderProduct{" +
@@ -102,6 +111,7 @@ public class OrderProduct {
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", total=" + total +
+                ", productId=" + productId +
                 '}';
     }
 }

@@ -616,12 +616,4 @@ public class ProductDAO {
 
     }
 
-    public  void updateQuantity(int productId, int quantity) throws SQLException {
-        String sql = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
-        PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
-        preparedStatement.setInt(1, quantity);
-        preparedStatement.setInt(2, productId);
-        preparedStatement.executeUpdate();
-    }
-
 }

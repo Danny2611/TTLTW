@@ -29,6 +29,12 @@ public class DbProperties {
     public static String AUTH_ENDPOINT;
     public static String RECAPTCHA_SITE_KEY;
     public static String RECAPTCHA_SECRET_KEY;
+    public static String FACEBOOK_APP_ID;
+    public static String FACEBOOK_APP_SECRET;
+    public static String FACEBOOK_REDIRECT_URI;
+    public static String FACEBOOK_DIALOG_OAUTH;
+    public static String FACEBOOK_ACCESS_TOKEN_URL;
+    public static String FACEBOOK_GRAPH_API_URL;
     public DbProperties() {
     }
 
@@ -65,5 +71,11 @@ public class DbProperties {
         AUTH_ENDPOINT = prop.getProperty("AUTH_ENDPOINT");
         RECAPTCHA_SITE_KEY = prop.getProperty("RECAPTCHA_SITE_KEY");
         RECAPTCHA_SECRET_KEY = prop.getProperty("RECAPTCHA_SECRET_KEY");
+        FACEBOOK_APP_ID = prop.getProperty("FACEBOOK_APP_ID");
+        FACEBOOK_APP_SECRET = prop.getProperty("FACEBOOK_APP_SECRET");
+        FACEBOOK_REDIRECT_URI = prop.getProperty("FACEBOOK_REDIRECT_URI");
+        FACEBOOK_DIALOG_OAUTH = prop.getProperty("FACEBOOK_DIALOG_OAUTH");
+        FACEBOOK_ACCESS_TOKEN_URL = prop.getProperty("FACEBOOK_ACCESS_TOKEN_URL");
+        FACEBOOK_GRAPH_API_URL = prop.getProperty("FACEBOOK_GRAPH_API_URL");
     }
 }
