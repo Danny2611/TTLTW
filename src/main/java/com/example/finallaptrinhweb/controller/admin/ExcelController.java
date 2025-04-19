@@ -2,6 +2,7 @@ package com.example.finallaptrinhweb.controller.admin;
 
 import com.example.finallaptrinhweb.dao.CategoryDao;
 import com.example.finallaptrinhweb.dao.ProductDAO;
+import com.example.finallaptrinhweb.dao.SupplierDAO;
 import com.example.finallaptrinhweb.model.Product;
 import com.example.finallaptrinhweb.model.User;
 import com.google.gson.Gson;
@@ -94,7 +95,7 @@ public class ExcelController extends HttpServlet {
                     product.setWarrantyPeriod(warrantyPeriod);
                     product.setProductType(productType);
                     product.setStorageCondition(storageCondition);
-                    product.setSupplierId(1);
+                    product.setSupplierId(SupplierDAO.getSupplierByName(supplierName));
                     product.setImageUrl(image); // Lưu URL ảnh
                     product.setSupplierImageUrl(null); // Nếu không dùng thì có thể bỏ
                     product.setActive(true);
