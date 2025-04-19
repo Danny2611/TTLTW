@@ -14,7 +14,7 @@ public class OrderProductDAO {
     public static List<OrderProduct> loadOrderProductByOrderId(int orderId) {
         List<OrderProduct> productList = new ArrayList<>();
         try {
-            String query = "SELECT op.id, op.productName, op.quantity, op.price, o.id, o.date_created, u.id, o.status, (SUM(op.price * op.quantity) + s.ship_price) AS total, " +
+            String query = "SELECT op.id, op.productName, op.quantity, op.price, op.productId, o.id, o.date_created, u.id, o.status, (SUM(op.price * op.quantity) + s.ship_price) AS total, " +
                     "o.payment, o.detail_address, o.phone, u.username, s.ship_price, op.imageUrl " +
                     "FROM orders o " +
                     "JOIN order_products op ON o.id = op.order_id " +
@@ -37,6 +37,7 @@ public class OrderProductDAO {
                     orderProduct.setPrice(resultSet.getDouble("price"));
                     orderProduct.setImageUrl(resultSet.getString("imageUrl"));
                     orderProduct.setTotal(resultSet.getDouble("price"), resultSet.getInt("quantity"));
+                    orderProduct.setProductId(resultSet.getInt("productId"));
                     productList.add(orderProduct);
                 }
                 resultSet.close();

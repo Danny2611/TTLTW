@@ -98,7 +98,7 @@
                                             </td>
                                             <td>${p.productName}</td>
                                             <td class="table-nowrap"><%= Util.formatCurrency((double) pageContext.getAttribute("price")) %> VND</td>
-                                            <td>${p.quantity}</td>
+                                            <td>${p.stockQuantity}</td>
                                             <td>${supplierMap[p.supplierId].contactName}</td>
                                             <td class="text-right" style="display: flex; gap: 5px;">
                                                 <a href="edit-product?type=enterEdit&id=${p.id}" class="btn btn-sm bg-success-light">
