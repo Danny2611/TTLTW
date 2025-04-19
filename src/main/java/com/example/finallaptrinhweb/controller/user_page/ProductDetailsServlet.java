@@ -18,9 +18,11 @@ import java.util.List;
 
 import com.example.finallaptrinhweb.model.Supplier;
 import com.example.finallaptrinhweb.dao.SupplierDAO;
+import org.apache.log4j.Logger;
 
 @WebServlet("/user/product")
 public class ProductDetailsServlet extends HttpServlet {
+    private  static  final Logger logger = Logger.getLogger(ProductDetailsServlet.class);
     private static final long serialVersionUID = 1L;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -73,7 +75,6 @@ public class ProductDetailsServlet extends HttpServlet {
                 boolean isBought = false;
                 if (user != null && orderDAO.checkUserBuyProduct(user.getId(), productId)) {
                     isBought = true;
-                    System.out.println("User was bought");
                 }
 //                Lấy danh sách comment
                 List<Comment> comments = commentDAO.getAllCommentForProduct(productId);
@@ -101,16 +102,19 @@ public class ProductDetailsServlet extends HttpServlet {
                     dispatcher.forward(request, response);
                 } else {
                     // Nếu không tìm thấy sản phẩm, hiển thị thông báo
+                    logger.error("Product not found");
                     response.getWriter().println("Product not found");
                 }
             } catch (NumberFormatException e) {
                 // Xử lý khi giá trị id không hợp lệ hoặc không thể chuyển đổi thành số nguyên
+                logger.error("Invalid product Id");
                 response.getWriter().println("Invalid product ID");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             // Xử lý khi giá trị id là null hoặc rỗng
+            logger.error("Product ID is missing");
             response.getWriter().println("Product ID is missing");
         }
     }

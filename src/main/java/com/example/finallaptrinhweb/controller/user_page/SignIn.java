@@ -138,6 +138,7 @@ public class SignIn extends HttpServlet {
                 case 5 -> "/admin/contact";
                 default -> "/admin";
             };
+            System.out.println("Path"+ path);
             response.sendRedirect(request.getContextPath() + path);
         }
     }

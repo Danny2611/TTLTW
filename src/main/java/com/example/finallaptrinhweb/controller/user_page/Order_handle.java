@@ -55,7 +55,7 @@ public class Order_handle extends HttpServlet {
 
         if (result > 0) {
             logger.info("User "+ username + "order successfully" );
-            response.getWriter().write("success");
+            response.sendRedirect(request.getContextPath() +"/user/order_success.jsp");
         } else {
             logger.info("User "+ username + "order failure" );
             response.getWriter().write("error");

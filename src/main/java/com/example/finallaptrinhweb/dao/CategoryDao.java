@@ -1,11 +1,14 @@
 package com.example.finallaptrinhweb.dao;
 
+import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
 import com.example.finallaptrinhweb.db.JDBIConnector;
 import com.example.finallaptrinhweb.model.CategoryQuantity;
 import com.example.finallaptrinhweb.model.ProductCategories;
 import com.example.finallaptrinhweb.model.ProductGroups;
 import com.example.finallaptrinhweb.model.User;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -112,6 +115,17 @@ public class CategoryDao {
                     .collect(Collectors.toList());
         });
         return list.get(0).getId() + 1;
+    }
+    public int getCategory(String cateName) throws SQLException {
+        int id = 0;
+        String sql= "select id from product_categories where cateName like ?";
+        PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+        preparedStatement.setString(1, cateName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()){
+            id = resultSet.getInt("id");
+        }
+        return  id;
     }
 
 

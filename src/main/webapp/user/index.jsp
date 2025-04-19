@@ -225,16 +225,11 @@
                                 </div>
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
-                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a class="button product_type_simple add-to-cart-loop"
-                                       data-id="${p.id}"
-                                       data-stock="${p.stockQuantity}">
+                                <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon"><a
+                                        data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
                                         <span>
                                             <i class="fa-solid fa-cart-shopping"></i>
-                                        </span>
-                                    </a>
-                                </div>
-
+                                        </span></a></div>
                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
                                     <a href="" class="open-quick-view quick-view-button">
                                         <span>
@@ -296,12 +291,10 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a class="button product_type_simple add-to-cart-loop"
-                                       data-id="${p.id}"
-                                       data-stock="${p.stockQuantity}">
-                                        <span>
-                                            <i class="fa-solid fa-cart-shopping"></i>
-                                        </span>
+                                    <a data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
+                                <span>
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </span>
                                     </a>
                                 </div>
                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
@@ -365,12 +358,10 @@
                             </div>
                             <div class="wd-buttons wd-pos-r-t">
                                 <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                    <a class="button product_type_simple add-to-cart-loop"
-                                       data-id="${p.id}"
-                                       data-stock="${p.stockQuantity}">
-                                        <span>
-                                            <i class="fa-solid fa-cart-shopping"></i>
-                                        </span>
+                                    <a data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
+                                <span>
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </span>
                                     </a>
                                 </div>
                                 <div class="quick-view wd-action-btn wd-style-icon wd-quick-view-icon">
@@ -552,23 +543,11 @@
 </script>
 <script>
     $(document).ready(function () {
-        $(".add-to-cart-loop").click(function (e) {
-            e.preventDefault();
+        $(".add-cart-btn").click(function () {
+            let productId = $(this).data("id")
+            console.log(productId)
 
-            const productId = $(this).data("id");
-            const stock = parseInt($(this).data("stock"));
-
-            if (stock <= 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Hết hàng',
-                    text: 'Sản phẩm này hiện đã hết hàng. Vui lòng chọn sản phẩm khác.',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-
-            // Gọi API thêm vào giỏ hàng
+            //     call api
             fetch(`${pageContext.request.contextPath}/api/cart`, {
                 method: "POST",
                 headers: {
@@ -579,30 +558,14 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Đã thêm vào giỏ hàng',
-                            text: 'Sản phẩm đã được thêm vào giỏ!',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
+                        alert("Thêm sản phẩm vào giỏ hàng thành công!");
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi',
-                            text: data.message || 'Không thể thêm sản phẩm.'
-                        });
+                        alert("Lỗi: " + data.message);
                     }
                 })
-                .catch(error => {
-                    console.error("Lỗi khi gửi request:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Lỗi hệ thống',
-                        text: 'Đã xảy ra lỗi khi thêm vào giỏ hàng.'
-                    });
-                });
-        });
+                .catch(error => console.error("Lỗi hệ thống:", error));
+
+        })
     });
 </script>
 </body>

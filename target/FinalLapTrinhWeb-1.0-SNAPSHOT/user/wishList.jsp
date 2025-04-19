@@ -65,8 +65,7 @@
                                     </div>
                                     <div class="wd-buttons wd-pos-r-t">
                                         <div class="wd-add-btn wd-action-btn wd-style-icon wd-add-cart-icon">
-                                            <a href="addtocart?id=${p.id}"
-                                               class="button product_type_simple add-to-cart-loop" aria-label="">
+                                            <a data-id="${p.id}" class="add-cart-btn button product_type_simple add-to-cart-loop" aria-label="">
                                     <span>
                                         <i class="fa-solid fa-cart-shopping"></i>
                                     </span>
@@ -113,7 +112,7 @@
                                         <div class="blockInfo" style="display: flex; margin-top: 30px">
                                             <div class="product-price">${Util.formatCurrency(product.price)} VND</div>
                                             <div class="product-actions">
-                                                <a href="addtocart?id=${product.id}">
+                                                <a data-id="${product.id}" class="add-cart-btn button product_type_simple add-to-cart-loop">
                                                     <i class="fas fa-shopping-cart"></i>
                                                 </a>
                                                 <a class="wishlist-btnn" data-product-id="${product.id}">
@@ -251,7 +250,35 @@
     }
 
 
-</script>`
+</script>
+<script>
+    $(document).ready(function () {
+        $(".add-cart-btn").click(function () {
+            let productId = $(this).data("id")
+            console.log(productId)
+
+            //     call api
+            fetch(`${pageContext.request.contextPath}/api/cart`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId: productId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Thêm sản phẩm vào giỏ hàng thành công!");
+                    } else {
+                        alert("Lỗi: " + data.message);
+                    }
+                })
+                .catch(error => console.error("Lỗi hệ thống:", error));
+
+        })
+    });
+</script>
+`
 <%--<script>--%>
 <%--    $(document).ready(function () {--%>
 <%--        // Xử lý thêm/xóa wishlist--%>

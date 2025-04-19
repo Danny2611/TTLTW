@@ -155,6 +155,9 @@
                                                 nhân</span></a>
                             </li>
                             <li class="user-menu-item">
+                                <a href="updateinfouser"><span class="nav-link-text">Đơn hàng của bạn</span></a>
+                            </li>
+                            <li class="user-menu-item">
                                 <a href="signout"><span class="nav-link-text">Đăng xuất</span></a>
                             </li>
                         </ul>
