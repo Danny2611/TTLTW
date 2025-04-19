@@ -616,4 +616,26 @@ public class ProductDAO {
 
     }
 
+    public void updateStockQuantity(int productId, int quantity) throws SQLException {
+        String sql = "update products set stockQuantity = stockQuantity + ? where id = ?";
+        PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+        preparedStatement.setInt(1, quantity);
+        preparedStatement.setInt(2, productId);
+        preparedStatement.executeUpdate();
+    }
+    public static boolean updateStockProduct(int product_id, int quantity) {
+        try {
+            String query = "UPDATE `products` SET `stockQuantity` = stockQuantity - ? WHERE id = ?";
+            try (PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(query)) {
+                preparedStatement.setInt(1, quantity);
+                preparedStatement.setInt(2, product_id);
+                int rowsAffected = preparedStatement.executeUpdate();
+                return rowsAffected > 0;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
 }

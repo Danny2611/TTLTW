@@ -118,7 +118,7 @@ public class CategoryDao {
     }
     public int getCategory(String cateName) throws SQLException {
         int id = 0;
-        String sql= "select id from product_categories where cateName like ?";
+        String sql= "select id from product_categories where categoryName like ?";
         PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
         preparedStatement.setString(1, cateName);
         ResultSet resultSet = preparedStatement.executeQuery();

@@ -163,6 +163,13 @@
                                 <div class="price">${Util.formatCurrency(product.price)}</div>
                                 <div class="unit">VND</div>
                             </div>
+                            <div class="price-wrapper">
+                                <div class="stock-status low-stock">
+                                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 20px"></i>
+                                    <span class="stock-quantity" style="font-size: 16px">Còn lại: ${product.stockQuantity} sản phẩm</span>
+                                </div>
+                            </div>
+
                             <div
                                     class="wd-compare-btn product-compare-button wd-action-btn wd-style-text wd-compare-icon">
                                 <a href="">
@@ -190,8 +197,9 @@
                                             thú y</a></span>
                             </div>
                             <div class="container">
-                                <p data-id="${product.id}" class="add-cart-btn button " style="color: #fff;" >
-                                    <button class="add-to-cart-button">
+<%--                                <a style="color: #fff;" href="addtocart?id=${product.id}">--%>
+                                    <button class="add-to-cart-button"   data-product-id="${product.id}"
+                                            data-stock="${product.stockQuantity}">
                                         <svg class="add-to-cart-box box-1" width="24" height="24" viewBox="0 0 24 24"
                                              fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect width="24" height="24" rx="2" fill="#ffffff"/>
@@ -217,7 +225,7 @@
                                         <span class="add-to-cart">Thêm vào giỏ hàng</span>
                                         <span class="added-to-cart">Đã thêm</span>
                                     </button>
-                                </p>
+<%--                                </a>--%>
                             </div>
                         </div>
                     </div>
@@ -550,15 +558,25 @@
 
 
 </script>
-<script>
-</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function () {
-        $(".add-cart-btn").click(function () {
-            let productId = $(this).data("id")
-            console.log(productId)
+        $(".add-to-cart-button").click(function (e) {
+            e.preventDefault();
 
-            //     call api
+            const productId = $(this).data("product-id");
+            const stock = parseInt($(this).data("stock"));
+
+            if (stock <= 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Hết hàng',
+                    text: 'Sản phẩm này đã hết hàng. Vui lòng chọn sản phẩm khác.',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
             fetch(`${pageContext.request.contextPath}/api/cart`, {
                 method: "POST",
                 headers: {
@@ -569,16 +587,37 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        console.log("Success")
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Đã thêm vào giỏ',
+                            text: 'Sản phẩm đã được thêm vào giỏ hàng!',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        $(e.currentTarget).addClass("added");
+
                     } else {
-                        alert("Lỗi: " + data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: data.message || 'Không thể thêm sản phẩm.'
+                        });
                     }
                 })
-                .catch(error => console.error("Lỗi hệ thống:", error));
-
-        })
+                .catch(error => {
+                    console.error("Lỗi khi gửi request:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống',
+                        text: 'Đã xảy ra lỗi trong quá trình thêm vào giỏ hàng.'
+                    });
+                });
+        });
     });
 </script>
+
+
 </body>
 
 </html>
