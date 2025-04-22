@@ -29,17 +29,23 @@ public class Add_admin extends HttpServlet {
         User user = (User) session.getAttribute("adminAuth");
 
         String username = request.getParameter("username");
+        System.out.println("username "+ username);
         String email = request.getParameter("email");
+        String role = request.getParameter("role");
+        System.out.println("role " + role);
         SendEmail send = new SendEmail();
         ForgotPass forgotPass = new ForgotPass();
         String password = forgotPass.generateRandomPassword();
+        System.out.println("password:" + password);
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         String phone = request.getParameter("phone");
 
         try {
             // Thực hiện thêm admin vào cơ sở dữ liệu
-            UserDAO.getInstance().addAdmin(username, email, hashedPassword);
-            send.sendPassword(email,password);
+            UserDAO.getInstance().addAdmin(username, email, hashedPassword, Integer.parseInt(role));
+            boolean result= send.sendPassword(email,password);
+
+            System.out.println("Kết quả gửi email: " + result);
             logger.info("User: "+user.getEmail()+ " Add admin "+ email +" successfully");
             // Chuyển hướng đến trang thành công nếu thêm thành công
             response.sendRedirect("./list-admin");

@@ -191,7 +191,7 @@ public class UserDAO {
         }
     }
 
-    public void addAdmin(String username, String email, String password) throws SQLException {
+    public void addAdmin(String username, String email, String password, int roleId) throws SQLException {
         // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
         if (CheckExistUser(email)) {
             // Email đã tồn tại, bạn có thể xử lý tùy thuộc vào yêu cầu cụ thể của bạn
@@ -212,7 +212,7 @@ public class UserDAO {
                             .bind(3, hashedPassword)
                             .bind(4, "verified")
                             .bind(5, dateCreated)
-                            .bind(6, 2)
+                            .bind(6, roleId)
                             .bind(7, 10)
                             .execute();
                 });

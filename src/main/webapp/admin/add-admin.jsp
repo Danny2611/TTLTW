@@ -74,10 +74,14 @@
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label class="col-form-label col-md-2">Mật khẩu</label>
+                    <label class="col-form-label col-md-2">Quyền</label>
                     <div class="col-md-10">
-                      <input id="pass" type="password" required class="form-control" name="pass">
-                      <label style="color: red" id="pw-notice">Mật khẩu phải dài từ 8 kí tự và chứa cả chữ in hoa và số</label>
+                      <select name="role" class="form-control">
+                        <option value="3">Product</option>
+                        <option value="5">Feedback</option>
+                        <option value="4">Order</option>
+                        <option value="2">Admin</option>
+                      </select>
                     </div>
                   </div>
                   <div class="form-group row">
