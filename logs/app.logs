@@ -317,3 +317,6 @@
 2025-04-19 18:26:26 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
 2025-04-19 18:26:31 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
 2025-04-19 18:26:41 INFO  com.example.finallaptrinhweb.controller.user_page.Order_handle - User H?u Qúy ??ngorder successfully
+2025-04-22 21:39:24 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
+2025-04-22 21:50:26 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
+2025-04-22 21:52:54 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
