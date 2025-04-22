@@ -50,7 +50,7 @@ public class ForgotPass extends HttpServlet {
     }
 
     // Phương thức tạo mật khẩu ngẫu nhiên
-    private String generateRandomPassword() {
+    public String generateRandomPassword() {
         // Đây chỉ là một cách đơn giản, bạn có thể thay đổi theo nhu cầu
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder password = new StringBuilder();

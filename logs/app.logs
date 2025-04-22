@@ -299,3 +299,21 @@
 2025-04-19 18:20:52 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
 2025-04-19 18:20:52 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
 2025-04-19 18:20:52 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-04-19 18:23:52 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-04-19 18:24:02 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - create product successfully
+2025-04-19 18:26:12 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-04-19 18:26:14 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-19 18:26:16 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-19 18:26:20 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-04-19 18:26:21 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-04-19 18:26:23 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-19 18:26:26 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-04-19 18:26:31 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-04-19 18:26:41 INFO  com.example.finallaptrinhweb.controller.user_page.Order_handle - User H?u Qúy ??ngorder successfully
