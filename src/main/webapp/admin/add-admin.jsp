@@ -60,7 +60,7 @@
           <div class="card">
             <div class="card-body">
               <!-- Form -->
-              <form action="add-admin" method="post" accept-charset="UTF-8" id="login-form">
+              <form action="add-admin" method="post" accept-charset="UTF-8" id="add-admin">
                   <div class="form-group row">
                     <label class="col-form-label col-md-2">Tên người dùng</label>
                     <div class="col-md-10">
