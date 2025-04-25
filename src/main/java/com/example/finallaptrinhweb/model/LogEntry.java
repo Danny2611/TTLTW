@@ -1,6 +1,6 @@
 package com.example.finallaptrinhweb.model;
 
-public class LongEntry {
+public class LogEntry {
     private String timestamp;
     private String level;
     private String controller;
