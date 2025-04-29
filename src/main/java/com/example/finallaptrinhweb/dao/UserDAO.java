@@ -205,7 +205,7 @@ public class UserDAO {
                 String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
                 JDBIConnector.me().get().withHandle((handle) -> {
-                    return handle.createUpdate("INSERT INTO users (id, username, email, password, verify_status,date_created, role_id,remaining) VALUES (?, ?, ?, ?, ?, ?, ?,?)")
+                    return handle.createUpdate("INSERT INTO users (id, username, email, password, verify_status,date_created, role_id,remaining, fullName) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)")
                             .bind(0, this.GetId() + 1)
                             .bind(1, username)
                             .bind(2, email)
@@ -214,6 +214,7 @@ public class UserDAO {
                             .bind(5, dateCreated)
                             .bind(6, roleId)
                             .bind(7, 10)
+                            .bind(8, username)
                             .execute();
                 });
                 System.out.println("Admin đã được thêm vào cơ sở dữ liệu.");

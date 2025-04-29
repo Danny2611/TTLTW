@@ -37,4 +37,14 @@ public class LogEntry {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public String toString() {
+        return "LogEntry{" +
+                "timestamp='" + timestamp + '\'' +
+                ", level='" + level + '\'' +
+                ", controller='" + controller + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

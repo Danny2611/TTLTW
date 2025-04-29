@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 public class LogEntryController  extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<String> logs = Files.readAllLines(Paths.get("D:/Workspace/TTLTW/logs/app.logs"));
+        List<String> logs = Files.readAllLines(Paths.get("D:/Workspace/TTLTW/logs/app.logs"), StandardCharsets.UTF_8);
         List<LogEntry> logEntries = new ArrayList();
         for (String line : logs) {
             String[] parts = line.split(" ", 6); // tách dòng thành các phần
@@ -28,9 +29,10 @@ public class LogEntryController  extends HttpServlet {
                 entry.setController(parts[3]);
                 entry.setMessage(parts[5]);
                 logEntries.add(entry);
+                System.out.println(entry.toString());
             }
         }
-
+        System.out.println(logEntries.toString());
         req.setAttribute("logs", logEntries);
         req.getRequestDispatcher("logs.jsp").forward(req,resp);
     }
