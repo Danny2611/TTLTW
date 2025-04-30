@@ -206,9 +206,9 @@
                                             <label class="col-md-3 control-label"> Mật khẩu cũ: </label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="password" name="pass" class="form-control input-sm" required>
-                                                <% if (request.getAttribute("oldPassError") != null) { %>
-                                                <p style="color: red;"><%= request.getAttribute("oldPassError") %></p>
-                                                <% } %>
+<%--                                                <% if (request.getAttribute("oldPassError") != null) { %>--%>
+<%--                                                <p style="color: red;"><%= request.getAttribute("oldPassError") %></p>--%>
+<%--                                                <% } %>--%>
                                             </div>
                                         </div>
                                     </div>
@@ -218,9 +218,9 @@
                                             <label class="col-md-3 control-label"> Mật khẩu mới: </label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="password" name="newpass" class="form-control input-sm" required>
-                                                <% if (request.getAttribute("newPassError") != null) { %>
-                                                <p style="color: red;"><%= request.getAttribute("newPassError") %></p>
-                                                <% } %>
+<%--                                                <% if (request.getAttribute("newPassError") != null) { %>--%>
+<%--                                                <p style="color: red;"><%= request.getAttribute("newPassError") %></p>--%>
+<%--                                                <% } %>--%>
                                             </div>
                                         </div>
                                     </div>
@@ -230,9 +230,9 @@
                                             <label class="col-md-3 control-label"> Xác nhận mật khẩu: </label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="password" name="renewpass" class="form-control input-sm" required>
-                                                <% if (request.getAttribute("reNewPassError") != null) { %>
-                                                <p style="color: red;"><%= request.getAttribute("reNewPassError") %></p>
-                                                <% } %>
+<%--                                                <% if (request.getAttribute("reNewPassError") != null) { %>--%>
+<%--                                                <p style="color: red;"><%= request.getAttribute("reNewPassError") %></p>--%>
+<%--                                                <% } %>--%>
                                             </div>
                                         </div>
                                     </div>
@@ -429,6 +429,7 @@
 </script>
 
 
+
 <script>
     document.getElementById("file").addEventListener("change", function(event) {
         let file = event.target.files[0];
@@ -487,11 +488,12 @@
             $errorContainer.remove(); // xóa lỗi cũ
 
             if (password !== confirmPassword) {
-                $(this).after("<p style='color:red'>Mật khẩu xác nhận không trùng khớp.</p>");
+                $(this).after("<p class='text-danger' style='color:red'>Mật khẩu xác nhận không trùng khớp.</p>");
             }
         });
     });
 </script>
+
 
 
 </body>
