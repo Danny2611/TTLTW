@@ -28,6 +28,11 @@
     <title>Trang cá nhân</title>
 </head>
 <body>
+<%
+    boolean hasResetPasswordError = request.getAttribute("oldPassError") != null ||
+            request.getAttribute("newPassError") != null ||
+            request.getAttribute("reNewPassError") != null;
+%>
 <div class="website-wrapper">
     <jsp:include page="header.jsp"/>
     <div class="page-title" style="
@@ -42,19 +47,17 @@
             <div class="col-lg-8 order-lg-2">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a href="" data-target="#profile" data-toggle="tab" class="nav-link active nav-link-2">Tài
-                            Khoản</a>
+                        <a href="#profile" data-toggle="tab" class="nav-link nav-link-2 <%= hasResetPasswordError ? "" : "active" %>">Tài Khoản</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" data-target="#messages" data-toggle="tab" class="nav-link nav-link-2">Đổi Mật
-                            Khẩu</a>
+                        <a href="#messages" data-toggle="tab" class="nav-link nav-link-2 <%= hasResetPasswordError ? "active" : "" %>">Đổi Mật Khẩu</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" data-target="#edit" data-toggle="tab" class="nav-link nav-link-2">Đơn Hàng</a>
+                        <a href="#edit" data-toggle="tab" class="nav-link nav-link-2 ">Đơn Hàng</a>
                     </li>
                 </ul>
                 <div class="tab-content py-4">
-                    <div class="tab-pane active" id="profile">
+                    <div class="tab-pane <%= hasResetPasswordError ? "" : "active" %>" id="profile">
                         <!-- <h5 class="mb-3">Thông Tin Tài Khoản</h5> -->
                         <div class="row">
                             <div class="col-md-12">
@@ -183,7 +186,7 @@
                         </div>
                         <!--/row-->
                     </div>
-                    <div class="tab-pane" id="messages">
+                    <div class="tab-pane <%= hasResetPasswordError ? "active" : "" %>" id="messages">
                         <!-- <h5 class="mb-3">Thông Tin Tài Khoản</h5> -->
                         <div class="row">
                             <div class="col-md-12">
@@ -191,43 +194,48 @@
                                     <h1>THAY ĐỔI MẬT KHẨU</h1>
                                     <div class="content">Bạn nên cập nhật mật khẩu thường xuyên vì lí do bảo mật</div>
                                 </header>
-                                <form id="formAcount" class="formAcount validate clearfix" method="post"
-                                      action="resetpassword">
-                                    <% String error = (String) request.getAttribute("wrongInfor");%>
-                                    <% if (error != null) {%>
-                                    <p style="color: <%=error.equals("Mật khẩu đã được thay đổi") ? "#7cb342" : "red"%>; margin-bottom: 10px"><%=error%>
-                                    </p>
+                                <form id="formAcount" class="formAcount_resetPass validate clearfix" method="post" action="resetpassword">
+                                    <% String success = (String) request.getAttribute("successMessage"); %>
+                                    <% if (success != null) { %>
+                                    <p style="color: #7cb342; margin-bottom: 10px"><%=success%></p>
                                     <% } %>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Mật khẩu cũ: </label>
                                             <div class="col-lg-6 col-md-9">
-                                                <input type="password" name="pass"
-                                                       class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
-                                                       required>
+                                                <input type="password" name="pass" class="form-control input-sm" required>
+                                                <% if (request.getAttribute("oldPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("oldPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Mật khẩu mới: </label>
                                             <div class="col-lg-6 col-md-9">
-                                                <input type="password" name="newpass"
-                                                       class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
-                                                       required>
+                                                <input type="password" name="newpass" class="form-control input-sm" required>
+                                                <% if (request.getAttribute("newPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("newPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Xác nhận mật khẩu: </label>
                                             <div class="col-lg-6 col-md-9">
-                                                <input type="password" id="pass" name="renewpass"
-                                                       class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
-                                                       required>
+                                                <input type="password" name="renewpass" class="form-control input-sm" required>
+                                                <% if (request.getAttribute("reNewPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("reNewPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"></label>
@@ -237,6 +245,7 @@
                                         </div>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
                         <!--/row-->
