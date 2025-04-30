@@ -493,7 +493,75 @@
         });
     });
 </script>
+<script>$(document).ready(function () {
+    $(".formAcount_resetPass").on("submit", function (event) {
+        event.preventDefault();
 
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "resetpassword",
+            data: formData,
+            dataType: "json",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function (response) {
+                // Xóa thông báo lỗi cũ nếu có
+                $(".formAcount_resetPass p.text-danger").remove();
+                $("input[name='pass'], input[name='newpass'], input[name='renewpass']").each(function () {
+                    $(this).next("p").remove();
+                });
+
+
+                if (response.status === "success") {
+                    Swal.fire({
+                        title: "Thành công!",
+                        text: response.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "updateinfouser";
+                        }
+                    });
+                } else {
+                    // Nếu có lỗi cụ thể từ server thì hiển thị chúng
+                    if (response.errors) {
+                        if (response.errors.oldPassError) {
+                            $("input[name='pass']").after("<p class='text-danger' style='color:red'>" + response.errors.oldPassError + "</p>");
+                        }
+                        if (response.errors.newPassError) {
+                            $("input[name='newpass']").after("<p class='text-danger' style='color:red'>" + response.errors.newPassError + "</p>");
+                        }
+                        if (response.errors.reNewPassError) {
+                            $("input[name='renewpass']").after("<p class='text-danger' style='color:red'>" + response.errors.reNewPassError + "</p>");
+                        }
+                    }
+
+                    // Popup chung báo lỗi
+                    Swal.fire({
+                        title: "Lỗi!",
+                        text: response.message,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: "Có lỗi xảy ra, vui lòng thử lại!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+
+    });
+});
+</script>
 
 
 </body>

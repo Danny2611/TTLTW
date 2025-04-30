@@ -100,5 +100,8 @@ public class ResetPass extends HttpServlet {
     private boolean hasSpecialChar(String password) {
         return password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
     }
-
+    private boolean isAjaxRequest(HttpServletRequest request) {
+        String requestedWith = request.getHeader("X-Requested-With");
+        return requestedWith != null && requestedWith.equals("XMLHttpRequest");
+    }
 }
