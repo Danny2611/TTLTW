@@ -26,6 +26,7 @@
     <link rel="icon" href="https://tienthangvet.vn/wp-content/uploads/cropped-favicon-Tien-Thang-Vet-192x192.png"
           sizes="192x192"/>
     <title>Trang cá nhân</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <%
@@ -427,6 +428,7 @@
 });
 </script>
 
+
 <script>
     document.getElementById("file").addEventListener("change", function(event) {
         let file = event.target.files[0];
@@ -463,6 +465,33 @@
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("input[name='newpass']").on("input", function () {
+            const password = $(this).val();
+            $.post("/api/users/validate-password", { password: password }, function (res) {
+                const $errorContainer = $("input[name='newpass']").next("p");
+                $errorContainer.remove(); // xóa lỗi cũ
+
+                if (!res.valid) {
+                    const errorMsg = "<p style='color:red'>" + res.errors[0] + "</p>";
+                    $("input[name='newpass']").after(errorMsg);
+                }
+            }, "json");
+        });
+
+        $("input[name='renewpass']").on("input", function () {
+            const password = $("input[name='newpass']").val();
+            const confirmPassword = $(this).val();
+            const $errorContainer = $(this).next("p");
+            $errorContainer.remove(); // xóa lỗi cũ
+
+            if (password !== confirmPassword) {
+                $(this).after("<p style='color:red'>Mật khẩu xác nhận không trùng khớp.</p>");
+            }
+        });
+    });
+</script>
 
 
 </body>
