@@ -187,6 +187,7 @@
                         </div>
                         <!--/row-->
                     </div>
+
                     <div class="tab-pane <%= hasResetPasswordError ? "active" : "" %>" id="messages">
                         <!-- <h5 class="mb-3">Thông Tin Tài Khoản</h5> -->
                         <div class="row">
@@ -195,32 +196,48 @@
                                     <h1>THAY ĐỔI MẬT KHẨU</h1>
                                     <div class="content">Bạn nên cập nhật mật khẩu thường xuyên vì lí do bảo mật</div>
                                 </header>
+                                <%
+                                    // Kiểm tra xem user có mật khẩu hay không (đăng nhập bằng Google)
+                                    String userPassword = UserDAO.getInstance().getPassword(user.getEmail());
+                                    boolean hasPassword = userPassword != null && !userPassword.isEmpty();
+                                %>
                                 <form id="formAcount" class="formAcount_resetPass validate clearfix" method="post" action="resetpassword">
                                     <% String success = (String) request.getAttribute("successMessage"); %>
                                     <% if (success != null) { %>
                                     <p style="color: #7cb342; margin-bottom: 10px"><%=success%></p>
                                     <% } %>
 
+                                    <% if (hasPassword) { %>
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Mật khẩu cũ: </label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="password" name="pass" class="form-control input-sm" required>
-<%--                                                <% if (request.getAttribute("oldPassError") != null) { %>--%>
-<%--                                                <p style="color: red;"><%= request.getAttribute("oldPassError") %></p>--%>
-<%--                                                <% } %>--%>
+                                                <% if (request.getAttribute("oldPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("oldPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+                                    <% } else { %>
+                                    <!-- Thông báo cho người dùng biết họ đang thiết lập mật khẩu lần đầu -->
+                                    <div class="form-group clearfix">
+                                        <div class="row">
+                                            <div class="col-md-9 offset-md-3">
+                                                <p style="color: #2196F3; margin-bottom: 15px;">Bạn đang thiết lập mật khẩu lần đầu tiên cho tài khoản này.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
 
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Mật khẩu mới: </label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="password" name="newpass" class="form-control input-sm" required>
-<%--                                                <% if (request.getAttribute("newPassError") != null) { %>--%>
-<%--                                                <p style="color: red;"><%= request.getAttribute("newPassError") %></p>--%>
-<%--                                                <% } %>--%>
+                                                <% if (request.getAttribute("newPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("newPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -230,9 +247,9 @@
                                             <label class="col-md-3 control-label"> Xác nhận mật khẩu: </label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="password" name="renewpass" class="form-control input-sm" required>
-<%--                                                <% if (request.getAttribute("reNewPassError") != null) { %>--%>
-<%--                                                <p style="color: red;"><%= request.getAttribute("reNewPassError") %></p>--%>
-<%--                                                <% } %>--%>
+                                                <% if (request.getAttribute("reNewPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("reNewPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -241,16 +258,18 @@
                                         <div class="row">
                                             <label class="col-md-3 control-label"></label>
                                             <div class="col-lg-6 col-md-9">
+                                                <!-- Thêm hidden field để biết có phải là thiết lập mật khẩu lần đầu không -->
+                                                <input type="hidden" name="isFirstTimeSetup" value="<%= !hasPassword %>">
                                                 <button class="btn-update">LƯU</button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
                         </div>
                         <!--/row-->
                     </div>
+
                     <div class="tab-pane myorder__style" id="edit">
                         <!-- <div class="heading">Đơn hàng của tôi</div> -->
                         <div class="inner">
