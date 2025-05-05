@@ -67,9 +67,10 @@
                                     <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Tên</th>
+                                        <th>Tên sản phẩm</th>
                                         <th>Email</th>
                                         <th>Nội dung</th>
+                                        <th>Đánh giá (*)</th>
                                         <th>Ngày gởi</th>
                                     </tr>
                                     </thead>
@@ -78,11 +79,12 @@
                                     <tbody>
                                     <c:forEach var="f" items="${feedbackList}">
                                         <tr>
-                                            <td>${f.id}</td>
-                                            <td>${f.name}</td>
-                                            <td>${f.email}</td>
-                                            <td>${f.content}</td>
-                                            <td>${Util.formatTimestamp(f.submissionDate)}</td>
+                                            <td>${f.comment.id}</td>
+                                            <td>${f.product.productName}</td>
+                                            <td>${f.user.email}</td>
+                                            <td>${f.comment.content}</td>
+                                            <td>${f.comment.star}</td>
+                                            <td>${f.comment.formattedCreatedAt}</td>
                                         </tr>
                                     </c:forEach>
                                     <%System.out.println("DA xuong toi day");%>

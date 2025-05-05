@@ -51,7 +51,7 @@ public class FeedbackDAO {
                 String content = resultSet.getString("content");
                 String productName = resultSet.getString("productName");
                 int productId =resultSet.getInt("productId");
-                LocalDate submissionDate = resultSet.getDate("submissionDate").toLocalDate();
+                LocalDate submissionDate = resultSet.getDate("createdAt").toLocalDate();
                 User user = new User();
                 user.setEmail(email);
 
