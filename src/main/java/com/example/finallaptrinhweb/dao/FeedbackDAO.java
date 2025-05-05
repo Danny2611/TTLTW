@@ -1,10 +1,12 @@
 package com.example.finallaptrinhweb.dao;
 
+import com.example.finallaptrinhweb.DTO;
 import com.example.finallaptrinhweb.connection_pool.DBCPDataSource;
-import com.example.finallaptrinhweb.model.Feedback;
-import com.example.finallaptrinhweb.model.Util;
+import com.example.finallaptrinhweb.model.*;
+
 import java.sql.Timestamp;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import java.sql.Connection;
@@ -34,23 +36,38 @@ public class FeedbackDAO {
         }
     }
 
-    public static List<Feedback> getAllFeedbacks() {
-        List<Feedback> feedbackList = new ArrayList<>();
+    public static List<DTO> getAllFeedbacks() {
+        List<DTO> feedbackList = new ArrayList<>();
 
         try (Connection connection = DBCPDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT id, name, email, content, submissionDate FROM comments");
+                     "SELECT c.id, c.star, c.content , u.email, p.productName, p.id as productId, c.createdAt FROM comments c join products p on c.productId = p.id   join users u on u.id = c.userId");
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
+                int star = resultSet.getInt("star");
                 String email = resultSet.getString("email");
                 String content = resultSet.getString("content");
-                Timestamp submissionDate = resultSet.getTimestamp("submissionDate");
+                String productName = resultSet.getString("productName");
+                int productId =resultSet.getInt("productId");
+                LocalDate submissionDate = resultSet.getDate("submissionDate").toLocalDate();
+                User user = new User();
+                user.setEmail(email);
 
-                Feedback feedback = new Feedback(id, email, name, content, submissionDate);
-                feedbackList.add(feedback);
+                Product product = new Product();
+                product.setId(productId);
+                product.setProductName(productName);
+
+                Comment comment = new Comment();
+                comment.setId(Long.valueOf(id));
+                comment.setStar(star);
+                comment.setContent(content);
+                comment.setCreatedAt(submissionDate);
+
+
+                DTO dto = new DTO(user,comment,product);
+                feedbackList.add(dto);
             }
 
         } catch (SQLException e) {

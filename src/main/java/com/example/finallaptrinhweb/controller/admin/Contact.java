@@ -1,5 +1,6 @@
 package com.example.finallaptrinhweb.controller.admin;
 
+import com.example.finallaptrinhweb.DTO;
 import com.example.finallaptrinhweb.dao.FeedbackDAO;
 import com.example.finallaptrinhweb.model.Feedback;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class Contact extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("current_page", "feedbackList");
-        List<Feedback> feedbackList = FeedbackDAO.getAllFeedbacks();
+        List<DTO> feedbackList = FeedbackDAO.getAllFeedbacks();
         request.setAttribute("feedbackList", feedbackList);
         request.getRequestDispatcher("./contact.jsp").forward(request, response);
     }
