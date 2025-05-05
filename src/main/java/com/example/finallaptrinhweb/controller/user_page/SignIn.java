@@ -28,7 +28,7 @@ public class SignIn extends HttpServlet {
         String pass = request.getParameter("password");
         String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
         User user = null;
-
+        System.out.println("Email: %s and Pass: %s".formatted(email, pass));
         System.out.println("reCAPTCHA response from form: " + gRecaptchaResponse);
 
         // Kiểm tra nếu email không tồn tại

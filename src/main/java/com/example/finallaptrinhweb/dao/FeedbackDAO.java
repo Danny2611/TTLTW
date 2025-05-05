@@ -39,7 +39,7 @@ public class FeedbackDAO {
 
         try (Connection connection = DBCPDataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT id, name, email, content, submissionDate FROM feedbacks");
+                     "SELECT id, name, email, content, submissionDate FROM comments");
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
