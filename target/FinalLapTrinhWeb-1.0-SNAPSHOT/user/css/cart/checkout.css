@@ -272,3 +272,8 @@ p {
 }
 
 
+.select-location {
+  border: 1px solid #ededed;
+  width: 100%;
+  padding: 11px 0;
+}
