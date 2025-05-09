@@ -87,7 +87,7 @@
               <input type="text" id="addressLine1" name="addressLine1" placeholder="Số nhà / Đường" class="checkout__input__add" required />
               <span class="error-message"></span>
 
-              <select class="select-location" id="ward" name="ward" required>
+              <select class="select-location" id="addressLine2" name="addressLine2" required>
                 <option value="">Chọn Xã / Phường / Thị trấn</option>
               </select>
               <span class="error-message"></span>
@@ -373,6 +373,10 @@
       });
     });
   </script>
+  <script>
+
+  </script>
+
 
   <jsp:include page="footer.jsp"/>
   <script src="js/checkout/fee.js"></script>

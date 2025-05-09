@@ -91,6 +91,66 @@ async function getDiscount() {
     }
 }
 
+
+//  call province
+const citySelect = document.getElementById("city");
+const districtSelect = document.getElementById("district");
+const wardSelect = document.getElementById("addressLine2");
+
+
+fetch("https://open.oapi.vn/location/provinces?page=0&size=100")
+    .then(res => res.json())
+    .then(data => {
+        data.data.forEach(province => {
+            const option = document.createElement("option");
+            option.value = province.name;
+            option.text = province.name;
+            option.setAttribute("data-province-id", province.id); // Lưu id thay vì provinceId
+            citySelect.appendChild(option);
+        });
+    });
+
+// Khi chọn tỉnh → load huyện
+citySelect.addEventListener("change", () => {
+    const selectedOption = citySelect.options[citySelect.selectedIndex];
+    const provinceId = selectedOption.getAttribute("data-province-id");
+    // console.log("pro", provinceId)
+    districtSelect.innerHTML = "<option value=''>Chọn Huyện / Quận</option>";
+    wardSelect.innerHTML = "<option value=''>Chọn Xã / Phường</option>";
+
+    fetch(`https://open.oapi.vn/location/districts/${provinceId}?page=0&size=100`)
+        .then(res => res.json())
+        .then(data => {
+            data.data.forEach(district => {
+                const option = document.createElement("option");
+                option.value = district.name;
+                option.text = district.name;
+                option.setAttribute("data-district-id", district.id); // Lưu id thay vì districtId
+                districtSelect.appendChild(option);
+            });
+        });
+});
+
+// Khi chọn huyện → load xã
+districtSelect.addEventListener("change", () => {
+    const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+    const districtId = selectedOption.getAttribute("data-district-id"); // Lấy id từ data attribute
+
+    wardSelect.innerHTML = "<option value=''>Chọn Xã / Phường</option>";
+
+    fetch(`https://open.oapi.vn/location/wards/${districtId}?page=0&size=100`)
+        .then(res => res.json())
+        .then(data => {
+            data.data.forEach(ward => {
+                const option = document.createElement("option");
+                option.value = ward.name;
+                option.text = ward.name;
+                option.setAttribute("data-ward-id", ward.id); // Lưu id thay vì wardId
+                wardSelect.appendChild(option);
+            });
+        });
+});
+
 // Gọi khi load lần đầu
 getCart();
 
