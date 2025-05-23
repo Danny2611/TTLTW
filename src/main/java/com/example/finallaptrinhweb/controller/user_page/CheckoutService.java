@@ -33,7 +33,7 @@ public class CheckoutService extends HttpServlet {
             return;
         }
 
-        // ✅ Mã hóa tham số URL
+        // Mã hóa tham số URL
         String apiUrl = "https://services.giaohangtietkiem.vn/services/shipment/fee?"
                 + "pick_province=" + URLEncoder.encode("Hồ Chí Minh", StandardCharsets.UTF_8.toString())
                 + "&pick_district=" + URLEncoder.encode("Thủ Đức", StandardCharsets.UTF_8.toString())
@@ -49,11 +49,11 @@ public class CheckoutService extends HttpServlet {
             URL url = new URL(apiUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type", "application/json"); // ✅ Fix: Thêm Header
+            conn.setRequestProperty("Content-Type", "application/json"); //  Fix: Thêm Header
             conn.setRequestProperty("Token", "1IWspuqjIDEeKZd4S32CPHt8ajxOtfUPO1YKShf");
 
             int responseCode = conn.getResponseCode();
-            System.out.println("Response Code: " + responseCode); // ✅ Debug lỗi
+            System.out.println("Response Code: " + responseCode); //  Debug lỗi
 
             if (responseCode == 200) {
                 Scanner scanner = new Scanner(new InputStreamReader(conn.getInputStream()));
