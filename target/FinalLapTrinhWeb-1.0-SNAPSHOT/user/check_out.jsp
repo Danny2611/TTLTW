@@ -294,50 +294,20 @@
             $(".payment-validation-message").text("Vui lòng chọn một phương thức thanh toán (COD hoặc MOMO).").show();
           } else if (isCashChecked) {
             $("#checkoutForm").submit()
-            // Nếu đã chọn COD, hiển thị modal
-            // $("#orderSuccessModal").modal("show");
-            <%--let formData = new FormData();--%>
-            <%--const fee = document.getElementById("fee-input").value--%>
-            <%--const totalPayment = document.getElementById('totalAmount-input').value--%>
-            <%--const quantity = document.getElementById("quantity").value--%>
-            <%--console.log("quantity value", quantity)--%>
-            <%--console.log("fee value", fee)--%>
-            <%--console.log("total value", totalPayment)--%>
-            <%--formData.append("paymentMethod", "COD");--%>
-            <%--formData.append("firstName", document.getElementById('firstName').value)--%>
-            <%--formData.append("lastName", document.getElementById('lastName').value)--%>
-            <%--formData.append("addressLine1", document.getElementById('addressLine1').value)--%>
-            <%--formData.append("addressLine2", document.getElementById('addressLine2').value)--%>
-            <%--formData.append("district", document.getElementById('district').value)--%>
-            <%--formData.append("city", document.getElementById('city').value)--%>
-            <%--formData.append("phoneNumber", document.getElementById('phoneNumber').value)--%>
-            <%--formData.append("email", document.getElementById('email').value)--%>
-            <%--formData.append("fee", fee)--%>
-            <%--formData.append("totalAmount" , totalPayment)--%>
-            <%--formData.append("quantity", quantity)--%>
-            <%--console.log(formData)--%>
-            <%--console.log("📝 Dữ liệu trong FormData:");--%>
-            <%--for (let pair of formData.entries()) {--%>
-            <%--  console.log(`${pair[0]}: ${pair[1]}`);--%>
-            <%--}--%>
-            <%--fetch("http://localhost:8080/FinalLapTrinhWeb_war/user/order-handle", {--%>
-            <%--  method: "POST",--%>
-            <%--  body: formData--%>
-            <%--})--%>
-            <%--        .then(response => response.text())--%>
-            <%--        .then(data => {--%>
-            <%--          console.log(data);--%>
-            <%--          if (data.trim() === "success") {--%>
-            <%--            alert("Đặt hàng thành công!");--%>
-            <%--            window.location.href = "/thank-you"; // Chuyển hướng sau khi đặt hàng--%>
-            <%--          } else {--%>
-            <%--            alert("Đặt hàng thất bại. Vui lòng thử lại.");--%>
-            <%--          }--%>
-            <%--        })--%>
-            <%--        .catch(error => console.error("Lỗi khi gửi đơn hàng:", error));--%>
           } else if (isMomoChecked) {
             // Nếu đã chọn Momo, hiển thị mã QR code
-            $("#momoQrCodeModal").modal("show");
+            // $("#momoQrCodeModal").modal("show");
+
+            const totalAmount = document.getElementById("totalPayment").dataset.id
+            console.log("totalAmount: " + totalAmount)
+            console.log(totalAmount)
+            fetch("http://localhost:8080/FinalLapTrinhWeb_war/payment-momo", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              body: `amount=${totalAmount}`
+            });
 
           }
         }

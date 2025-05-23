@@ -1,14 +1,18 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
+import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.mail.Session;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,17 +22,20 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
-@WebServlet(name = "Payment Controller" , value =  "payment-momo")
+@WebServlet(name = "Payment Controller" , value =  "/user/payment-momo")
 public class PaymentMomoController extends HttpServlet {
+    private static  final Logger logger = Logger.getLogger(PaymentMomoController.class);
     private static final String endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
     private static final String partnerCode = "MOMO";
     private static final String accessKey = "F8BBA842ECF85";
     private static final String secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
-    private static final String redirectUrl = "http://localhost:8080/your-app/return";
-    private static final String ipnUrl = "http://localhost:8080/your-app/ipn";
+    private static final String redirectUrl = "http://localhost:8080/FinalLapTrinhWeb_war/user/return";
+    private static final String ipnUrl = "https://callback.url/notify";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("auth");
         String orderId = UUID.randomUUID().toString();
         String requestId = UUID.randomUUID().toString();
         String amount = req.getParameter("amount");
@@ -69,7 +76,8 @@ public class PaymentMomoController extends HttpServlet {
 
         // Lấy payUrl
         String payUrl = new JSONObject(momoResponse).getString("payUrl");
-
+        System.out.println("payUrl: " +payUrl);
+        logger.info("User " + user.getEmail() + " payment with MoMo");
         resp.sendRedirect(payUrl);
 
     }
@@ -81,6 +89,7 @@ public class PaymentMomoController extends HttpServlet {
             byte[] hash = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
             return bytesToHex(hash);
         } catch (Exception e) {
+            logger.error("Signuture Fail");
             throw new RuntimeException("Lỗi khi tạo chữ ký", e);
         }
     }
