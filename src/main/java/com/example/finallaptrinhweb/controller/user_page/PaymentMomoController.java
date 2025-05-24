@@ -30,7 +30,7 @@ public class PaymentMomoController extends HttpServlet {
     private static final String accessKey = "F8BBA842ECF85";
     private static final String secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
     private static final String redirectUrl = "http://localhost:8080/FinalLapTrinhWeb_war/user/return";
-    private static final String ipnUrl = "https://callback.url/notify";
+    private static final String ipnUrl = "http://localhost:8080/FinalLapTrinhWeb_war/user/user/momo-ipn";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,6 +40,7 @@ public class PaymentMomoController extends HttpServlet {
         String requestId = UUID.randomUUID().toString();
         String amount = req.getParameter("amount");
 
+        System.out.println("amoumt: " + amount);
         String orderInfo = "Thanh toán đơn hàng " + orderId;
         String requestType = "captureWallet";
 
@@ -73,12 +74,15 @@ public class PaymentMomoController extends HttpServlet {
 
         // Gửi request tới MoMo
         String momoResponse = sendHttpRequest(endpoint, jsonRequest);
+        System.out.println("momoResponse :"+ momoResponse);
 
         // Lấy payUrl
         String payUrl = new JSONObject(momoResponse).getString("payUrl");
         System.out.println("payUrl: " +payUrl);
         logger.info("User " + user.getEmail() + " payment with MoMo");
-        resp.sendRedirect(payUrl);
+        resp.setContentType("application/json");
+        resp.getWriter().write("{\"payUrl\":\"" + payUrl + "\"}");
+
 
     }
     private String hmacSHA256(String data, String key) {
@@ -101,20 +105,43 @@ public class PaymentMomoController extends HttpServlet {
     }
 
     private String sendHttpRequest(String url, String json) throws IOException {
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setDoOutput(true);
-        OutputStream os = con.getOutputStream();
-        os.write(json.getBytes());
-        os.flush();
-        os.close();
+        try {
+            System.out.println("Connecting to: " + url);
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setDoOutput(true);
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine; StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) response.append(inputLine);
-        in.close();
-        return response.toString();
+            // Ghi dữ liệu
+            OutputStream os = con.getOutputStream();
+            os.write(json.getBytes(StandardCharsets.UTF_8));
+            os.flush();
+            os.close();
+
+            // Kiểm tra response code
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            BufferedReader in;
+            if (responseCode >= 200 && responseCode < 300) {
+                in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            } else {
+                in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            }
+
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            return response.toString();
+        } catch (Exception e) {
+            System.out.println("Error in sendHttpRequest: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

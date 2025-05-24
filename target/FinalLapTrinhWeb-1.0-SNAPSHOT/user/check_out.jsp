@@ -301,13 +301,20 @@
             const totalAmount = document.getElementById("totalPayment").dataset.id
             console.log("totalAmount: " + totalAmount)
             console.log(totalAmount)
-            fetch("http://localhost:8080/FinalLapTrinhWeb_war/payment-momo", {
+            const params = new URLSearchParams();
+            params.append('amount', totalAmount);
+            fetch("http://localhost:8080/FinalLapTrinhWeb_war/user/payment-momo", {
               method: "POST",
               headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
               },
-              body: `amount=${totalAmount}`
-            });
+              body: params
+            })
+            .then(res => res.json())
+            .then(data => {
+              window.location.href = data.payUrl;  // chuyển hướng trang
+            })
+            .catch(console.error);
 
           }
         }
