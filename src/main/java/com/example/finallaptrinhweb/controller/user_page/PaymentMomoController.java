@@ -30,7 +30,7 @@ public class PaymentMomoController extends HttpServlet {
     private static final String accessKey = "F8BBA842ECF85";
     private static final String secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
     private static final String redirectUrl = "http://localhost:8080/FinalLapTrinhWeb_war/user/return";
-    private static final String ipnUrl = "http://localhost:8080/FinalLapTrinhWeb_war/user/user/momo-ipn";
+    private static final String ipnUrl = "http://localhost:8080/FinalLapTrinhWeb_war/user/momo-ipn";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -85,7 +85,7 @@ public class PaymentMomoController extends HttpServlet {
 
 
     }
-    private String hmacSHA256(String data, String key) {
+    public String hmacSHA256(String data, String key) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
@@ -98,7 +98,7 @@ public class PaymentMomoController extends HttpServlet {
         }
     }
 
-    private String bytesToHex(byte[] bytes) {
+    public String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) sb.append(String.format("%02x", b));
         return sb.toString();

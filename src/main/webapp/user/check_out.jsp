@@ -300,7 +300,7 @@
 
             const totalAmount = document.getElementById("totalPayment").dataset.id
             console.log("totalAmount: " + totalAmount)
-            console.log(totalAmount)
+
             const params = new URLSearchParams();
             params.append('amount', totalAmount);
             fetch("http://localhost:8080/FinalLapTrinhWeb_war/user/payment-momo", {

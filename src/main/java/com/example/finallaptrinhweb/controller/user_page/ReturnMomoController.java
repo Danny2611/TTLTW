@@ -1,5 +1,6 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
+import com.example.finallaptrinhweb.dao.OrderDAO;
 import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,6 +20,7 @@ public class ReturnMomoController extends HttpServlet {
     private static final Logger logger = Logger.getLogger(ReturnMomoController.class);
     private static final String secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
 
+    OrderDAO orderDAO = new OrderDAO();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -84,6 +86,7 @@ public class ReturnMomoController extends HttpServlet {
                 request.setAttribute("orderId", orderId);
                 request.setAttribute("amount", amount);
                 request.setAttribute("transId", transId);
+//                OrderDAO.addOrder()
 
                 // Redirect đến trang success
                 response.sendRedirect(request.getContextPath() + "/user/order_success.jsp");

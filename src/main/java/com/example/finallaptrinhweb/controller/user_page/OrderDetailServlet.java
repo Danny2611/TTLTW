@@ -36,7 +36,7 @@ public class OrderDetailServlet extends HttpServlet {
 
 
                 // Tính tổng tiền sản phẩm
-                double sum = order.getTotalPay();
+                double sum = order.getTotalAmount();
 //                for (OrderProduct o : productList) {
 //                    sum += o.getTotal();
 //                }

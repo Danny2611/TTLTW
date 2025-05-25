@@ -80,6 +80,7 @@ public class OrderDAO {
                         order.setPhone(resultSet.getLong("phone"));
                         order.setUsername(resultSet.getString("username"));
                         order.setShipPrice(resultSet.getDouble("ship_price"));
+                        order.setTotalAmount(resultSet.getDouble("totalAmount"));
                     }
                 }
             }
