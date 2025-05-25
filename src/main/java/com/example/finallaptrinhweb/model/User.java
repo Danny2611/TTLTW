@@ -17,6 +17,7 @@ public class User {
     private String detail_address;
     private String phone;
     private String verifyStatus;
+    private String firebase_uid;
     private int roleId;
     private Date date_created;
 
@@ -24,7 +25,7 @@ public class User {
     public User() {
     }
 
-    public User(int id, String username, String email, String password, String fullName, Date dateOfBirth, String city, String district, String ward, String detail_address, String phone, String verifyStatus, int roleId, Date date_created) {
+    public User(int id, String username, String email, String password, String fullName, Date dateOfBirth, String city, String district, String ward, String detail_address, String phone, String verifyStatus,String firebase_uid, int roleId, Date date_created) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -37,6 +38,7 @@ public class User {
         this.detail_address = detail_address;
         this.phone = phone;
         this.verifyStatus = verifyStatus;
+        this.firebase_uid = firebase_uid;
         this.roleId = roleId;
         this.date_created = date_created;
     }
@@ -87,6 +89,14 @@ public class User {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getFirebase_uid() {
+        return firebase_uid;
+    }
+
+    public void setFirebase_uid(String firebase_uid) {
+        this.firebase_uid = firebase_uid;
     }
 
     public String getCity() {
