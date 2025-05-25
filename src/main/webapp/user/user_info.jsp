@@ -66,24 +66,14 @@
                                     <h1>HỒ SƠ CỦA TÔI</h1>
                                     <div class="content">Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
                                 </header>
-                                <%--thông tin user--%>
-                                <%
-                                    User infor = (User) session.getAttribute("auth");
-                                    String fullname = infor.getFullName();
-                                    String dob = String.valueOf(infor.getDateOfBirth());
-                                    String phone = infor.getPhone();
-                                    String city = infor.getCity();
-                                    String district = infor.getDistrict();
-                                    String ward = infor.getWard();
-                                    String detail_address = infor.getDetail_address();
-                                %>
+
                                 <form class="formAcount validate clearfix" method="post" action="updateinfouser">
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Họ tên: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="fullName" name="fullName"
-                                                       value="<%=fullname == null ? "": fullname%>"
+                                                       value="<%=user.getFullName() == null ? "": user.getFullName()%>"
                                                        placeholder="Họ tên"
                                                        class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
                                                        required>
@@ -95,43 +85,51 @@
                                             <label class="col-md-3 control-label">Ngày sinh: <span></span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="date" id="birthday" name="birthday"
-                                                       value="<%=dob == null ? "": dob%>"
+                                                       value="<%=user.getDateOfBirth() == null ? "": user.getDateOfBirth()%>"
                                                        placeholder="Ngày sinh"
                                                        class="validate[required] form-control input-sm" required>
                                             </div>
                                         </div>
                                     </div>
+                                    <% if (user.getPhone() != null) { %>
                                     <div class="form-group clearfix">
                                         <div class="row">
-                                            <label class="col-md-3 control-label">Điện thoại: <span></span></label>
+                                            <label class="col-md-3 control-label">Điện thoại: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="mobile" name="phone"
-                                                       value="<%=phone == null ? "": phone%>"
+                                                       value="<%=user.getPhone() == null ? "": user.getPhone()%>"
                                                        placeholder="Điện thoại"
                                                        class="validate[required,custom[phone]] form-control input-sm"
-                                                       required>
+                                                       required
+
+                                                >
                                             </div>
                                         </div>
                                     </div>
+                                    <% } %>
+
+                                    <% if (user.getEmail() != null) { %>
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label">Email: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" name="email"
-                                                       value="<%=user.getEmail()%>"
+                                                       value="<%=user.getEmail() == null ? "": user.getEmail()%>"
                                                        placeholder="Email"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                        required>
                                             </div>
                                         </div>
                                     </div>
+                                    <% } %>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label">Tỉnh/Thành phố
                                                 <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" name="city"
-                                                       value="<%=city == null ? "" : city%>"
+                                                       value="<%=user.getCity() == null ? "": user.getCity()%>"
                                                        placeholder="Thành phố"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                        required>
@@ -143,7 +141,7 @@
                                             <label class="col-md-3 control-label">Quận/ Huyện: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="district" name="district"
-                                                       value="<%=district == null ? "": district%>"
+                                                       value="<%=user.getDistrict() == null ? "": user.getDistrict()%>"
                                                        placeholder="Quận/ Huyện"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                 >
@@ -155,7 +153,7 @@
                                             <label class="col-md-3 control-label">Xã/ Phường/ Thị trấn: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="ward" name="ward"
-                                                       value="<%=ward == null ? "": ward%>"
+                                                       value="<%=user.getWard() == null ? "": user.getWard()%>"
                                                        placeholder="Xã/ Phường/ Thị trấn"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                 >
@@ -168,7 +166,7 @@
                                                 <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="address" name="address"
-                                                       value="<%=detail_address == null ? "": detail_address%>"
+                                                       value="<%=user.getDetail_address() == null ? "": user.getDetail_address()%>"
                                                        placeholder="Địa chỉ chi tiết"
                                                        class="validate[required] form-control input-sm">
                                             </div>
@@ -198,7 +196,7 @@
                                 </header>
                                 <%
                                     // Kiểm tra xem user có mật khẩu hay không (đăng nhập bằng Google)
-                                    String userPassword = UserDAO.getInstance().getPassword(user.getEmail());
+                                    String userPassword = UserDAO.getInstance().getPasswordById(user.getId());
                                     boolean hasPassword = userPassword != null && !userPassword.isEmpty();
                                 %>
                                 <form id="formAcount" class="formAcount_resetPass validate clearfix" method="post" action="resetpassword">

@@ -61,11 +61,14 @@ public class UpdateInfoUser extends HttpServlet {
         String district = request.getParameter("district");
         String ward = request.getParameter("ward");
         String detail_address = request.getParameter("address");
-
+        String email = request.getParameter("email");
+        System.out.println("email: " + email);
+        System.out.println("phone : " + phone);
         try {
-            UserDAO.getInstance().updateUserInfor(user.getEmail(), fullName, birthday, city, district, ward, detail_address, phone);
+            UserDAO.getInstance().updateUserInfor(user.getId(), fullName, birthday, city, district, ward, detail_address, phone, email);
 
-            User updatedUser = UserDAO.getInstance().GetInfor(user.getEmail());
+
+            User updatedUser = UserDAO.getInstance().GetInforById(user.getId());
             session.setAttribute("auth", updatedUser);
 
             out.print("{\"status\": \"success\", \"message\": \"Cập nhật thông tin thành công!\"}");

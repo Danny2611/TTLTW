@@ -62,7 +62,7 @@ public class LogInByFacebook extends HttpServlet {
             }
 
             // Lấy thông tin đầy đủ của user từ database
-            User dbUser = UserDAO.getInstance().GetInfor(user.getEmail());
+            User dbUser = UserDAO.getInstance().GetInforByEmail(user.getEmail());
 
             // Kiểm tra trạng thái verify
             boolean verifiedStatus = UserDAO.getInstance().CheckVerifiedStatus(dbUser.getEmail());
