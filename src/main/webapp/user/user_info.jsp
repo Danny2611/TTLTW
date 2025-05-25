@@ -324,7 +324,7 @@
 
         </div>
     </div>
-
+    <jsp:include page="loader.jsp" />
     <jsp:include page="footer.jsp"/>
 </div>
 <script src="js/thuvien/jquery-3.3.1.min.js"></script>
@@ -431,11 +431,13 @@
 
 
 <script>
+    const loader = document.querySelector(".overlay_loader");
     document.getElementById("file").addEventListener("change", function(event) {
         let file = event.target.files[0];
         if (file) {
             let formData = new FormData();
             formData.append("file", file);
+            loader.style.display = "flex";
 
             fetch("/updateAvatar", {
                 method: "POST",
@@ -443,6 +445,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    loader.style.display = "none";
                     if (data.status === "success") {
                         document.querySelector(".img-ava img").src = data.avatarUrl;
                         Swal.fire({
