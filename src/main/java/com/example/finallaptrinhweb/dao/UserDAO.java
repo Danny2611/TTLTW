@@ -40,6 +40,7 @@ public class UserDAO {
         } else {
             User user = (User) users.get(0);
             String hashedPasswordFromDatabase = user.getPassword();
+            System.out.println("Check pass" + BCrypt.checkpw(password, hashedPasswordFromDatabase));
             return email.equals(user.getEmail()) && BCrypt.checkpw(password, hashedPasswordFromDatabase) ? user : null;
         }
     }
@@ -191,35 +192,30 @@ public class UserDAO {
         }
     }
 
-    public void addAdmin(String username, String email, String password, int roleId) throws SQLException {
-        // Kiểm tra xem email đã tồn tại trong hệ thống hay chưa
+    public void addAdmin(String username, String email, String password, int roleId, String phone) throws SQLException {
         if (CheckExistUser(email)) {
-            // Email đã tồn tại, bạn có thể xử lý tùy thuộc vào yêu cầu cụ thể của bạn
-            // Ví dụ: Báo lỗi, không thực hiện thêm admin, ...
+
             System.out.println("Email đã tồn tại trong hệ thống.");
         } else {
-            // Kiểm tra xem username có giá trị hợp lệ hay không
             if (username != null) {
-                // Tiếp tục xử lý thêm admin vào cơ sở dữ liệu
                 Date dateCreated = new Date();
-                String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
                 JDBIConnector.me().get().withHandle((handle) -> {
-                    return handle.createUpdate("INSERT INTO users (id, username, email, password, verify_status,date_created, role_id,remaining, fullName) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)")
+                    return handle.createUpdate("INSERT INTO users (id, username, email, password, verify_status,date_created, role_id,remaining, fullName,phone) VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?)")
                             .bind(0, this.GetId() + 1)
                             .bind(1, username)
                             .bind(2, email)
-                            .bind(3, hashedPassword)
+                            .bind(3, password)
                             .bind(4, "verified")
                             .bind(5, dateCreated)
                             .bind(6, roleId)
                             .bind(7, 10)
                             .bind(8, username)
+                            .bind(9,phone)
                             .execute();
                 });
                 System.out.println("Admin đã được thêm vào cơ sở dữ liệu.");
             } else {
-                // Xử lý lỗi hoặc thông báo nếu username không hợp lệ
                 System.out.println("Tên người dùng không hợp lệ.");
             }
         }

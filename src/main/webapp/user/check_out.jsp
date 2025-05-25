@@ -69,23 +69,30 @@
                 </div>
               </div>
             </div>
-            <div class="checkout__input">
-              <p>Địa chỉ<span>*</span></p>
-              <input type="text" id="addressLine1"name="addressLine1"  placeholder="Số nhà / Đường" class="checkout__input__add" required />
-              <span class="error-message"></span>
-              <input type="text" id="addressLine2" name="addressLine2" placeholder="Xã / Phường / Thị trấn"   required/>
-              <span class="error-message"></span>
-            </div>
-            <div class="checkout__input">
-              <p>Huyện / Quận<span>*</span></p>
-              <input type="text" id="district" name="district" required />
-              <span class="error-message"></span>
-            </div>
+
             <div class="checkout__input">
               <p>Tỉnh / Thành phố<span>*</span></p>
-              <input type="text" id="city" name="city" required />
+              <select class="select-location" id="city" name="city" required></select>
               <span class="error-message"></span>
             </div>
+
+            <div class="checkout__input">
+              <p>Huyện / Quận<span>*</span></p>
+              <select class="select-location" id="district" name="district" required></select>
+              <span class="error-message"></span>
+            </div>
+
+            <div class="checkout__input">
+              <p>Địa chỉ<span>*</span></p>
+              <input type="text" id="addressLine1" name="addressLine1" placeholder="Số nhà / Đường" class="checkout__input__add" required />
+              <span class="error-message"></span>
+
+              <select class="select-location" id="addressLine2" name="addressLine2" required>
+                <option value="">Chọn Xã / Phường / Thị trấn</option>
+              </select>
+              <span class="error-message"></span>
+            </div>
+
             <div class="row">
               <div class="col-lg-6">
                 <div class="checkout__input">
@@ -366,6 +373,10 @@
       });
     });
   </script>
+  <script>
+
+  </script>
+
 
   <jsp:include page="footer.jsp"/>
   <script src="js/checkout/fee.js"></script>

@@ -10,6 +10,16 @@ public class Comment {
     private int star;
     private  String content;
     private LocalDate  createdAt;
+    private String formattedCreatedAt;
+
+    public String getFormattedCreatedAt() {
+        return formattedCreatedAt;
+    }
+
+    public void setFormattedCreatedAt(String formattedCreatedAt) {
+        this.formattedCreatedAt = formattedCreatedAt;
+    }
+
 
     public Comment(
 

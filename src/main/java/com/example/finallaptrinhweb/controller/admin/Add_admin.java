@@ -39,10 +39,13 @@ public class Add_admin extends HttpServlet {
         System.out.println("password:" + password);
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         String phone = request.getParameter("phone");
+        System.out.println("Mật khẩu gốc: " + password);
+        System.out.println("Hash lưu DB: " + hashedPassword);
+
 
         try {
             // Thực hiện thêm admin vào cơ sở dữ liệu
-            UserDAO.getInstance().addAdmin(username, email, hashedPassword, Integer.parseInt(role));
+            UserDAO.getInstance().addAdmin(username, email, hashedPassword, Integer.parseInt(role), phone);
             boolean result= send.sendPassword(email,password);
 
             System.out.println("Kết quả gửi email: " + result);
