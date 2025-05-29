@@ -139,6 +139,24 @@
             <version>5.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.2.0</version> <!-- Kiểm tra phiên bản mới nhất trên Maven Central -->
+        </dependency>
+        <!-- Thư viện JSON cho xử lý dữ liệu từ Firebase -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version> <!-- Kiểm tra phiên bản mới nhất -->
+        </dependency>
+
+        <!-- Thư viện HTTP Client để gọi API Firebase (nếu cần) -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
+        </dependency>
 
 
 

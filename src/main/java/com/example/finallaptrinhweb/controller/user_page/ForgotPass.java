@@ -23,22 +23,26 @@ public class ForgotPass extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
+        String identifier = request.getParameter("identifier");
         SendEmail send = new SendEmail();
 
         try {
-            if (UserDAO.getInstance().CheckExistUser(email)) {
+            if (UserDAO.getInstance().CheckExistUser(identifier)) {
                 // Tạo mật khẩu ngẫu nhiên
                 String newPassword = generateRandomPassword();
-
                 // Lưu mật khẩu mới đã mã hóa vào CSDL
                 String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
-                UserDAO.getInstance().resetPassword(email, hashedPassword);
+                UserDAO.getInstance().resetPassword(identifier, hashedPassword);
 
                 // Gửi mật khẩu mới đến email của người dùng
-                if (send.sendPassword(email, newPassword)) {
-                    response.sendRedirect("./signIn.jsp");
+                if (  identifier.contains("@")) {
+                    if (send.sendPassword(identifier, newPassword)) {
+                        response.sendRedirect("./signIn.jsp");
+                    }
+                }else{
+
                 }
+
             } else {
                 request.setAttribute("wrongInfor", "Tài khoản không tồn tại !");
                 request.getRequestDispatcher("./forgotPass.jsp").forward(request, response);
@@ -48,7 +52,6 @@ public class ForgotPass extends HttpServlet {
             throw new RuntimeException(var6);
         }
     }
-
     // Phương thức tạo mật khẩu ngẫu nhiên
     public String generateRandomPassword() {
         // Đây chỉ là một cách đơn giản, bạn có thể thay đổi theo nhu cầu
