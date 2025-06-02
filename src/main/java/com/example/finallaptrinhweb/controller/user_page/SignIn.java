@@ -18,22 +18,25 @@ import java.sql.SQLException;
 
 @WebServlet("/user/signin")
 public class SignIn extends HttpServlet {
-    private static  final Logger logger = Logger.getLogger(SignIn.class);
+    private static final Logger logger = Logger.getLogger(SignIn.class);
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
+        // Sử dụng identifier thay vì email để hỗ trợ cả email và số điện thoại
+        String identifier = request.getParameter("identifier");
         String pass = request.getParameter("password");
+        System.out.println("m" + pass);
         String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
         User user = null;
-        System.out.println("Email: %s and Pass: %s".formatted(email, pass));
+
         System.out.println("reCAPTCHA response from form: " + gRecaptchaResponse);
 
-        // Kiểm tra nếu email không tồn tại
-        if (email == null || email.isEmpty()) {
-            request.setAttribute("wrongInfor", "Vui lòng nhập email");
+        // Kiểm tra nếu identifier không tồn tại
+        if (identifier == null || identifier.isEmpty()) {
+            request.setAttribute("wrongInfor", "Vui lòng nhập email hoặc số điện thoại");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
             return;
         }
@@ -49,25 +52,25 @@ public class SignIn extends HttpServlet {
         }
 
         // Kiểm tra xem tài khoản có đang bị khóa không
-        System.out.println("isLocked: " + UserDAO.getInstance().isLocked(email));
-        if (UserDAO.getInstance().isLocked(email)) {
+        System.out.println("isLocked: " + UserDAO.getInstance().isLocked(identifier));
+        if (UserDAO.getInstance().isLocked(identifier)) {
             request.setAttribute("wrongInfor", "Tài khoản của bạn đang bị khóa. Vui lòng thử lại sau 5 phút.");
             request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
             return;
         }
 
-        int currentRemaining = UserDAO.getInstance().getRemaining(email);
+        int currentRemaining = UserDAO.getInstance().getRemaining(identifier);
         try {
-            user = UserDAO.getInstance().CheckLogin(email, pass);
+            user = UserDAO.getInstance().CheckLogin(identifier, pass);
         } catch (SQLException e) {
-            logger.error("ERR in login with "+ e);
+            logger.error("ERR in login with " + e);
             throw new RuntimeException(e);
         }
 
         if (currentRemaining > 0) {
             boolean verifiedStatus;
             try {
-                verifiedStatus = UserDAO.getInstance().CheckVerifiedStatus(email);
+                verifiedStatus = UserDAO.getInstance().CheckVerifiedStatus(identifier);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -99,12 +102,12 @@ public class SignIn extends HttpServlet {
             }
 
             // Nếu đăng nhập thất bại
-            UserDAO.getInstance().updateRemaining(email, currentRemaining - 1);
-            int newRemaining = UserDAO.getInstance().getRemaining(email); // Lấy lại số lần thử mới nhất
+            UserDAO.getInstance().updateRemaining(identifier, currentRemaining - 1);
+            int newRemaining = UserDAO.getInstance().getRemaining(identifier); // Lấy lại số lần thử mới nhất
 
             if (newRemaining == 0) {
-                UserDAO.getInstance().lockAccount(email);
-                logger.warn("User with email " +email  + "Login Fail");
+                UserDAO.getInstance().lockAccount(identifier);
+                logger.warn("User with identifier " + identifier + " Login Fail");
                 request.setAttribute("wrongInfor", "Bạn đã nhập sai quá nhiều lần. Tài khoản sẽ bị khóa trong 5 phút.");
             } else {
                 request.setAttribute("wrongInfor", "Đăng nhập thất bại. Bạn còn " + newRemaining + " lần thử.");
@@ -112,14 +115,13 @@ public class SignIn extends HttpServlet {
             System.out.println("Số lần đăng nhập còn lại: " + newRemaining);
 
         } else {
-            if (UserDAO.getInstance().isLocked(email) == false && user != null) {
+            if (!UserDAO.getInstance().isLocked(identifier) && user != null) {
                 UserDAO.getInstance().resetRemain(user.getId());
-                redirect(user, request,response);
+                redirect(user, request, response);
             }
-            logger.warn("Email " + email + " Login Fail");
+            logger.warn("Identifier " + identifier + " Login Fail");
             request.setAttribute("wrongInfor", "Bạn tạm thời không thể đăng nhập. Hãy thử lại sau 5 phút.");
         }
-
 
         request.getRequestDispatcher("/user/signIn.jsp").forward(request, response);
     }
@@ -138,7 +140,7 @@ public class SignIn extends HttpServlet {
                 case 5 -> "/admin/contact";
                 default -> "/admin";
             };
-            System.out.println("Path"+ path);
+            System.out.println("Path" + path);
             response.sendRedirect(request.getContextPath() + path);
         }
     }

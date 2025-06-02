@@ -36,7 +36,7 @@ public class AuthService {
         }
 
         // Trả về thông tin người dùng từ database
-        return userDAO.GetInfor(googleUserInfo.getEmail());
+        return userDAO.GetInforByEmail(googleUserInfo.getEmail());
     }
 
     // Đăng ký người dùng từ Google
