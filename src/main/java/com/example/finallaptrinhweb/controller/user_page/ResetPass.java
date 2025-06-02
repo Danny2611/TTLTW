@@ -48,6 +48,7 @@ public class ResetPass extends HttpServlet {
             }
 
             // Kiểm tra mật khẩu mới
+
             if (!isValidLength(newPassword)) {
                 errors.put("newPassError", "Mật khẩu phải có ít nhất 8 ký tự.");
                 hasError = true;
@@ -62,11 +63,15 @@ public class ResetPass extends HttpServlet {
                 hasError = true;
             }
 
+
             // Kiểm tra xác nhận mật khẩu
+
             if (!confirmPassword.equals(newPassword)) {
                 errors.put("reNewPassError", "Mật khẩu xác nhận không trùng khớp.");
                 hasError = true;
             }
+
+
 
             if (hasError) {
                 if (isAjaxRequest(request)) {
@@ -81,6 +86,7 @@ public class ResetPass extends HttpServlet {
                     for (Map.Entry<String, String> entry : errors.entrySet()) {
                         request.setAttribute(entry.getKey(), entry.getValue());
                     }
+
                     request.setAttribute("hasResetPasswordError", true); // Để giữ tab đổi mật khẩu mở
                     request.getRequestDispatcher("./user_info.jsp").forward(request, response);
                 }
@@ -94,6 +100,7 @@ public class ResetPass extends HttpServlet {
 
                     JSONObject json = new JSONObject();
                     json.put("status", "success");
+
                     json.put("message", firstTimeSetup ?
                             "Mật khẩu đã được thiết lập thành công" :
                             "Mật khẩu đã được thay đổi thành công");
@@ -102,6 +109,7 @@ public class ResetPass extends HttpServlet {
                     request.setAttribute("successMessage", firstTimeSetup ?
                             "Mật khẩu đã được thiết lập thành công" :
                             "Mật khẩu đã được thay đổi thành công");
+
                     request.getRequestDispatcher("./user_info.jsp").forward(request, response);
                 }
             }
@@ -111,6 +119,7 @@ public class ResetPass extends HttpServlet {
             response.sendRedirect("error.jsp");
         }
     }
+
 
     private boolean isValidLength(String password) {
         return password.length() >= 8;
@@ -127,6 +136,7 @@ public class ResetPass extends HttpServlet {
     private boolean hasSpecialChar(String password) {
         return password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*");
     }
+
 
     private boolean isAjaxRequest(HttpServletRequest request) {
         String requestedWith = request.getHeader("X-Requested-With");
