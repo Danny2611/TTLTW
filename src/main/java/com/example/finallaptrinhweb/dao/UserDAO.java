@@ -28,7 +28,15 @@ public class UserDAO {
         return instance;
     }
 
-    public User CheckLogin(String email, String password) throws SQLException {
+    public User CheckLogin(String identifier, String password) throws SQLException {
+        // Kiểm tra identifier có phải là email hay không (chứa @)
+        if (identifier.contains("@")) {
+            return CheckLoginByEmail(identifier, password);
+        } else {
+            return CheckLoginByPhone(identifier, password);
+        }
+    }
+    private User CheckLoginByEmail(String email, String password) throws SQLException {
         List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
             return handle.createQuery("SELECT * FROM users WHERE email = ?")
                     .bind(0, email)
@@ -40,12 +48,36 @@ public class UserDAO {
         } else {
             User user = (User) users.get(0);
             String hashedPasswordFromDatabase = user.getPassword();
-            System.out.println("Check pass" + BCrypt.checkpw(password, hashedPasswordFromDatabase));
             return email.equals(user.getEmail()) && BCrypt.checkpw(password, hashedPasswordFromDatabase) ? user : null;
         }
     }
 
-    public boolean CheckExistUser(String email) throws SQLException {
+    private User CheckLoginByPhone(String phone, String password) throws SQLException {
+        List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT * FROM users WHERE phone = ?")
+                    .bind(0, phone)
+                    .mapToBean(User.class)
+                    .collect(Collectors.toList());
+        });
+        if (users.size() != 1) {
+            return null;
+        } else {
+            User user = (User) users.get(0);
+            String hashedPasswordFromDatabase = user.getPassword();
+            return phone.equals(user.getPhone()) && BCrypt.checkpw(password, hashedPasswordFromDatabase) ? user : null;
+        }
+    }
+
+    public boolean CheckExistUser(String identifier) throws SQLException {
+        // Check if the identifier is an email (contains @) or a phone number
+        if (identifier.contains("@")) {
+            return CheckExistEmail(identifier);
+        } else {
+            return CheckExistPhone(identifier);
+        }
+    }
+
+    public boolean CheckExistEmail(String email) throws SQLException {
         List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
             return handle.createQuery("SELECT * FROM users WHERE email = ?")
                     .bind(0, email)
@@ -55,7 +87,26 @@ public class UserDAO {
         return !users.isEmpty();
     }
 
-    public boolean CheckVerifiedStatus(String email) throws SQLException {
+    public boolean CheckExistPhone(String phone) throws SQLException {
+        List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT * FROM users WHERE phone = ?")
+                    .bind(0, phone)
+                    .mapToBean(User.class)
+                    .collect(Collectors.toList());
+        });
+        return !users.isEmpty();
+    }
+
+    public boolean CheckVerifiedStatus(String identifier) throws SQLException {
+        // Check if the identifier is an email (contains @) or a phone number
+        if (identifier.contains("@")) {
+            return CheckEmailVerifiedStatus(identifier);
+        } else {
+            return CheckPhoneVerifiedStatus(identifier);
+        }
+    }
+
+    public boolean CheckEmailVerifiedStatus(String email) throws SQLException {
         List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
             return handle.createQuery("SELECT * FROM users WHERE email = ? && verify_status = ?")
                     .bind(0, email)
@@ -64,6 +115,36 @@ public class UserDAO {
                     .collect(Collectors.toList());
         });
         return !users.isEmpty();
+    }
+
+    public boolean CheckPhoneVerifiedStatus(String phone) throws SQLException {
+        List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT * FROM users WHERE phone = ? && verify_status = ?")
+                    .bind(0, phone)
+                    .bind(1, "verified")
+                    .mapToBean(User.class)
+                    .collect(Collectors.toList());
+        });
+        return !users.isEmpty();
+    }
+
+    public void UpdateFirebaseUid(String phone, String firebaseUid) throws SQLException {
+        JDBIConnector.me().get().useHandle((handle) -> {
+            handle.createUpdate("UPDATE users SET firebase_uid = ?, verify_status = 'verified' WHERE phone = ?")
+                    .bind(0, firebaseUid)
+                    .bind(1, phone)
+                    .execute();
+        });
+    }
+
+    public User GetInforById(int id) throws SQLException {
+        List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT * FROM users WHERE id = ?")
+                    .bind(0, id)
+                    .mapToBean(User.class)
+                    .collect(Collectors.toList());
+        });
+        return users.isEmpty() ? null : users.get(0);
     }
 
     public int GetId() throws SQLException {
@@ -75,33 +156,61 @@ public class UserDAO {
         return users.get(0).getId();
     }
 
-    public User GetInfor(String email) throws SQLException {
+    public User GetInforByIdentifier(String identifier) throws SQLException {
+        // Kiểm tra identifier có phải là email hay không (chứa @)
+        if (identifier.contains("@")) {
+            return GetInforByEmail(identifier);
+        } else {
+            return GetInforByPhone(identifier);
+        }
+    }
+
+    public User GetInforByEmail(String email) throws SQLException {
         List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
             return handle.createQuery("SELECT * FROM users WHERE email = ?")
                     .bind(0, email)
                     .mapToBean(User.class)
                     .collect(Collectors.toList());
         });
-        return users.get(0);
+        return users.isEmpty() ? null : users.get(0);
+    }
+
+    public User GetInforByPhone(String phone) throws SQLException {
+        List<User> users = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT * FROM users WHERE phone = ?")
+                    .bind(0, phone)
+                    .mapToBean(User.class)
+                    .collect(Collectors.toList());
+        });
+        return users.isEmpty() ? null : users.get(0);
     }
 
     public void SignUp(String username, String email, String password, String verifyStatus, int roleId) throws SQLException {
+        SignUp(username, email, null, password, verifyStatus, roleId, null);
+    }
+
+    public void SignUpWithPhone(String username, String phone, String password, String verifyStatus,String firebaseUid, int roleId) throws SQLException {
+        SignUp(username, null, phone, password, verifyStatus, roleId, firebaseUid);
+    }
+
+    public void SignUp(String username, String email, String phone, String password, String verifyStatus, int roleId, String firebase_uid) throws SQLException {
         Date dateCreated = new Date();
         // Chỉ hash password nếu nó được cung cấp (trường hợp đăng ký thông thường)
         final String hashedPassword = (password != null && !password.isEmpty())
                 ? BCrypt.hashpw(password, BCrypt.gensalt())
                 : null;
 
-
         JDBIConnector.me().get().withHandle(handle -> {
-            return handle.createUpdate("INSERT INTO users (id, username, email, password, verify_status, date_created, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)")
+            return handle.createUpdate("INSERT INTO users (id, username, email, phone, password, verify_status, firebase_uid, date_created, role_id) VALUES (?, ?, ?, ?, ?,?, ?, ?, ?)")
                     .bind(0, this.GetId() + 1)
                     .bind(1, username)
                     .bind(2, email)
-                    .bind(3, hashedPassword)
-                    .bind(4, verifyStatus)
-                    .bind(5, dateCreated)
-                    .bind(6, roleId)
+                    .bind(3, phone)
+                    .bind(4, hashedPassword)
+                    .bind(5, verifyStatus)
+                    .bind(6, firebase_uid)
+                    .bind(7, dateCreated)
+                    .bind(8, roleId)
                     .execute();
         });
     }
@@ -118,7 +227,25 @@ public class UserDAO {
         });
     }
 
-    public String getPassword(String email) throws SQLException {
+    public void SetVerifiedStatusByPhone(String phone) throws SQLException {
+        JDBIConnector.me().get().useHandle((handle) -> {
+            handle.createUpdate("UPDATE users SET verify_status = 'verified' WHERE phone = ?")
+                    .bind(0, phone)
+                    .execute();
+        });
+    }
+
+
+    public String getPassword(String identifier) throws SQLException {
+        // Kiểm tra identifier có phải là email hay không (chứa @)
+        if (identifier.contains("@")) {
+            return getPasswordByEmail(identifier);
+        } else {
+            return getPasswordByPhone(identifier);
+        }
+    }
+
+    public String getPasswordByEmail(String email) throws SQLException {
         List<String> passwords = JDBIConnector.me().get().withHandle((handle) -> {
             return handle.createQuery("SELECT password FROM users WHERE email = ?")
                     .bind(0, email)
@@ -133,23 +260,68 @@ public class UserDAO {
         }
     }
 
-
-    public void updateUserInfor(String email, String fullName, String birthday, String city, String district, String ward, String detail_address, String phone) throws SQLException {
-        JDBIConnector.me().get().useTransaction(handle -> {
-            int rowsUpdated = handle.createUpdate("UPDATE users SET fullName = ?, dateOfBirth = DATE(?), city = ?, district = ?, ward = ?, detail_address = ?, phone = ? WHERE email = ?")
-                    .bind(0, fullName)
-                    .bind(1, birthday)
-                    .bind(2, city)
-                    .bind(3, district)
-                    .bind(4, ward)
-                    .bind(5, detail_address)
-                    .bind(6, phone)
-                    .bind(7, email)
-                    .execute();
-
-            System.out.println("Rows updated: " + rowsUpdated);  // Kiểm tra số dòng đã update
+    public String getPasswordById(int id) throws SQLException {
+        List<String> passwords = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT password FROM users WHERE id = ?")
+                    .bind(0, id)
+                    .mapTo(String.class)
+                    .collect(Collectors.toList());
         });
+
+        if (!passwords.isEmpty()) {
+            return passwords.get(0);
+        } else {
+            return null; // hoặc trả giá trị mặc định nếu cần
+        }
     }
+
+
+    public String getPasswordByPhone(String phone) throws SQLException {
+        List<String> passwords = JDBIConnector.me().get().withHandle((handle) -> {
+            return handle.createQuery("SELECT password FROM users WHERE phone = ?")
+                    .bind(0, phone)
+                    .mapTo(String.class)
+                    .collect(Collectors.toList());
+        });
+
+        if (!passwords.isEmpty()) {
+            return passwords.get(0);
+        } else {
+            return null; // Hoặc giá trị mặc định khác tùy thuộc vào logic của bạn
+        }
+    }
+
+    public void updateUserInfor(int id, String fullName, String birthday, String city,
+                                String district, String ward, String address, String phone, String email) {
+        try {
+            JDBIConnector.me().get().withHandle(handle -> {
+                return handle.createUpdate("UPDATE users SET fullName = ?, dateOfBirth = ?, city = ?, district = ?, ward = ?, detail_address = ?, phone = ?, email = ? WHERE id = ?")
+                        .bind(0, fullName)
+                        .bind(1, birthday)
+                        .bind(2, city)
+                        .bind(3, district)
+                        .bind(4, ward)
+                        .bind(5, address)
+                        .bind(6, phone)
+                        .bind(7, email)
+                        .bind(8, id)
+                        .execute();
+            });
+        } catch (SQLException e) {
+            // In ra lỗi chi tiết SQL
+            System.err.println("Lỗi khi cập nhật user thông tin:");
+            System.err.println("SQLState: " + e.getSQLState());
+            System.err.println("ErrorCode: " + e.getErrorCode());
+            System.err.println("Message: " + e.getMessage());
+            e.printStackTrace();
+            // Có thể ném lại hoặc xử lý tùy theo logic bạn muốn
+        } catch (Exception e) {
+            // Bắt các lỗi khác nếu có
+            System.err.println("Lỗi không xác định khi cập nhật user thông tin:");
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void updatePassword(String email, String password) throws SQLException {
@@ -165,11 +337,34 @@ public class UserDAO {
     }
 
     // Trong UserDAO
-    public void resetPassword(String email, String hashedPassword) throws SQLException {
+
+    public void resetPassword(String identifier, String hashedPassword) throws SQLException {
+        try {
+            // Kiểm tra identifier có phải là email hay không (chứa @)
+            if (identifier.contains("@")) {
+                resetPasswordByEmail(identifier, hashedPassword);
+            } else {
+                resetPasswordByPhone(identifier, hashedPassword);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetPasswordByEmail(String email, String hashedPassword) throws SQLException {
         JDBIConnector.me().get().useHandle((handle) -> {
             handle.createUpdate("UPDATE users SET password = ? WHERE email = ?")
                     .bind(0, hashedPassword)
                     .bind(1, email)
+                    .execute();
+        });
+    }
+
+    public void resetPasswordByPhone(String phone, String hashedPassword) throws SQLException {
+        JDBIConnector.me().get().useHandle((handle) -> {
+            handle.createUpdate("UPDATE users SET password = ? WHERE email = ?")
+                    .bind(0, hashedPassword)
+                    .bind(1, phone)
                     .execute();
         });
     }
@@ -221,6 +416,7 @@ public class UserDAO {
         }
     }
 
+
     public  boolean changePermission(int roleId, int userId){
         try{
             String sql = "update users  set role_id = ? where id = ?";
@@ -234,7 +430,22 @@ public class UserDAO {
         }
         return  false;
     }
-    public int getRemaining(String email) {
+
+
+    // remaining
+    public int getRemaining(String identifier) {
+        try {
+            // Kiểm tra identifier có phải là email hay không (chứa @)
+            if (identifier.contains("@")) {
+                return getRemainingByEmail(identifier);
+            } else {
+                return getRemainingByPhone(identifier);
+            }
+        } catch (Exception e) {
+            return 5; // Giá trị mặc định
+        }
+    }
+    public int getRemainingByEmail(String email) {
         int remaining= 0 ;
         try{
             String sql = "select remaining from users where email = ?";
@@ -249,7 +460,21 @@ public class UserDAO {
         }
         return  remaining;
     }
-
+    public int getRemainingByPhone(String phone) {
+        int remaining= 0 ;
+        try{
+            String sql = "select remaining from users where phone = ?";
+            PreparedStatement preparedStatement = DBCPDataSource.preparedStatement(sql);
+            preparedStatement.setString(1, phone);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                remaining= resultSet.getInt("remaining");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return  remaining;
+    }
     public void updateRemaining( String email, int remaining) {
         try{
             String sql = "update users set remaining = ? where email = ?";
@@ -261,7 +486,6 @@ public class UserDAO {
             throw new RuntimeException(e);
         }
     }
-
     public void resetRemain(int userId){
         try{
             String sql = "update users set remaining = 10 where id = ?";
@@ -289,11 +513,22 @@ public class UserDAO {
         return  id;
     }
 
-
-    public boolean isLocked(String email) {
+    //islock
+    public boolean isLocked(String identifier) {
+        try {
+            // Kiểm tra identifier có phải là email hay không (chứa @)
+            if (identifier.contains("@")) {
+                return isLockedByEmail(identifier);
+            } else {
+                return isLockedByPhone(identifier);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean isLockedByEmail(String email) {
         String query = "SELECT locked_until FROM users WHERE email = ?";
-        try (
-             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+        try (PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -307,11 +542,40 @@ public class UserDAO {
         }
         return false;
     }
+    public boolean isLockedByPhone(String phone) {
+        String query = "SELECT locked_until FROM users WHERE phone = ?";
+        try (PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+            ps.setString(1, phone);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Timestamp lockedUntil = rs.getTimestamp("locked_until");
+                if (lockedUntil != null && lockedUntil.after(new Timestamp(System.currentTimeMillis()))) {
+                    return true; // Tài khoản vẫn đang bị khóa
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-    public void lockAccount(String email) {
+    //lockAccount
+    public void lockAccount(String identifier) {
+        try {
+            // Kiểm tra identifier có phải là email hay không (chứa @)
+            if (identifier.contains("@")) {
+                lockAccountByEmail(identifier);
+            } else {
+                lockAccountByPhone(identifier);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void lockAccountByEmail(String email) {
         String query = "UPDATE users SET locked_until = NOW() + INTERVAL 5 MINUTE WHERE email = ?";
-        try (
-             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+        try (PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
             ps.setString(1, email);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -319,21 +583,62 @@ public class UserDAO {
         }
     }
 
-    public void resetAttempts(String email) {
+    public void lockAccountByPhone(String phone) {
+        String query = "UPDATE users SET locked_until = NOW() + INTERVAL 5 MINUTE WHERE phone = ?";
+        try (PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+            ps.setString(1, phone);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void resetAttempts(String identifier) {
+        if (identifier.contains("@")) {
+            resetAttemptsByEmail(identifier);
+        } else {
+            resetAttemptsByPhone(identifier);
+        }
+    }
+
+    public void resetAttemptsByEmail(String email) {
         String query = "UPDATE users SET remaining = 10, locked_until = NULL WHERE email = ?";
-        try (
-             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+        try (PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
             ps.setString(1, email);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public void resetAttemptsByPhone(String phone) {
+        String query = "UPDATE users SET remaining = 10, locked_until = NULL WHERE phone = ?";
+        try (PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+            ps.setString(1, phone);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void resetAttempts(String email) {
+//        String query = "UPDATE users SET remaining = 10, locked_until = NULL WHERE email = ?";
+//        try (
+//             PreparedStatement ps = DBCPDataSource.preparedStatement(query)) {
+//            ps.setString(1, email);
+//            ps.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+
     public long getLockTime(String email) {
         long lockTime = 0;
         String sql = "SELECT locked_until FROM users WHERE email = ?";
         try (
-             PreparedStatement ps = DBCPDataSource.preparedStatement(sql)) {
+                PreparedStatement ps = DBCPDataSource.preparedStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
