@@ -85,10 +85,16 @@ public class ReturnMomoController extends HttpServlet {
                 String address = (String) session.getAttribute("address");
                 String phone = (String) session.getAttribute("phone");
                 String  receiver= (String) session.getAttribute("receiver");
-                Integer discount = (int) session.getAttribute("discount");
-                Integer quantity = (Integer) session.getAttribute("quantity");
-                Integer totalPay = (Integer) session.getAttribute("totalPay");
-                Integer ship = (Integer) session.getAttribute("ship");
+                String discountStr = (String) session.getAttribute("discount");
+                Integer discount = 0;
+                if (discountStr != null && !discountStr.trim().isEmpty()) {
+                    discount = Integer.parseInt(discountStr.trim());
+                }
+                Integer quantity = Integer.parseInt(session.getAttribute("quantity").toString());
+                Integer totalPay = Integer.parseInt(session.getAttribute("totalPay").toString());
+                Integer ship = Integer.parseInt(session.getAttribute("ship").toString());
+
+                System.out.println("discount:" + discount);
                 try {
                     if(discount !=null){
                         boolean update = CouponCodeDAO.getInstance().setUseCouponIsUse(discount);
@@ -97,7 +103,7 @@ public class ReturnMomoController extends HttpServlet {
                     logger.error("Change isUse cupOn fail", e);
                     throw new RuntimeException(e);
                 }
-                OrderDAO.addOrder(receiver, user.getId(),discount,2,
+                OrderDAO.addOrder(receiver, user.getId(),discount == 0 ? null: discount,2,
                         quantity, "Chờ xử lí", totalPay -ship,
                         Integer.parseInt(phone), address, 2, new Timestamp(System.currentTimeMillis()), totalPay, ship);
                 // Set attributes cho JSP
