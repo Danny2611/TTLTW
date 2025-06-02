@@ -26,8 +26,14 @@
     <link rel="icon" href="https://tienthangvet.vn/wp-content/uploads/cropped-favicon-Tien-Thang-Vet-192x192.png"
           sizes="192x192"/>
     <title>Trang cá nhân</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+<%
+    boolean hasResetPasswordError = request.getAttribute("oldPassError") != null ||
+            request.getAttribute("newPassError") != null ||
+            request.getAttribute("reNewPassError") != null;
+%>
 <div class="website-wrapper">
     <jsp:include page="header.jsp"/>
     <div class="page-title" style="
@@ -42,19 +48,17 @@
             <div class="col-lg-8 order-lg-2">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                        <a href="" data-target="#profile" data-toggle="tab" class="nav-link active nav-link-2">Tài
-                            Khoản</a>
+                        <a href="#profile" data-toggle="tab" class="nav-link nav-link-2 <%= hasResetPasswordError ? "" : "active" %>">Tài Khoản</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" data-target="#messages" data-toggle="tab" class="nav-link nav-link-2">Đổi Mật
-                            Khẩu</a>
+                        <a href="#messages" data-toggle="tab" class="nav-link nav-link-2 <%= hasResetPasswordError ? "active" : "" %>">Đổi Mật Khẩu</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" data-target="#edit" data-toggle="tab" class="nav-link nav-link-2">Đơn Hàng</a>
+                        <a href="#edit" data-toggle="tab" class="nav-link nav-link-2 ">Đơn Hàng</a>
                     </li>
                 </ul>
                 <div class="tab-content py-4">
-                    <div class="tab-pane active" id="profile">
+                    <div class="tab-pane <%= hasResetPasswordError ? "" : "active" %>" id="profile">
                         <!-- <h5 class="mb-3">Thông Tin Tài Khoản</h5> -->
                         <div class="row">
                             <div class="col-md-12">
@@ -62,24 +66,14 @@
                                     <h1>HỒ SƠ CỦA TÔI</h1>
                                     <div class="content">Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
                                 </header>
-                                <%--thông tin user--%>
-                                <%
-                                    User infor = (User) session.getAttribute("auth");
-                                    String fullname = infor.getFullName();
-                                    String dob = String.valueOf(infor.getDateOfBirth());
-                                    String phone = infor.getPhone();
-                                    String city = infor.getCity();
-                                    String district = infor.getDistrict();
-                                    String ward = infor.getWard();
-                                    String detail_address = infor.getDetail_address();
-                                %>
+
                                 <form class="formAcount validate clearfix" method="post" action="updateinfouser">
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Họ tên: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="fullName" name="fullName"
-                                                       value="<%=fullname == null ? "": fullname%>"
+                                                       value="<%=user.getFullName() == null ? "": user.getFullName()%>"
                                                        placeholder="Họ tên"
                                                        class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
                                                        required>
@@ -91,43 +85,51 @@
                                             <label class="col-md-3 control-label">Ngày sinh: <span></span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="date" id="birthday" name="birthday"
-                                                       value="<%=dob == null ? "": dob%>"
+                                                       value="<%=user.getDateOfBirth() == null ? "": user.getDateOfBirth()%>"
                                                        placeholder="Ngày sinh"
                                                        class="validate[required] form-control input-sm" required>
                                             </div>
                                         </div>
                                     </div>
+                                    <% if (user.getPhone() != null) { %>
                                     <div class="form-group clearfix">
                                         <div class="row">
-                                            <label class="col-md-3 control-label">Điện thoại: <span></span></label>
+                                            <label class="col-md-3 control-label">Điện thoại: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="mobile" name="phone"
-                                                       value="<%=phone == null ? "": phone%>"
+                                                       value="<%=user.getPhone() == null ? "": user.getPhone()%>"
                                                        placeholder="Điện thoại"
                                                        class="validate[required,custom[phone]] form-control input-sm"
-                                                       required>
+                                                       required
+
+                                                >
                                             </div>
                                         </div>
                                     </div>
+                                    <% } %>
+
+                                    <% if (user.getEmail() != null) { %>
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label">Email: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" name="email"
-                                                       value="<%=user.getEmail()%>"
+                                                       value="<%=user.getEmail() == null ? "": user.getEmail()%>"
                                                        placeholder="Email"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                        required>
                                             </div>
                                         </div>
                                     </div>
+                                    <% } %>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label">Tỉnh/Thành phố
                                                 <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" name="city"
-                                                       value="<%=city == null ? "" : city%>"
+                                                       value="<%=user.getCity() == null ? "": user.getCity()%>"
                                                        placeholder="Thành phố"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                        required>
@@ -139,7 +141,7 @@
                                             <label class="col-md-3 control-label">Quận/ Huyện: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="district" name="district"
-                                                       value="<%=district == null ? "": district%>"
+                                                       value="<%=user.getDistrict() == null ? "": user.getDistrict()%>"
                                                        placeholder="Quận/ Huyện"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                 >
@@ -151,7 +153,7 @@
                                             <label class="col-md-3 control-label">Xã/ Phường/ Thị trấn: <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="ward" name="ward"
-                                                       value="<%=ward == null ? "": ward%>"
+                                                       value="<%=user.getWard() == null ? "": user.getWard()%>"
                                                        placeholder="Xã/ Phường/ Thị trấn"
                                                        class="validate[required,custom[email]] form-control input-sm"
                                                 >
@@ -164,7 +166,7 @@
                                                 <span>(*)</span></label>
                                             <div class="col-lg-6 col-md-9">
                                                 <input type="text" id="address" name="address"
-                                                       value="<%=detail_address == null ? "": detail_address%>"
+                                                       value="<%=user.getDetail_address() == null ? "": user.getDetail_address()%>"
                                                        placeholder="Địa chỉ chi tiết"
                                                        class="validate[required] form-control input-sm">
                                             </div>
@@ -183,7 +185,8 @@
                         </div>
                         <!--/row-->
                     </div>
-                    <div class="tab-pane" id="messages">
+
+                    <div class="tab-pane <%= hasResetPasswordError ? "active" : "" %>" id="messages">
                         <!-- <h5 class="mb-3">Thông Tin Tài Khoản</h5> -->
                         <div class="row">
                             <div class="col-md-12">
@@ -191,47 +194,70 @@
                                     <h1>THAY ĐỔI MẬT KHẨU</h1>
                                     <div class="content">Bạn nên cập nhật mật khẩu thường xuyên vì lí do bảo mật</div>
                                 </header>
-                                <form id="formAcount" class="formAcount validate clearfix" method="post"
-                                      action="resetpassword">
-                                    <% String error = (String) request.getAttribute("wrongInfor");%>
-                                    <% if (error != null) {%>
-                                    <p style="color: <%=error.equals("Mật khẩu đã được thay đổi") ? "#7cb342" : "red"%>; margin-bottom: 10px"><%=error%>
-                                    </p>
+                                <%
+                                    // Kiểm tra xem user có mật khẩu hay không (đăng nhập bằng Google)
+                                    String userPassword = UserDAO.getInstance().getPasswordById(user.getId());
+                                    boolean hasPassword = userPassword != null && !userPassword.isEmpty();
+                                %>
+                                <form id="formAcount" class="formAcount_resetPass validate clearfix" method="post" action="resetpassword">
+                                    <% String success = (String) request.getAttribute("successMessage"); %>
+                                    <% if (success != null) { %>
+                                    <p style="color: #7cb342; margin-bottom: 10px"><%=success%></p>
                                     <% } %>
+
+                                    <% if (hasPassword) { %>
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Mật khẩu cũ: </label>
                                             <div class="col-lg-6 col-md-9">
-                                                <input type="password" name="pass"
-                                                       class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
-                                                       required>
+                                                <input type="password" name="pass" class="form-control input-sm" required>
+                                                <% if (request.getAttribute("oldPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("oldPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+                                    <% } else { %>
+                                    <!-- Thông báo cho người dùng biết họ đang thiết lập mật khẩu lần đầu -->
+                                    <div class="form-group clearfix">
+                                        <div class="row">
+                                            <div class="col-md-9 offset-md-3">
+                                                <p style="color: #2196F3; margin-bottom: 15px;">Bạn đang thiết lập mật khẩu lần đầu tiên cho tài khoản này.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Mật khẩu mới: </label>
                                             <div class="col-lg-6 col-md-9">
-                                                <input type="password" name="newpass"
-                                                       class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
-                                                       required>
+                                                <input type="password" name="newpass" class="form-control input-sm" required>
+                                                <% if (request.getAttribute("newPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("newPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"> Xác nhận mật khẩu: </label>
                                             <div class="col-lg-6 col-md-9">
-                                                <input type="password" id="pass" name="renewpass"
-                                                       class="validate[required,minSize[4],maxSize[32]] form-control input-sm"
-                                                       required>
+                                                <input type="password" name="renewpass" class="form-control input-sm" required>
+                                                <% if (request.getAttribute("reNewPassError") != null) { %>
+                                                <p style="color: red;"><%= request.getAttribute("reNewPassError") %></p>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group clearfix">
                                         <div class="row">
                                             <label class="col-md-3 control-label"></label>
                                             <div class="col-lg-6 col-md-9">
+                                                <!-- Thêm hidden field để biết có phải là thiết lập mật khẩu lần đầu không -->
+                                                <input type="hidden" name="isFirstTimeSetup" value="<%= !hasPassword %>">
                                                 <button class="btn-update">LƯU</button>
                                             </div>
                                         </div>
@@ -241,6 +267,7 @@
                         </div>
                         <!--/row-->
                     </div>
+
                     <div class="tab-pane myorder__style" id="edit">
                         <!-- <div class="heading">Đơn hàng của tôi</div> -->
                         <div class="inner">
@@ -418,6 +445,8 @@
 });
 </script>
 
+
+
 <script>
     document.getElementById("file").addEventListener("change", function(event) {
         let file = event.target.files[0];
@@ -454,6 +483,102 @@
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("input[name='newpass']").on("input", function () {
+            const password = $(this).val();
+            $.post("/api/users/validate-password", { password: password }, function (res) {
+                const $errorContainer = $("input[name='newpass']").next("p");
+                $errorContainer.remove(); // xóa lỗi cũ
+
+                if (!res.valid) {
+                    const errorMsg = "<p style='color:red'>" + res.errors[0] + "</p>";
+                    $("input[name='newpass']").after(errorMsg);
+                }
+            }, "json");
+        });
+
+        $("input[name='renewpass']").on("input", function () {
+            const password = $("input[name='newpass']").val();
+            const confirmPassword = $(this).val();
+            const $errorContainer = $(this).next("p");
+            $errorContainer.remove(); // xóa lỗi cũ
+
+            if (password !== confirmPassword) {
+                $(this).after("<p class='text-danger' style='color:red'>Mật khẩu xác nhận không trùng khớp.</p>");
+            }
+        });
+    });
+</script>
+<script>$(document).ready(function () {
+    $(".formAcount_resetPass").on("submit", function (event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "resetpassword",
+            data: formData,
+            dataType: "json",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function (response) {
+                // Xóa thông báo lỗi cũ nếu có
+                $(".formAcount_resetPass p.text-danger").remove();
+                $("input[name='pass'], input[name='newpass'], input[name='renewpass']").each(function () {
+                    $(this).next("p").remove();
+                });
+
+
+                if (response.status === "success") {
+                    Swal.fire({
+                        title: "Thành công!",
+                        text: response.message,
+                        icon: "success",
+                        confirmButtonText: "OK"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "updateinfouser";
+                        }
+                    });
+                } else {
+                    // Nếu có lỗi cụ thể từ server thì hiển thị chúng
+                    if (response.errors) {
+                        if (response.errors.oldPassError) {
+                            $("input[name='pass']").after("<p class='text-danger' style='color:red'>" + response.errors.oldPassError + "</p>");
+                        }
+                        if (response.errors.newPassError) {
+                            $("input[name='newpass']").after("<p class='text-danger' style='color:red'>" + response.errors.newPassError + "</p>");
+                        }
+                        if (response.errors.reNewPassError) {
+                            $("input[name='renewpass']").after("<p class='text-danger' style='color:red'>" + response.errors.reNewPassError + "</p>");
+                        }
+                    }
+
+                    // Popup chung báo lỗi
+                    Swal.fire({
+                        title: "Lỗi!",
+                        text: response.message,
+                        icon: "error",
+                        confirmButtonText: "OK"
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Lỗi!",
+                    text: "Có lỗi xảy ra, vui lòng thử lại!",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+
+    });
+});
+</script>
 
 
 </body>

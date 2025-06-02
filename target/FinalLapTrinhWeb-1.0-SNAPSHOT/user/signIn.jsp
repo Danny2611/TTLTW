@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="UTF-8"/>
-<%--    <link rel="stylesheet" href="css/sign/form.css"/>--%>
+    <%--    <link rel="stylesheet" href="css/sign/form.css"/>--%>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
           integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -286,9 +286,10 @@
                 <p class="error-message"><%=error%></p>
                 <% } %>
 
+
                 <div class="input-group">
-                    <input type="email" id="email" name="email" placeholder="Email" required>
-                    <div id="email-error" style="color: red;"></div>
+                    <input type="text" id="identifier" name="identifier" placeholder="Email hoặc Số điện thoại" required>
+                    <div id="identifier-error" style="color: red;"></div>
                 </div>
 
                 <div class="input-group">

@@ -253,3 +253,221 @@
 2025-05-25 12:37:22 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
 2025-05-25 12:37:32 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
 2025-05-25 12:37:36 INFO  com.example.finallaptrinhweb.controller.user_page.Order_handle - User Hữu Qúy Đặngorder with COD successfully
+2025-05-25 12:47:40 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-05-25 12:47:41 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-05-25 12:47:43 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-05-25 12:47:49 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-05-25 12:47:51 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-05-25 12:47:52 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-05-25 16:52:28 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-05-25 16:52:31 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-05-25 16:52:33 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-05-25 16:52:43 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-01 12:05:04 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-01 12:05:06 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:05:07 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:08:10 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-01 12:08:24 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:08:31 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:08:45 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-01 12:13:19 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-01 12:14:04 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:14:06 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:14:10 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-01 12:31:46 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-01 12:31:48 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:31:51 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:31:53 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:32:18 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-01 12:35:50 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-01 12:35:52 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:35:53 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-01 12:35:56 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-01 12:36:09 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:00:46 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - User danghuuquy10042003@gmail.comimport inventory with excel
+2025-06-02 11:01:15 INFO  com.example.finallaptrinhweb.controller.admin.ExcelController - update stockQuantity successfully
+2025-06-02 11:02:17 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-02 11:02:21 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Add product successfully
+2025-06-02 11:02:24 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:02:27 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:02:30 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:02:38 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:02:58 INFO  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User 21130503@st.hcmuaf.edu.vn payment SUCCESS - TransID: 3304603055
+2025-06-02 11:02:58 ERROR com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - MoMo return processing error
+java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Integer (java.lang.String and java.lang.Integer are in module java.base of loader 'bootstrap')
+	at com.example.finallaptrinhweb.controller.user_page.ReturnMomoController.doGet(ReturnMomoController.java:86)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2025-06-02 11:03:06 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:03:37 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:03:38 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:03:42 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:04:00 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:04:24 INFO  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User 21130503@st.hcmuaf.edu.vn payment SUCCESS - TransID: 3304603065
+2025-06-02 11:04:24 ERROR com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - MoMo return processing error
+java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Integer (java.lang.String and java.lang.Integer are in module java.base of loader 'bootstrap')
+	at com.example.finallaptrinhweb.controller.user_page.ReturnMomoController.doGet(ReturnMomoController.java:86)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2025-06-02 11:06:38 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-02 11:06:40 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:06:48 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:06:52 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:07:01 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:07:29 INFO  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User 21130503@st.hcmuaf.edu.vn payment SUCCESS - TransID: 3304603081
+2025-06-02 11:07:29 ERROR com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - MoMo return processing error
+java.lang.NumberFormatException: Cannot parse null string
+	at java.base/java.lang.Integer.parseInt(Integer.java:630)
+	at java.base/java.lang.Integer.parseInt(Integer.java:786)
+	at com.example.finallaptrinhweb.controller.user_page.ReturnMomoController.doGet(ReturnMomoController.java:86)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2025-06-02 11:09:55 INFO  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User unknown payment SUCCESS - TransID: 3304603081
+2025-06-02 11:09:55 ERROR com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - MoMo return processing error
+java.lang.NullPointerException: Cannot invoke "Object.toString()" because the return value of "jakarta.servlet.http.HttpSession.getAttribute(String)" is null
+	at com.example.finallaptrinhweb.controller.user_page.ReturnMomoController.doGet(ReturnMomoController.java:86)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2025-06-02 11:10:19 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-02 11:10:24 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:10:25 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:10:29 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:10:39 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:11:11 INFO  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User 21130503@st.hcmuaf.edu.vn payment SUCCESS - TransID: 3304603102
+2025-06-02 11:11:11 ERROR com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - MoMo return processing error
+java.lang.ClassCastException: class java.lang.String cannot be cast to class java.lang.Integer (java.lang.String and java.lang.Integer are in module java.base of loader 'bootstrap')
+	at com.example.finallaptrinhweb.controller.user_page.ReturnMomoController.doGet(ReturnMomoController.java:88)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:116)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:666)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1740)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1189)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2025-06-02 11:15:19 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User 21130503@st.hcmuaf.edu.vn Login Successfully
+2025-06-02 11:15:22 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:15:23 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:15:27 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:16:06 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:16:50 WARN  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User 21130503@st.hcmuaf.edu.vn payment FAILED - Declined due to general reasons. Please contact MoMo for more details.
+2025-06-02 11:17:08 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:17:10 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:17:14 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:21:26 INFO  com.example.finallaptrinhweb.controller.user_page.PaymentMomoController - User 21130503@st.hcmuaf.edu.vn payment with MoMo
+2025-06-02 11:21:55 WARN  com.example.finallaptrinhweb.controller.user_page.ReturnMomoController - User 21130503@st.hcmuaf.edu.vn payment FAILED - Declined due to general reasons. Please contact MoMo for more details.
+2025-06-02 11:22:26 INFO  com.example.finallaptrinhweb.controller.user_page.CartController - Get cart successfully
+2025-06-02 11:23:28 INFO  com.example.finallaptrinhweb.controller.user_page.CheckoutService - Checkout successfully
+2025-06-02 11:28:33 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully
+2025-06-02 11:35:17 INFO  com.example.finallaptrinhweb.controller.user_page.SignIn - User huuquy Login Successfully

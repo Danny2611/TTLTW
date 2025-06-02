@@ -299,10 +299,29 @@
             // $("#momoQrCodeModal").modal("show");
 
             const totalAmount = document.getElementById("totalPayment").dataset.id
-            console.log("totalAmount: " + totalAmount)
+            const lastname = document.getElementById("lastName").value
+            const fistName = document.getElementById("firstName").value
+            const phoneNumber = document.getElementById("phoneNumber").value
+            const city = document.getElementById("city").value
+            const district = document.getElementById("district").value
+            const ward = document.getElementById("addressLine2").value
+            const detailAddress = document.getElementById("addressLine1").value
+            const discount = document.getElementById('discount-fee-input').value
+            const quantity = document.getElementById("quantity").value
+            const feeShip = document.getElementById("fee-input").value
+            console.log("totalAmount: " + totalAmount +"and discount:" + discount
+            +"quantity: " + quantity
+            )
 
             const params = new URLSearchParams();
             params.append('amount', totalAmount);
+            params.append('username', fistName+" " + lastname);
+            params.append('phoneNumber', phoneNumber);
+            params.append('address', detailAddress + " "+ ward +" "+ district+ " "+ city);
+            params.append('discount', discount);
+            params.append('quantity', quantity);
+            params.append('ship', feeShip);
+            console.log("params: " + params)
             fetch("http://localhost:8080/FinalLapTrinhWeb_war/user/payment-momo", {
               method: "POST",
               headers: {

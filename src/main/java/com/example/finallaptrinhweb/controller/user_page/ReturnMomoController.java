@@ -1,5 +1,6 @@
 package com.example.finallaptrinhweb.controller.user_page;
 
+import com.example.finallaptrinhweb.dao.CouponCodeDAO;
 import com.example.finallaptrinhweb.dao.OrderDAO;
 import com.example.finallaptrinhweb.model.User;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,8 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 
 @WebServlet(value = "/user/return")
 public class ReturnMomoController extends HttpServlet {
@@ -79,7 +82,24 @@ public class ReturnMomoController extends HttpServlet {
                 // Thanh toán thành công
                 System.out.println("Payment SUCCESS");
                 logger.info("User " + (user != null ? user.getEmail() : "unknown") + " payment SUCCESS - TransID: " + transId);
-
+                String address = (String) session.getAttribute("address");
+                String phone = (String) session.getAttribute("phone");
+                String  receiver= (String) session.getAttribute("receiver");
+                Integer discount = (int) session.getAttribute("discount");
+                Integer quantity = (Integer) session.getAttribute("quantity");
+                Integer totalPay = (Integer) session.getAttribute("totalPay");
+                Integer ship = (Integer) session.getAttribute("ship");
+                try {
+                    if(discount !=null){
+                        boolean update = CouponCodeDAO.getInstance().setUseCouponIsUse(discount);
+                    }
+                } catch (SQLException e) {
+                    logger.error("Change isUse cupOn fail", e);
+                    throw new RuntimeException(e);
+                }
+                OrderDAO.addOrder(receiver, user.getId(),discount,2,
+                        quantity, "Chờ xử lí", totalPay -ship,
+                        Integer.parseInt(phone), address, 2, new Timestamp(System.currentTimeMillis()), totalPay, ship);
                 // Set attributes cho JSP
                 request.setAttribute("status", "success");
                 request.setAttribute("message", "Thanh toán thành công!");

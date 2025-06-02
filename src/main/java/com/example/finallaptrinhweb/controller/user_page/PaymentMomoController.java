@@ -38,11 +38,29 @@ public class PaymentMomoController extends HttpServlet {
         User user = (User) session.getAttribute("auth");
         String orderId = UUID.randomUUID().toString();
         String requestId = UUID.randomUUID().toString();
+
+
         String amount = req.getParameter("amount");
+        String address = req.getParameter("address");
+        String phoneNumber = req.getParameter("phoneNumber");
+        String receiver = req.getParameter("username");
+        String discount = req.getParameter("discount");
+        String quantity = req.getParameter("quantity");
+        String ship = req.getParameter("ship");
 
         System.out.println("amoumt: " + amount);
         String orderInfo = "Thanh toán đơn hàng " + orderId;
         String requestType = "captureWallet";
+
+//        Save other infor
+        HttpSession sessionForPayment = req.getSession();
+        sessionForPayment.setAttribute("address", address);
+        sessionForPayment.setAttribute("phone", phoneNumber);
+        sessionForPayment.setAttribute("receiver", receiver);
+        sessionForPayment.setAttribute("discount", discount);
+        sessionForPayment.setAttribute("quantity", quantity);
+        sessionForPayment.setAttribute("totalPay", amount);
+        sessionForPayment.setAttribute("ship", ship);
 
         // Tạo raw signature
         String rawHash = "accessKey=" + accessKey +

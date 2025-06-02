@@ -51,7 +51,9 @@ public class Order_handle extends HttpServlet {
         double ship_price = Double.parseDouble(request.getParameter("fee"));
         System.out.println(firstName+ lastName);
         // Gọi phương thức thêm đơn hàng
-        int result = OrderDAO.addOrder(username, user_id, discounts_id, ship_id, quantity, status, total_pay- ship_price, phone, detail_address, payment, date_created, total_pay, ship_price);
+        int result = OrderDAO.addOrder(username, user_id, discounts_id, ship_id,
+                quantity, status, total_pay- ship_price,
+                phone, detail_address, payment, date_created, total_pay, ship_price);
 
         if (result > 0) {
             logger.info("User "+ username + "order with COD successfully" );
