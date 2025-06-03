@@ -28,9 +28,9 @@
                 </p>
                 <% } %>
                 <div class="input-group">
-                    <input type="email" id="email-forgot" name="email" placeholder="Email" required>
+                    <input type="text" id="identifier" name="identifier" placeholder="Email hoặc Số điện thoại" required>
+                    <div id="identifier-error" style="color: red;"></div>
                 </div>
-                <div id="email-error" style="color: red;"></div>
 
                 <div>
                     <button>Đặt lại mật khẩu</button>

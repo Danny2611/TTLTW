@@ -63,6 +63,8 @@
                                <c:if test="${current_page=='product'}">class="active"</c:if>>Sản phẩm</a></li>
                         <li><a href="coupon-code"
                                <c:if test="${current_page=='coupon-code'}">class="active"</c:if>>Mã giảm giá</a></li>
+                        <li><a href="logs"
+                               <c:if test="${current_page=='logs'}">class="active"</c:if>>Logs</a></li>
                     </ul>
                 </li>
 

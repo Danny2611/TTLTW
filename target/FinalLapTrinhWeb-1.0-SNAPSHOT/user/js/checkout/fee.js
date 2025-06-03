@@ -35,6 +35,7 @@ function updateTotalPayment() {
     const finalTotal = totalBeforeDiscount * discountPercent;
 
     totalAmountInput.value = finalTotal;
+    totalPayment.setAttribute("data-id" ,finalTotal.toFixed(0) )
     totalPayment.innerHTML = `Tổng tiền thanh toán: ${finalTotal.toFixed(0)} VND`;
 }
 

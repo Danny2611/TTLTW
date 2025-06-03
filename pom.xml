@@ -132,6 +132,11 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>9.2.0</version>
+        </dependency>
         <!-- pom.xml nếu dùng Maven -->
         <dependency>
             <groupId>org.apache.poi</groupId>
