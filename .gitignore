@@ -1,2 +1,3 @@
+target/
 target/*.war
 src/main/resources/db.properties

@@ -426,6 +426,10 @@
         </div>
     </div>
 
+    <jsp:include page="loader.jsp" />
+
+
+
     <jsp:include page="footer.jsp"/>
 </div>
 
@@ -557,5 +561,11 @@
         }
     }
 </script>
+<script>
+    document.querySelector('.signup-form').addEventListener('submit', function () {
+        document.querySelector('.overlay_loader').style.display = 'flex';
+    });
+</script>
+
 </body>
 </html>
